@@ -106,7 +106,9 @@ details p{color:var(--muted);margin:10px 0 0}
 .contact{background:var(--ink);color:var(--bg);border-radius:18px;padding:40px 28px;display:grid;gap:18px}
 .contact h2{font-size:clamp(1.6rem,3.4vw,2.3rem)}
 .contact p{margin:0;opacity:.8;max-width:56ch}
-.contact .btn{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);justify-self:start}
+.contact .btns{display:flex;gap:12px;flex-wrap:wrap}
+.contact .btn{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.contact .btn.ghost{background:transparent;border-color:color-mix(in srgb,var(--bg) 40%,transparent);color:var(--bg)}
 .contact .mail{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.9rem;opacity:.75}
 footer{padding:32px 0 48px;color:var(--muted);font-size:.88rem}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -151,7 +153,7 @@ footer a{color:var(--muted)}
     <h1 data-i18n-html="h1">Ihr vernetzter Prototyp. <em>Komplett.</em> Zum Festpreis.</h1>
     <p class="lead" data-i18n="lead">Firmware, Edge AI, IoT, App, Platine und Gehäuse aus einer Hand – gebaut in unserem Engineering-Lab, geprüft und übergeben in Deutschland. Ein Ansprechpartner, ein Vertrag, Zahlung nach Meilensteinen.</p>
     <div class="cta">
-      <a class="btn primary" href="#kontakt" data-i18n="cta1">Kostenloses Erstgespräch</a>
+      <a class="btn primary" href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3m4nhoiuMQJNdoVJFKLxkRxB66sq4DS17tRcXQUA7V5pcbY0ZU4CJtLPsP50ZAxhzaSki3V-7A" target="_blank" rel="noopener" data-i18n="cta1">Kostenloses Erstgespräch buchen</a>
       <a class="btn" href="#pakete" data-i18n="cta2">Pakete ansehen</a>
     </div>
     <div class="facts">
@@ -281,8 +283,11 @@ footer a{color:var(--muted)}
     <div class="contact">
       <p class="mono" style="color:inherit;opacity:.7" data-i18n="s7k">Kontakt</p>
       <h2 data-i18n="s7h">Erzählen Sie uns von Ihrer Idee</h2>
-      <p data-i18n="s7p">Zwei, drei Sätze reichen: Was soll das Gerät tun, für wen, und bis wann? Sie erhalten innerhalb von 48 Stunden eine Antwort.</p>
-      <a class="btn" href="mailto:nilwerk.team@gmail.com?subject=Prototyp-Anfrage" data-i18n="s7b">E-Mail schreiben</a>
+      <p data-i18n="s7p">Buchen Sie direkt ein kostenloses 30-Minuten-Gespräch per Google Meet – oder schreiben Sie uns zwei, drei Sätze: Was soll das Gerät tun, für wen, und bis wann? Antwort innerhalb von 48 Stunden.</p>
+      <div class="btns">
+        <a class="btn" href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3m4nhoiuMQJNdoVJFKLxkRxB66sq4DS17tRcXQUA7V5pcbY0ZU4CJtLPsP50ZAxhzaSki3V-7A" target="_blank" rel="noopener" data-i18n="s7c">30-Min-Termin buchen</a>
+        <a class="btn ghost" href="mailto:nilwerk.team@gmail.com?subject=Prototyp-Anfrage" data-i18n="s7b">E-Mail schreiben</a>
+      </div>
       <span class="mail">nilwerk.team@gmail.com</span>
     </div>
   </div>
@@ -309,7 +314,7 @@ nav1:"Services",nav2:"Packages",nav3:"Process",nav4:"Contact",
 eyebrow:"Hardware prototypes for startups & SMEs",
 h1:"Your connected prototype. <em>Complete.</em> Fixed price.",
 lead:"Firmware, edge AI, IoT, app, PCB and enclosure from one team – built in our engineering lab, inspected and handed over in Germany. One contact, one contract, payment by milestone.",
-cta1:"Free intro call",cta2:"See packages",
+cta1:"Book a free intro call",cta2:"See packages",
 f1:"feasibility sprint",wk:"weeks",f2:"to a working prototype",f3:"contact person in Germany",
 s1k:"Services",s1h:"Six disciplines, one device",s1p:"You get a working system, not a piece of one – from sensor to app.",
 c1h:"Embedded firmware",c1p:"ESP32, nRF52, STM32. Sensors, power-saving modes, OTA updates, clean architecture.",
@@ -339,7 +344,7 @@ q1:"Who owns the results?",a1:"You do. After payment you receive full rights to 
 q2:"Is the prototype CE certified?",a2:"A prototype is not yet a series product. We design with CE, RED and the Cyber Resilience Act in mind so the path to approval stays short.",
 q3:"What if requirements change?",a3:"Small adjustments are included. Larger changes are quoted upfront at a fixed price or at €39/hour.",
 q4:"Do you sign an NDA?",a4:"Yes, gladly before the first technical call. Every team member is bound to confidentiality by contract.",
-s7k:"Contact",s7h:"Tell us about your idea",s7p:"Two or three sentences are enough: what should the device do, for whom, and by when? You'll get a reply within 48 hours.",s7b:"Send an email",
+s7k:"Contact",s7h:"Tell us about your idea",s7p:"Book a free 30-minute call via Google Meet right away – or send us two or three sentences: what should the device do, for whom, and by when? Reply within 48 hours.",s7b:"Send an email",s7c:"Book a 30-min call",
 dsg:"Privacy",dsgp:"This site uses no cookies, no tracking and no external fonts. It is hosted on GitHub Pages (GitHub Inc.), which processes technically necessary access data such as your IP address. If you email us, your message is processed via Gmail (Google); we use your details only to handle your request and delete them when no longer needed.",
 from:"from",imp1:"Information pursuant to § 5 DDG",imp2:"trading as",imp3:"Germany"
 };
