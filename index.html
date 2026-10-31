@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nilwerk Prototyping</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='1' y='1' width='30' height='30' rx='9' fill='%2315181d'/%3E%3Cpath d='M10 22V9.5l12 12.5V9.5' fill='none' stroke='%233fc79a' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='10' cy='22' r='2.6' fill='%2315181d' stroke='%233fc79a' stroke-width='1.8'/%3E%3Ccircle cx='22' cy='9.5' r='2.6' fill='%2315181d' stroke='%233fc79a' stroke-width='1.8'/%3E%3C/svg%3E">
 <meta name="description" content="Vernetzte Hardware-Prototypen zum Festpreis: Embedded, Edge AI, IoT, App, PCB und Gehäuse – mit deutscher Qualitätsprüfung.">
 <style>
 :root{
@@ -33,6 +34,11 @@ nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,t
 nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
 .brand{display:flex;align-items:center;gap:10px;font-family:"Space Grotesk",Inter,sans-serif;font-weight:700;text-decoration:none}
 .brand svg{flex:none}
+.brand .word{font-size:1.28rem;letter-spacing:-.03em;font-weight:700}
+.brand .word span{color:var(--accent)}
+.g2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:760px){.g2{grid-template-columns:1fr}}
+.proof .tagline{font:500 .72rem "JetBrains Mono",ui-monospace,Menlo,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
 .navlinks{display:flex;gap:22px;align-items:center}
 .navlinks a{text-decoration:none;color:var(--muted);font-size:.93rem}
 .navlinks a:hover{color:var(--ink)}
@@ -122,8 +128,8 @@ footer a{color:var(--muted)}
 <nav>
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Nilwerk">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="7" stroke="currentColor" stroke-width="2"/><path d="M6 18c3-6 13-6 16 0" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"/><circle cx="6" cy="18" r="2" fill="currentColor"/><circle cx="22" cy="18" r="2" fill="currentColor"/></svg>
-      Nilwerk
+      <svg class="mark" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="9" fill="#15181d" stroke="#ffffff" stroke-opacity=".12"/><path d="M10 22V9.5l12 12.5V9.5" stroke="#3fc79a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="22" r="2.6" fill="#15181d" stroke="#3fc79a" stroke-width="1.8"/><circle cx="22" cy="9.5" r="2.6" fill="#15181d" stroke="#3fc79a" stroke-width="1.8"/><path d="M6.5 26.6c2.4-1.5 4.8-1.5 7.2 0s4.8 1.5 7.2 0 4.8-1.5 6.9-.1" stroke="#8fd9ff" stroke-opacity=".7" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <span class="word">nil<span>werk</span></span>
     </a>
     <div class="navlinks">
       <a href="#leistungen" data-i18n="nav1">Leistungen</a>
@@ -257,13 +263,14 @@ footer a{color:var(--muted)}
   <div class="wrap">
     <div class="sec-head">
       <p class="mono" data-i18n="s5k">Referenzen</p>
-      <h2 data-i18n="s5h">Bereits gebaut</h2>
-      <p data-i18n="s5p">Eigene Projekte, die zeigen, wie wir arbeiten – Details gerne im Gespräch.</p>
+      <h2 data-i18n="s5h">Ausgewählte Projekte</h2>
+      <p data-i18n="s5p">Systeme, die wir entworfen und gebaut haben – von der Sensorik über die Firmware bis zur App.</p>
     </div>
-    <div class="grid g3">
-      <div class="card"><h3 data-i18n="r1h">Bodenfeuchte-Sensorknoten</h3><p data-i18n="r1p">Kapazitiver Sensor, geschaltete Versorgung, Glättung und MQTT-Telemetrie.</p><div class="chips"><span class="chip">ESP8266</span><span class="chip">MQTT</span><span class="chip">Low-Power</span></div></div>
-      <div class="card"><h3 data-i18n="r2h">Aktivitäts-Tracker (BLE)</h3><p data-i18n="r2p">Bewegungsklassifikation auf dem Gerät aus Beschleunigungsdaten, Übertragung per BLE.</p><div class="chips"><span class="chip">nRF52</span><span class="chip">BLE GATT</span><span class="chip">Edge</span></div></div>
-      <div class="card"><h3 data-i18n="r3h">Smart-Home-Zentrale</h3><p data-i18n="r3p">Raspberry Pi mit Home Assistant, Kiosk-Dashboard und Steckdosen-Steuerung per MQTT.</p><div class="chips"><span class="chip">Raspberry Pi</span><span class="chip">Home Assistant</span><span class="chip">Shelly</span></div></div>
+    <div class="grid g2">
+      <div class="card"><span class="tagline" data-i18n="r1t">Agrar · IoT</span><h3 data-i18n="r1h">Wassermonitoring- und Bewässerungsnetz für einen Hof</h3><p data-i18n="r1p">Verteilte, energiesparende Bodenfeuchte-Knoten melden per MQTT an eine zentrale Steuerung, die Bewässerung zonenweise regelt. Geschaltete Sensorversorgung gegen Korrosion, Signalglättung und Ausreißerfilter für verlässliche Messwerte.</p><div class="chips"><span class="chip">ESP8266/ESP32</span><span class="chip">MQTT</span><span class="chip">Low-Power</span><span class="chip">Dashboard</span></div></div>
+      <div class="card"><span class="tagline" data-i18n="r2t">Entertainment · Edge</span><h3 data-i18n="r2h">Arcade-Spiele mit Mensch im Regelkreis</h3><p data-i18n="r2p">Sensorball mit IMU und Barometer erkennt Würfe, Fänge, Drehungen und Drücken in Echtzeit. Eine sichere Regel-Engine macht daraus Spiele, die sich ohne Code beschreiben lassen – auch per KI.</p><div class="chips"><span class="chip">nRF52</span><span class="chip">BLE</span><span class="chip">IMU 50 Hz</span><span class="chip">Web Bluetooth</span></div></div>
+      <div class="card"><span class="tagline" data-i18n="r3t">Monitoring · Edge AI</span><h3 data-i18n="r3h">Aktivitätserkennung direkt auf dem Gerät</h3><p data-i18n="r3p">Kompakter BLE-Knoten klassifiziert Bewegung on-device in Ruhe-, Normal- und Aktivphasen und erfasst Temperatur und Feuchte – ohne Cloud, mit minimalem Datenverkehr.</p><div class="chips"><span class="chip">nRF52</span><span class="chip">Bosch BHY2</span><span class="chip">On-Device ML</span></div></div>
+      <div class="card"><span class="tagline" data-i18n="r4t">Gebäude · Automation</span><h3 data-i18n="r4h">Gebäudeautomations- und Energie-Hub</h3><p data-i18n="r4p">Lokale Steuerzentrale für Sensoren, Verbraucher und Energiemessung, mit Touch-Dashboard und Sprachsteuerung. Alle Geräte über MQTT angebunden, Fernzugriff abgesichert per VPN.</p><div class="chips"><span class="chip">Raspberry Pi</span><span class="chip">Home Assistant</span><span class="chip">MQTT</span><span class="chip">VPN</span></div></div>
     </div>
   </div>
 </section>
@@ -335,10 +342,11 @@ st4h:"Build",st4p:"Weekly updates & demos.",st5h:"Inspection in DE",st5p:"Functi
 s4k:"How we work",s4h:"German accountability, efficient engineering lab",s4p:"That is how we deliver faster and for less without compromising on quality.",
 l1h:"Project lead & quality",l1a:"Contract under German law",l1b:"System architecture, firmware, app",l1c:"Final inspection before handover",
 l2h:"Hardware & fabrication",l2a:"PCB design and assembly",l2b:"Enclosure design & 3D printing",l2c:"Integration and functional tests",
-s5k:"References",s5h:"Already built",s5p:"Our own projects that show how we work – details on request.",
-r1h:"Soil moisture sensor node",r1p:"Capacitive sensor, switched power, smoothing and MQTT telemetry.",
-r2h:"Activity tracker (BLE)",r2p:"On-device motion classification from accelerometer data, sent over BLE.",
-r3h:"Smart-home hub",r3p:"Raspberry Pi with Home Assistant, kiosk dashboard and smart-plug control over MQTT.",
+s5k:"References",s5h:"Selected projects",s5p:"Systems we've designed and built – from sensing and firmware to the app.",
+r1t:"Agriculture · IoT",r1h:"Water monitoring and irrigation control grid for a farm",r1p:"Distributed low-power soil-moisture nodes report over MQTT to a central controller that runs irrigation zone by zone. Switched sensor power against corrosion, signal smoothing and outlier filtering for reliable readings.",
+r2t:"Entertainment · Edge",r2h:"Arcade games with humans in the loop",r2p:"A sensor ball with IMU and barometer detects throws, catches, spins and squeezes in real time. A safe rule engine turns them into games that can be described without code – even by AI.",
+r3t:"Monitoring · Edge AI",r3h:"On-device activity recognition",r3p:"A compact BLE node classifies motion on-device into rest, normal and active phases and logs temperature and humidity – no cloud, minimal data traffic.",
+r4t:"Buildings · Automation",r4h:"Building automation and energy hub",r4p:"A local control centre for sensors, loads and energy metering, with touch dashboard and voice control. All devices connected over MQTT, remote access secured via VPN.",
 s6h:"Frequently asked",
 q1:"Who owns the results?",a1:"You do. After payment you receive full rights to source code, schematics, layouts and CAD files.",
 q2:"Is the prototype CE certified?",a2:"A prototype is not yet a series product. We design with CE, RED and the Cyber Resilience Act in mind so the path to approval stays short.",
