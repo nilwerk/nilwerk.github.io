@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nilwerk Prototyping</title>
+<meta name="description" content="Vernetzte Hardware-Prototypen zum Festpreis: Embedded, Edge AI, IoT, App, PCB und Gehäuse – mit deutscher Qualitätsprüfung.">
+<style>
+:root{
+  --bg:#f6f4ef; --surface:#ffffff; --ink:#15181d; --muted:#5b616b; --line:#e2ded5;
+  --accent:#0f7a5c; --accent-ink:#ffffff; --accent-soft:#e3f2ec; --warn:#b4541a;
+  --trace:#c9c2b3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101317; --surface:#181c22; --ink:#ecebe7; --muted:#a2a7af; --line:#2a3038;
+    --accent:#3fc79a; --accent-ink:#0c1512; --accent-soft:#16302a; --warn:#e58a4f; --trace:#2f363f;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101317; --surface:#181c22; --ink:#ecebe7; --muted:#a2a7af; --line:#2a3038;
+  --accent:#3fc79a; --accent-ink:#0c1512; --accent-soft:#16302a; --warn:#e58a4f; --trace:#2f363f;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+h1,h2,h3{font-family:"Space Grotesk",Inter,sans-serif;line-height:1.15;margin:0}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+/* nav */
+nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-family:"Space Grotesk",Inter,sans-serif;font-weight:700;text-decoration:none}
+.brand svg{flex:none}
+.navlinks{display:flex;gap:22px;align-items:center}
+.navlinks a{text-decoration:none;color:var(--muted);font-size:.93rem}
+.navlinks a:hover{color:var(--ink)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{border:0;background:transparent;color:var(--muted);font:600 .78rem Inter,system-ui,sans-serif;padding:6px 10px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+@media(max-width:760px){.navlinks a{display:none}}
+/* hero */
+.hero{padding:72px 0 56px;position:relative;overflow:hidden}
+.hero h1{font-size:clamp(2.1rem,5.4vw,3.6rem);max-width:15ch;letter-spacing:-.02em}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p.lead{font-size:1.15rem;color:var(--muted);max-width:56ch;margin:22px 0 30px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 20px;border-radius:10px;font-weight:600;text-decoration:none;border:1px solid var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:hover{transform:translateY(-1px)}
+.facts{display:flex;gap:28px;flex-wrap:wrap;margin-top:40px}
+.facts div{border-left:2px solid var(--accent);padding-left:12px}
+.facts b{display:block;font-family:"Space Grotesk",Inter,sans-serif;font-size:1.4rem}
+.facts b span{font-size:1rem;color:var(--ink)}
+.facts span{color:var(--muted);font-size:.9rem}
+.traces{position:absolute;right:-60px;top:30px;width:520px;opacity:.9;pointer-events:none}
+@media(max-width:900px){.traces{display:none}}
+/* sections */
+section{padding:64px 0;border-top:1px solid var(--line)}
+.sec-head{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;max-width:640px}
+.sec-head h2{font-size:clamp(1.6rem,3.4vw,2.3rem)}
+.sec-head p{color:var(--muted);margin:0}
+.grid{display:grid;gap:16px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+.card h3{font-size:1.1rem;margin:10px 0 6px}
+.card p{margin:0;color:var(--muted);font-size:.95rem}
+.ico{width:38px;height:38px;border-radius:9px;background:var(--accent-soft);display:grid;place-items:center;color:var(--accent)}
+/* pricing */
+.price{display:flex;flex-direction:column}
+.price .amt{font-family:"Space Grotesk",Inter,sans-serif;font-size:2rem;font-weight:700;margin:8px 0 2px}
+.price .dur{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+.price ul{margin:0 0 18px;padding:0;list-style:none;display:grid;gap:8px;font-size:.94rem}
+.price li{padding-left:22px;position:relative}
+.price li::before{content:"";position:absolute;left:0;top:.55em;width:10px;height:10px;border-radius:2px;background:var(--accent)}
+.price .btn{margin-top:auto;justify-content:center}
+.price.feat{border:2px solid var(--accent)}
+.tag{display:inline-block;background:var(--accent);color:var(--accent-ink);font:600 .72rem Inter,system-ui,sans-serif;padding:3px 8px;border-radius:999px;align-self:flex-start}
+.note{color:var(--muted);font-size:.9rem;margin-top:16px}
+/* process */
+.steps{counter-reset:s;display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.step{position:relative;padding:18px 16px 18px 0}
+.step::before{counter-increment:s;content:counter(s,decimal-leading-zero);font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.8rem;color:var(--accent);display:block;margin-bottom:10px}
+.step::after{content:"";position:absolute;top:28px;left:34px;right:12px;height:1px;background:var(--trace)}
+.step:last-child::after{display:none}
+.step h3{font-size:1rem;margin-bottom:4px}
+.step p{margin:0;color:var(--muted);font-size:.9rem}
+/* split */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.split{grid-template-columns:1fr}}
+.loc{padding:26px}
+.loc .flag{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.78rem;color:var(--accent)}
+.loc ul{margin:12px 0 0;padding-left:18px;color:var(--muted)}
+/* proof */
+.proof .card{display:flex;flex-direction:column;gap:6px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chip{font:500 .72rem "JetBrains Mono",ui-monospace,Menlo,monospace;border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)}
+/* faq */
+details{border-bottom:1px solid var(--line);padding:16px 0}
+summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::after{content:"+";color:var(--accent);font-family:"JetBrains Mono",ui-monospace,Menlo,monospace}
+details[open] summary::after{content:"–"}
+details p{color:var(--muted);margin:10px 0 0}
+/* contact */
+.contact{background:var(--ink);color:var(--bg);border-radius:18px;padding:40px 28px;display:grid;gap:18px}
+.contact h2{font-size:clamp(1.6rem,3.4vw,2.3rem)}
+.contact p{margin:0;opacity:.8;max-width:56ch}
+.contact .btn{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);justify-self:start}
+.contact .mail{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.9rem;opacity:.75}
+footer{padding:32px 0 48px;color:var(--muted);font-size:.88rem}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{color:var(--muted)}
+.legal{margin-top:24px;font-size:.85rem;color:var(--muted)}
+.legal h3{font-size:1rem;color:var(--ink);margin-bottom:6px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Nilwerk">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="7" stroke="currentColor" stroke-width="2"/><path d="M6 18c3-6 13-6 16 0" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"/><circle cx="6" cy="18" r="2" fill="currentColor"/><circle cx="22" cy="18" r="2" fill="currentColor"/></svg>
+      Nilwerk
+    </a>
+    <div class="navlinks">
+      <a href="#leistungen" data-i18n="nav1">Leistungen</a>
+      <a href="#pakete" data-i18n="nav2">Pakete</a>
+      <a href="#ablauf" data-i18n="nav3">Ablauf</a>
+      <a href="#kontakt" data-i18n="nav4">Kontakt</a>
+      <div class="lang" role="group" aria-label="Sprache">
+        <button type="button" data-lang="de" aria-pressed="true">DE</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <svg class="traces" viewBox="0 0 520 420" fill="none" aria-hidden="true">
+    <g stroke="var(--trace)" stroke-width="2">
+      <path d="M0 80h160l40 40h140l30-30h150"/><path d="M0 160h110l30 30h240l40 40h100"/>
+      <path d="M60 300h180l40-40h120l50 50h70"/><path d="M200 0v60l30 30v110"/><path d="M380 420v-80l-30-30v-90"/>
+    </g>
+    <g fill="var(--accent)"><circle cx="200" cy="120" r="5"/><circle cx="380" cy="190" r="5"/><circle cx="280" cy="260" r="5"/><circle cx="230" cy="200" r="5"/></g>
+    <rect x="250" y="130" width="110" height="90" rx="8" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+    <text x="305" y="182" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="var(--muted)">MCU</text>
+  </svg>
+  <div class="wrap">
+    <p class="mono" data-i18n="eyebrow">Hardware-Prototypen für Startups &amp; KMU</p>
+    <h1 data-i18n-html="h1">Ihr vernetzter Prototyp. <em>Komplett.</em> Zum Festpreis.</h1>
+    <p class="lead" data-i18n="lead">Firmware, Edge AI, IoT, App, Platine und Gehäuse aus einer Hand – gebaut in unserem Engineering-Lab, geprüft und übergeben in Deutschland. Ein Ansprechpartner, ein Vertrag, Zahlung nach Meilensteinen.</p>
+    <div class="cta">
+      <a class="btn primary" href="#kontakt" data-i18n="cta1">Kostenloses Erstgespräch</a>
+      <a class="btn" href="#pakete" data-i18n="cta2">Pakete ansehen</a>
+    </div>
+    <div class="facts">
+      <div><b><span data-i18n="from">ab</span> €990</b><span data-i18n="f1">Machbarkeits-Sprint</span></div>
+      <div><b>6–10 <span data-i18n="wk">Wochen</span></b><span data-i18n="f2">bis zum Funktionsmuster</span></div>
+      <div><b>1</b><span data-i18n="f3">Ansprechpartner in Deutschland</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="leistungen">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="mono" data-i18n="s1k">Leistungen</p>
+      <h2 data-i18n="s1h">Sechs Disziplinen, ein Gerät</h2>
+      <p data-i18n="s1p">Sie bekommen kein Teilstück, sondern ein funktionierendes Gesamtsystem – vom Sensor bis zur App.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></div><h3 data-i18n="c1h">Embedded-Firmware</h3><p data-i18n="c1p">ESP32, nRF52, STM32. Sensorik, Energiesparmodi, OTA-Updates, saubere Architektur.</p></div>
+      <div class="card"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></div><h3 data-i18n="c2h">Edge AI</h3><p data-i18n="c2p">Modelle direkt auf dem Gerät: Bewegungs- und Audioerkennung, Kamera-Klassifikation, ohne Cloud-Zwang.</p></div>
+      <div class="card"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1"/><path d="M2 9a14 14 0 0 1 20 0"/></svg></div><h3 data-i18n="c3h">IoT &amp; Cloud</h3><p data-i18n="c3p">WLAN, BLE, LoRa, MQTT, Home Assistant, Dashboards. Daten sicher vom Gerät ins System.</p></div>
+      <div class="card"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div><h3 data-i18n="c4h">Apps &amp; Software</h3><p data-i18n="c4p">Begleit-App (iOS/Android/Web) zum Koppeln, Steuern und Anzeigen – passend zur Firmware.</p></div>
+      <div class="card"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h5l3 3h2M7 16h3l3-3"/><circle cx="7" cy="8" r="1"/><circle cx="7" cy="16" r="1"/></svg></div><h3 data-i18n="c5h">Platinen (PCB)</h3><p data-i18n="c5p">Schaltplan, Layout, Fertigung und Bestückung – mit Blick auf späteres CE/RED.</p></div>
+      <div class="card"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 22V12M3 7l9 5 9-5"/></svg></div><h3 data-i18n="c6h">Gehäuse &amp; 3D-Druck</h3><p data-i18n="c6p">CAD-Konstruktion, FDM/SLA-Druck, Passformtests – ein Gerät, das man anfassen und zeigen kann.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pakete">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="mono" data-i18n="s2k">Pakete</p>
+      <h2 data-i18n="s2h">Feste Preise statt offener Stundenzettel</h2>
+      <p data-i18n="s2p">Alle Preise netto. Der Sprint wird bei Beauftragung eines Prototyp-Pakets vollständig angerechnet.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card price">
+        <h3 data-i18n="p1h">Machbarkeits-Sprint</h3>
+        <div class="amt">€990</div><div class="dur" data-i18n="p1d">1–2 Wochen</div>
+        <ul><li data-i18n="p1a">Anforderungen &amp; Systemarchitektur</li><li data-i18n="p1b">Bauteilauswahl &amp; Stückliste (BOM)</li><li data-i18n="p1c">Risikoliste &amp; verbindliches Festpreisangebot</li></ul>
+        <a class="btn" href="#kontakt" data-i18n="pbtn">Anfragen</a>
+      </div>
+      <div class="card price feat">
+        <span class="tag" data-i18n="pop">Beliebt</span>
+        <h3 data-i18n="p2h">Prototyp S</h3>
+        <div class="amt">€8.900</div><div class="dur" data-i18n="p2d">ca. 6 Wochen</div>
+        <ul><li data-i18n="p2a">Funktionsmuster auf Basis von Entwicklungsboards</li><li data-i18n="p2b">Firmware + einfache App oder Dashboard</li><li data-i18n="p2c">3D-gedrucktes Gehäuse</li><li data-i18n="p2e">2 Exemplare, Prüfung &amp; Übergabe in DE</li></ul>
+        <a class="btn primary" href="#kontakt" data-i18n="pbtn">Anfragen</a>
+      </div>
+      <div class="card price">
+        <h3 data-i18n="p3h">Prototyp M</h3>
+        <div class="amt">€15.900</div><div class="dur" data-i18n="p3d">8–10 Wochen</div>
+        <ul><li data-i18n="p3a">Eigene Platine (PCB), bestückt</li><li data-i18n="p3b">Edge AI oder Cloud-Anbindung</li><li data-i18n="p3c">Vollständige Begleit-App</li><li data-i18n="p3e">3 Exemplare + Dokumentation &amp; Quellcode</li></ul>
+        <a class="btn" href="#kontakt" data-i18n="pbtn">Anfragen</a>
+      </div>
+    </div>
+    <p class="note" data-i18n="pnote">Zusätzliche Entwicklung: €39/Stunde. Sie erhalten alle Quellcodes, CAD- und Fertigungsdaten.</p>
+  </div>
+</section>
+
+<section id="ablauf">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="mono" data-i18n="s3k">Ablauf</p>
+      <h2 data-i18n="s3h">Sie zahlen nur für abgenommene Meilensteine</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><h3 data-i18n="st1h">Anfrage</h3><p data-i18n="st1p">30-Minuten-Gespräch, kostenlos.</p></div>
+      <div class="step"><h3 data-i18n="st2h">Sprint</h3><p data-i18n="st2p">Architektur, BOM, Festpreis.</p></div>
+      <div class="step"><h3 data-i18n="st3h">Meilensteine</h3><p data-i18n="st3p">Zahlung in Etappen, nicht vorab.</p></div>
+      <div class="step"><h3 data-i18n="st4h">Bau</h3><p data-i18n="st4p">Wöchentliche Updates &amp; Demos.</p></div>
+      <div class="step"><h3 data-i18n="st5h">Prüfung in DE</h3><p data-i18n="st5p">Funktions- und Sichtprüfung.</p></div>
+      <div class="step"><h3 data-i18n="st6h">Übergabe</h3><p data-i18n="st6p">Abnahme, Versand, alle Daten.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="mono" data-i18n="s4k">So arbeiten wir</p>
+      <h2 data-i18n="s4h">Deutsche Verantwortung, effizientes Engineering-Lab</h2>
+      <p data-i18n="s4p">Darum können wir schneller und günstiger liefern, ohne bei der Qualität nachzugeben.</p>
+    </div>
+    <div class="split">
+      <div class="card loc">
+        <span class="flag">DE · Reutlingen</span>
+        <h3 data-i18n="l1h">Projektleitung &amp; Qualität</h3>
+        <ul><li data-i18n="l1a">Vertrag nach deutschem Recht</li><li data-i18n="l1b">Systemarchitektur, Firmware, App</li><li data-i18n="l1c">Endprüfung vor Übergabe</li></ul>
+      </div>
+      <div class="card loc">
+        <span class="flag">EG · Engineering-Lab</span>
+        <h3 data-i18n="l2h">Hardware &amp; Fertigung</h3>
+        <ul><li data-i18n="l2a">PCB-Design und Bestückung</li><li data-i18n="l2b">Gehäusekonstruktion &amp; 3D-Druck</li><li data-i18n="l2c">Integration und Funktionstests</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="proof">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="mono" data-i18n="s5k">Referenzen</p>
+      <h2 data-i18n="s5h">Bereits gebaut</h2>
+      <p data-i18n="s5p">Eigene Projekte, die zeigen, wie wir arbeiten – Details gerne im Gespräch.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><h3 data-i18n="r1h">Bodenfeuchte-Sensorknoten</h3><p data-i18n="r1p">Kapazitiver Sensor, geschaltete Versorgung, Glättung und MQTT-Telemetrie.</p><div class="chips"><span class="chip">ESP8266</span><span class="chip">MQTT</span><span class="chip">Low-Power</span></div></div>
+      <div class="card"><h3 data-i18n="r2h">Aktivitäts-Tracker (BLE)</h3><p data-i18n="r2p">Bewegungsklassifikation auf dem Gerät aus Beschleunigungsdaten, Übertragung per BLE.</p><div class="chips"><span class="chip">nRF52</span><span class="chip">BLE GATT</span><span class="chip">Edge</span></div></div>
+      <div class="card"><h3 data-i18n="r3h">Smart-Home-Zentrale</h3><p data-i18n="r3p">Raspberry Pi mit Home Assistant, Kiosk-Dashboard und Steckdosen-Steuerung per MQTT.</p><div class="chips"><span class="chip">Raspberry Pi</span><span class="chip">Home Assistant</span><span class="chip">Shelly</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head"><p class="mono">FAQ</p><h2 data-i18n="s6h">Häufige Fragen</h2></div>
+    <details><summary data-i18n="q1">Wem gehören die Ergebnisse?</summary><p data-i18n="a1">Ihnen. Nach Bezahlung erhalten Sie alle Rechte an Quellcode, Schaltplänen, Layouts und CAD-Dateien.</p></details>
+    <details><summary data-i18n="q2">Ist der Prototyp CE-zertifiziert?</summary><p data-i18n="a2">Ein Prototyp ist noch kein Serienprodukt. Wir entwickeln aber mit Blick auf CE, RED und den Cyber Resilience Act, damit der Weg zur Zulassung kurz bleibt.</p></details>
+    <details><summary data-i18n="q3">Was, wenn sich die Anforderungen ändern?</summary><p data-i18n="a3">Kleine Anpassungen sind im Paket enthalten. Größere Änderungen bieten wir vorab zum Festpreis oder zu €39/Stunde an.</p></details>
+    <details><summary data-i18n="q4">Unterschreiben Sie eine NDA?</summary><p data-i18n="a4">Ja, gerne vor dem ersten technischen Gespräch. Alle Teammitglieder sind vertraglich zur Vertraulichkeit verpflichtet.</p></details>
+  </div>
+</section>
+
+<section id="kontakt">
+  <div class="wrap">
+    <div class="contact">
+      <p class="mono" style="color:inherit;opacity:.7" data-i18n="s7k">Kontakt</p>
+      <h2 data-i18n="s7h">Erzählen Sie uns von Ihrer Idee</h2>
+      <p data-i18n="s7p">Zwei, drei Sätze reichen: Was soll das Gerät tun, für wen, und bis wann? Sie erhalten innerhalb von 48 Stunden eine Antwort.</p>
+      <a class="btn" href="mailto:nilwerk.team@gmail.com?subject=Prototyp-Anfrage" data-i18n="s7b">E-Mail schreiben</a>
+      <span class="mail">nilwerk.team@gmail.com</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Nilwerk</span>
+    <span><a href="#impressum">Impressum</a> · <a href="#impressum" data-i18n="dsg">Datenschutz</a></span>
+  </div>
+  <div class="wrap legal" id="impressum">
+    <div>
+      <h3>Impressum</h3>
+      <p><span data-i18n="imp1">Angaben gemäß § 5 DDG</span><br>Arsany Tadrous, <span data-i18n="imp2">handelnd unter</span> Nilwerk<br>72764 Reutlingen<br><span data-i18n="imp3">Deutschland</span><br>E-Mail: <a href="mailto:nilwerk.team@gmail.com">nilwerk.team@gmail.com</a></p>
+      <h3 style="margin-top:14px" data-i18n="dsg">Datenschutz</h3>
+      <p data-i18n="dsgp">Diese Seite setzt keine Cookies, kein Tracking und keine externen Schriftarten ein. Gehostet wird sie bei GitHub Pages (GitHub Inc.), das beim Aufruf technisch notwendige Zugriffsdaten wie die IP-Adresse verarbeitet. Wenn Sie uns per E-Mail schreiben, wird Ihre Nachricht über Gmail (Google) verarbeitet; wir nutzen Ihre Angaben ausschließlich zur Bearbeitung Ihrer Anfrage und löschen sie, wenn sie dafür nicht mehr benötigt werden.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const EN={
+nav1:"Services",nav2:"Packages",nav3:"Process",nav4:"Contact",
+eyebrow:"Hardware prototypes for startups & SMEs",
+h1:"Your connected prototype. <em>Complete.</em> Fixed price.",
+lead:"Firmware, edge AI, IoT, app, PCB and enclosure from one team – built in our engineering lab, inspected and handed over in Germany. One contact, one contract, payment by milestone.",
+cta1:"Free intro call",cta2:"See packages",
+f1:"feasibility sprint",wk:"weeks",f2:"to a working prototype",f3:"contact person in Germany",
+s1k:"Services",s1h:"Six disciplines, one device",s1p:"You get a working system, not a piece of one – from sensor to app.",
+c1h:"Embedded firmware",c1p:"ESP32, nRF52, STM32. Sensors, power-saving modes, OTA updates, clean architecture.",
+c2h:"Edge AI",c2p:"Models running on the device: motion and audio detection, camera classification, no cloud required.",
+c3h:"IoT & cloud",c3p:"Wi-Fi, BLE, LoRa, MQTT, Home Assistant, dashboards. Data from device to system, securely.",
+c4h:"Apps & software",c4p:"Companion app (iOS/Android/web) for pairing, control and display – matched to the firmware.",
+c5h:"Circuit boards (PCB)",c5p:"Schematic, layout, fabrication and assembly – designed with later CE/RED in mind.",
+c6h:"Enclosure & 3D printing",c6p:"CAD design, FDM/SLA printing, fit testing – a device you can hold and show.",
+s2k:"Packages",s2h:"Fixed prices, not open timesheets",s2p:"All prices excl. VAT. The sprint is fully credited when you order a prototype package.",
+p1h:"Feasibility sprint",p1d:"1–2 weeks",p1a:"Requirements & system architecture",p1b:"Component selection & bill of materials",p1c:"Risk list & binding fixed-price quote",
+pbtn:"Request",pop:"Popular",
+p2h:"Prototype S",p2d:"about 6 weeks",p2a:"Working prototype on development boards",p2b:"Firmware + simple app or dashboard",p2c:"3D-printed enclosure",p2e:"2 units, inspection & handover in Germany",
+p3h:"Prototype M",p3d:"8–10 weeks",p3a:"Custom assembled PCB",p3b:"Edge AI or cloud connection",p3c:"Full companion app",p3e:"3 units + documentation & source code",
+pnote:"Extra engineering: €39/hour. You receive all source code, CAD and manufacturing files.",
+s3k:"Process",s3h:"You only pay for accepted milestones",
+st1h:"Request",st1p:"30-minute call, free.",st2h:"Sprint",st2p:"Architecture, BOM, fixed price.",st3h:"Milestones",st3p:"Paid in stages, not upfront.",
+st4h:"Build",st4p:"Weekly updates & demos.",st5h:"Inspection in DE",st5p:"Functional and visual check.",st6h:"Handover",st6p:"Acceptance, shipping, all files.",
+s4k:"How we work",s4h:"German accountability, efficient engineering lab",s4p:"That is how we deliver faster and for less without compromising on quality.",
+l1h:"Project lead & quality",l1a:"Contract under German law",l1b:"System architecture, firmware, app",l1c:"Final inspection before handover",
+l2h:"Hardware & fabrication",l2a:"PCB design and assembly",l2b:"Enclosure design & 3D printing",l2c:"Integration and functional tests",
+s5k:"References",s5h:"Already built",s5p:"Our own projects that show how we work – details on request.",
+r1h:"Soil moisture sensor node",r1p:"Capacitive sensor, switched power, smoothing and MQTT telemetry.",
+r2h:"Activity tracker (BLE)",r2p:"On-device motion classification from accelerometer data, sent over BLE.",
+r3h:"Smart-home hub",r3p:"Raspberry Pi with Home Assistant, kiosk dashboard and smart-plug control over MQTT.",
+s6h:"Frequently asked",
+q1:"Who owns the results?",a1:"You do. After payment you receive full rights to source code, schematics, layouts and CAD files.",
+q2:"Is the prototype CE certified?",a2:"A prototype is not yet a series product. We design with CE, RED and the Cyber Resilience Act in mind so the path to approval stays short.",
+q3:"What if requirements change?",a3:"Small adjustments are included. Larger changes are quoted upfront at a fixed price or at €39/hour.",
+q4:"Do you sign an NDA?",a4:"Yes, gladly before the first technical call. Every team member is bound to confidentiality by contract.",
+s7k:"Contact",s7h:"Tell us about your idea",s7p:"Two or three sentences are enough: what should the device do, for whom, and by when? You'll get a reply within 48 hours.",s7b:"Send an email",
+dsg:"Privacy",dsgp:"This site uses no cookies, no tracking and no external fonts. It is hosted on GitHub Pages (GitHub Inc.), which processes technically necessary access data such as your IP address. If you email us, your message is processed via Gmail (Google); we use your details only to handle your request and delete them when no longer needed.",
+from:"from",imp1:"Information pursuant to § 5 DDG",imp2:"trading as",imp3:"Germany"
+};
+const DE={};
+document.querySelectorAll("[data-i18n]").forEach(el=>DE[el.dataset.i18n]=el.textContent);
+document.querySelectorAll("[data-i18n-html]").forEach(el=>DE[el.dataset.i18nHtml]=el.innerHTML);
+function setLang(l){
+  const d=l==="en"?EN:DE;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{const v=d[el.dataset.i18n];if(v!==undefined)el.textContent=v;});
+  document.querySelectorAll("[data-i18n-html]").forEach(el=>{const v=d[el.dataset.i18nHtml];if(v!==undefined)el.innerHTML=v;});
+  document.documentElement.lang=l;
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===l));
+  try{localStorage.setItem("lang",l)}catch(e){}
+}
+document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>setLang(b.dataset.lang)));
+let saved=null;try{saved=localStorage.getItem("lang")}catch(e){}
+if(saved==="en"||(!saved&&!navigator.language.startsWith("de")))setLang("en");
+</script>
+</body>
+</html>
