@@ -279,7 +279,7 @@ footer a{color:var(--muted)}
   <div class="wrap">
     <div class="sec-head"><p class="mono">FAQ</p><h2 data-i18n="s6h">Häufige Fragen</h2></div>
     <details><summary data-i18n="q1">Wem gehören die Ergebnisse?</summary><p data-i18n="a1">Ihnen. Nach Bezahlung erhalten Sie alle Rechte an Quellcode, Schaltplänen, Layouts und CAD-Dateien.</p></details>
-    <details><summary data-i18n="q2">Ist der Prototyp CE-zertifiziert?</summary><p data-i18n="a2">Ein Prototyp ist noch kein Serienprodukt. Wir entwickeln aber mit Blick auf CE, RED und den Cyber Resilience Act, damit der Weg zur Zulassung kurz bleibt.</p></details>
+    <details><summary data-i18n="q2">Ist der Prototyp CE-zertifiziert?</summary><p data-i18n="a2">Nein – ein Prototyp ist noch kein Serienprodukt und braucht keine CE-Kennzeichnung. Wir legen ihn aber so aus, dass der Weg zur Zulassung kurz bleibt: vorzertifizierte Funkmodule (RED), EMV-gerechtes Platinenlayout und sichere Firmware-Updates ohne Standardpasswörter (Cyber Resilience Act). Die Zertifizierung selbst übernimmt später ein akkreditiertes Prüflabor; wir bereiten die Unterlagen dafür vor.</p></details>
     <details><summary data-i18n="q3">Was, wenn sich die Anforderungen ändern?</summary><p data-i18n="a3">Kleine Anpassungen sind im Paket enthalten. Größere Änderungen bieten wir vorab zum Festpreis oder zu €39/Stunde an.</p></details>
     <details><summary data-i18n="q4">Unterschreiben Sie eine NDA?</summary><p data-i18n="a4">Ja, gerne vor dem ersten technischen Gespräch. Alle Teammitglieder sind vertraglich zur Vertraulichkeit verpflichtet.</p></details>
   </div>
@@ -308,7 +308,7 @@ footer a{color:var(--muted)}
   <div class="wrap legal" id="impressum">
     <div>
       <h3>Impressum</h3>
-      <p><span data-i18n="imp1">Angaben gemäß § 5 DDG</span><br>Arsany Tadrous, <span data-i18n="imp2">handelnd unter</span> Nilwerk<br>72764 Reutlingen<br><span data-i18n="imp3">Deutschland</span><br>E-Mail: <a href="mailto:nilwerk.team@gmail.com">nilwerk.team@gmail.com</a></p>
+      <p><span data-i18n="imp1">Angaben gemäß § 5 DDG</span><br><strong>Nilwerk</strong><br><span data-i18n="imp2">Inhaber:</span> Arsany Tadrous<br>72764 Reutlingen<br><span data-i18n="imp3">Deutschland</span><br>E-Mail: <a href="mailto:nilwerk.team@gmail.com">nilwerk.team@gmail.com</a></p>
       <h3 style="margin-top:14px" data-i18n="dsg">Datenschutz</h3>
       <p data-i18n="dsgp">Diese Seite setzt keine Cookies, kein Tracking und keine externen Schriftarten ein. Gehostet wird sie bei GitHub Pages (GitHub Inc.), das beim Aufruf technisch notwendige Zugriffsdaten wie die IP-Adresse verarbeitet. Wenn Sie uns per E-Mail schreiben, wird Ihre Nachricht über Gmail (Google) verarbeitet; wir nutzen Ihre Angaben ausschließlich zur Bearbeitung Ihrer Anfrage und löschen sie, wenn sie dafür nicht mehr benötigt werden.</p>
     </div>
@@ -349,12 +349,12 @@ r3t:"Monitoring · Edge AI",r3h:"On-device activity recognition",r3p:"A compact 
 r4t:"Buildings · Automation",r4h:"Building automation and energy hub",r4p:"A local control centre for sensors, loads and energy metering, with touch dashboard and voice control. All devices connected over MQTT, remote access secured via VPN.",
 s6h:"Frequently asked",
 q1:"Who owns the results?",a1:"You do. After payment you receive full rights to source code, schematics, layouts and CAD files.",
-q2:"Is the prototype CE certified?",a2:"A prototype is not yet a series product. We design with CE, RED and the Cyber Resilience Act in mind so the path to approval stays short.",
+q2:"Is the prototype CE certified?",a2:"No – a prototype is not yet a series product and does not need CE marking. We design it so the path to approval stays short: pre-certified radio modules (RED), EMC-compliant PCB layout and secure firmware updates without default passwords (Cyber Resilience Act). Certification itself is done later by an accredited test lab; we prepare the documentation for it.",
 q3:"What if requirements change?",a3:"Small adjustments are included. Larger changes are quoted upfront at a fixed price or at €39/hour.",
 q4:"Do you sign an NDA?",a4:"Yes, gladly before the first technical call. Every team member is bound to confidentiality by contract.",
 s7k:"Contact",s7h:"Tell us about your idea",s7p:"Book a free 30-minute call via Google Meet right away – or send us two or three sentences: what should the device do, for whom, and by when? Reply within 48 hours.",s7b:"Send an email",s7c:"Book a 30-min call",
 dsg:"Privacy",dsgp:"This site uses no cookies, no tracking and no external fonts. It is hosted on GitHub Pages (GitHub Inc.), which processes technically necessary access data such as your IP address. If you email us, your message is processed via Gmail (Google); we use your details only to handle your request and delete them when no longer needed.",
-from:"from",imp1:"Information pursuant to § 5 DDG",imp2:"trading as",imp3:"Germany"
+from:"from",imp1:"Information pursuant to § 5 DDG",imp2:"Owner:",imp3:"Germany"
 };
 const DE={};
 document.querySelectorAll("[data-i18n]").forEach(el=>DE[el.dataset.i18n]=el.textContent);
