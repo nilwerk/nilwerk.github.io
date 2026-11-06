@@ -99,50 +99,92 @@ section{padding:64px 0;border-top:1px solid var(--line)}
 .loc .flag{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.78rem;color:var(--accent)}
 .loc ul{margin:12px 0 0;padding-left:18px;color:var(--muted)}
 /* ai workflow */
-.loop{display:grid;grid-template-columns:repeat(5,1fr)}
-.node{position:relative;padding-right:18px}
-.node:last-child{padding-right:0}
-.node::after{content:"";position:absolute;top:50%;right:3px;width:12px;height:1px;background:var(--accent)}
-.node::before{content:"";position:absolute;top:calc(50% - 3px);right:2px;width:6px;height:6px;border-top:1px solid var(--accent);border-right:1px solid var(--accent);transform:rotate(45deg)}
-.node:last-child::after,.node:last-child::before{display:none}
-.node .box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;height:100%}
-.node.gate .box{border:2px solid var(--ink)}
-.node h3{font-size:1rem;margin:10px 0 4px}
-.node p{margin:0;color:var(--muted);font-size:.88rem;line-height:1.45}
 .who{display:inline-block;font:600 .68rem "JetBrains Mono",ui-monospace,Menlo,monospace;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:6px;text-align:center;white-space:nowrap}
 .who.ai{background:var(--accent-soft);color:var(--accent)}
 .who.hu{background:var(--ink);color:var(--bg)}
 .who.lab{border:1px solid var(--warn);color:var(--warn);padding:2px 7px}
 .who.you,.who.repo{border:1px solid var(--line);color:var(--muted);padding:2px 7px}
-.loopback{margin:10px 9% 0;height:22px;border:1px dashed var(--accent);border-top:0;border-radius:0 0 14px 14px;position:relative}
+/* live run bar */
+.run{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:14px;font:500 .8rem "JetBrains Mono",ui-monospace,Menlo,monospace}
+.run .item{display:flex;gap:10px;align-items:center;min-width:0}
+.run .id{color:var(--accent);font-weight:600}
+.run .ttl{color:var(--ink)}
+.run .st{display:flex;gap:8px;align-items:center;color:var(--muted)}
+.pulse{width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none;animation:pulse 1.4s ease-in-out infinite}
+.run.wait .pulse{background:var(--warn)}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+/* loop */
+.loop{display:grid;grid-template-columns:repeat(5,1fr)}
+.node{position:relative;padding-right:22px}
+.node:last-child{padding-right:0}
+.node::after{content:"";position:absolute;top:50%;right:4px;width:14px;height:2px;border-radius:2px;background:var(--trace);transition:background .3s}
+.node::before{content:"";position:absolute;top:calc(50% - 3px);right:3px;width:6px;height:6px;border-top:2px solid var(--trace);border-right:2px solid var(--trace);transform:rotate(45deg);transition:border-color .3s}
+.node.done::after{background:var(--accent)}
+.node.done::before{border-color:var(--accent)}
+.node:last-child::after,.node:last-child::before{display:none}
+.node .box{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;height:100%;transition:border-color .3s,box-shadow .3s,transform .3s,opacity .3s}
+.node.gate .box{border:2px solid var(--ink)}
+.anim .node:not(.on):not(.done) .box{opacity:.6}
+.node.on .box{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);transform:translateY(-3px);opacity:1}
+.node.gate.on.wait .box{border-color:var(--warn);box-shadow:0 0 0 4px color-mix(in srgb,var(--warn) 18%,transparent)}
+.node .box .ok{position:absolute;top:12px;right:12px;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;opacity:0;transform:scale(.6);transition:opacity .25s,transform .25s}
+.node.done .box .ok{opacity:1;transform:scale(1)}
+.node h3{font-size:1rem;margin:10px 0 4px}
+.node p{margin:0;color:var(--muted);font-size:.88rem;line-height:1.45}
+.node .bar{height:3px;border-radius:3px;background:var(--line);margin-top:12px;overflow:hidden}
+.node .bar i{display:block;height:100%;width:0;background:var(--accent)}
+.node.done .bar i{width:100%}
+.node.on .bar i{animation:fill var(--d,1.8s) linear forwards}
+.node.on.wait .bar i{background:var(--warn)}
+@keyframes fill{from{width:0}to{width:100%}}
+.loopback{margin:12px 9% 0;height:22px;border:1px dashed var(--accent);border-top:0;border-radius:0 0 14px 14px;position:relative}
 .loopback span{position:absolute;left:50%;bottom:-.7em;transform:translateX(-50%);background:var(--bg);padding:0 10px;white-space:nowrap}
-.repo-note{display:flex;gap:10px;align-items:center;margin:34px 0 0;color:var(--muted);font-size:.95rem}
+/* event log */
+.log{margin-top:30px;background:#0f1216;color:#d9dcd6;border:1px solid var(--line);border-radius:12px;padding:12px 16px;font:500 .78rem/1.7 "JetBrains Mono",ui-monospace,Menlo,monospace;min-height:7.6em}
+.log .hd{display:flex;justify-content:space-between;gap:10px;color:#8a9099;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.log ol{list-style:none;margin:0;padding:0}
+.log li{display:flex;gap:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:logIn .35s ease-out}
+.log li .k{flex:none;width:7.5em;color:#3fc79a}
+.log li .k.hu{color:#f0f0ea}
+.log li .k.lab{color:#e58a4f}
+.log li .k.repo{color:#8a9099}
+.log li span:last-child{overflow:hidden;text-overflow:ellipsis}
+@keyframes logIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.repo-note{display:flex;gap:10px;align-items:center;margin:22px 0 0;color:var(--muted);font-size:.95rem}
 .repo-note svg{flex:none;color:var(--accent)}
+/* stories */
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:40px 0 14px}
 .tabs button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font:600 .9rem Inter,system-ui,sans-serif;cursor:pointer}
 .tabs button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .story{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
 .story>p{margin:0 0 18px;color:var(--muted);font-size:.95rem}
-.chain{list-style:none;margin:0;padding:0;display:grid}
-.chain li{display:grid;grid-template-columns:92px 1fr;gap:14px;align-items:start;position:relative;padding-bottom:16px}
-.chain li:last-child{padding-bottom:0}
-.chain li::before{content:"";position:absolute;left:46px;top:24px;bottom:0;width:1px;background:var(--trace)}
-.chain li:last-child::before{display:none}
-.chain .who{position:relative;z-index:1;background-clip:padding-box}
-.chain .who.lab,.chain .who.you{background:var(--surface)}
-.chain b{display:block;font-weight:600;font-size:.97rem}
-.chain span.d{color:var(--muted);font-size:.9rem}
-.chain .chips{margin-top:6px}
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:16px}
+.flow li{position:relative;min-width:0;hyphens:auto;-webkit-hyphens:auto;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 10px;transition:border-color .3s,box-shadow .3s,opacity .3s,transform .3s}
+.flow li::after{content:"";position:absolute;top:50%;right:-13px;width:10px;height:2px;border-radius:2px;background:var(--trace);transition:background .3s}
+.flow li:last-child::after{display:none}
+.flow li.done::after{background:var(--accent)}
+.anim .flow li:not(.on):not(.done){opacity:.5}
+.flow li.on{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);transform:translateY(-2px)}
+.flow b{display:block;font-weight:600;font-size:.88rem;line-height:1.3;margin-top:8px}
+.flow span.d{display:block;color:var(--muted);font-size:.8rem;line-height:1.4;margin-top:3px}
+.flow .chips{margin-top:6px;gap:4px}
+.flow .chip{font-size:.66rem;padding:1px 5px;white-space:normal}
 .team{margin-top:16px}
+@media(prefers-reduced-motion:reduce){.pulse,.log li{animation:none}.node .box,.flow li{transition:none}}
+@media(max-width:900px){
+  .flow{grid-auto-flow:row;grid-auto-columns:auto;gap:14px}
+  .flow li::after{top:auto;bottom:-10px;right:auto;left:22px;width:2px;height:6px}
+}
 @media(max-width:760px){
   .loop{grid-template-columns:1fr}
-  .node{padding:0 0 18px}
+  .node{padding:0 0 22px}
   .node:last-child{padding-bottom:0}
-  .node::after{top:auto;bottom:3px;right:auto;left:28px;width:1px;height:12px}
-  .node::before{top:auto;bottom:2px;right:auto;left:25px;transform:rotate(135deg)}
+  .node::after{top:auto;bottom:4px;right:auto;left:28px;width:2px;height:14px}
+  .node::before{top:auto;bottom:3px;right:auto;left:25px;transform:rotate(135deg)}
   .loopback{display:none}
-  .chain li{grid-template-columns:80px 1fr;gap:12px}
-  .chain li::before{left:40px}
+  .log li{white-space:normal;display:grid;grid-template-columns:6.5em 1fr;gap:8px}
+  .log li .k{width:auto}
+  .log li span:last-child{overflow:visible}
 }
 /* proof */
 .proof .card{display:flex;flex-direction:column;gap:6px}
@@ -292,14 +334,26 @@ footer a{color:var(--muted)}
       <p data-i18n="s4p">Ein Team spezialisierter KI-Agenten übernimmt Recherche, Entwürfe, Code und Tests. Vor jedem nächsten Schritt prüft ein Mensch. So liefern wir schneller und günstiger – und bleiben verantwortlich.</p>
     </div>
 
-    <div class="loop" role="list" aria-label="Arbeitsschleife">
-      <div class="node" role="listitem"><div class="box"><span class="who repo" data-i18n="w-repo">Projekt</span><h3 data-i18n="n1h">Kontext</h3><p data-i18n="n1p">Anforderungen und aktueller Projektstand.</p></div></div>
-      <div class="node" role="listitem"><div class="box"><span class="who ai" data-i18n="w-ai">KI-Agent</span><h3 data-i18n="n2h">Ausarbeiten</h3><p data-i18n="n2p">Entwurf, Code, Analyse oder Test.</p></div></div>
-      <div class="node gate" role="listitem"><div class="box"><span class="who hu" data-i18n="w-hu">Mensch</span><h3 data-i18n="n3h">Freigabe</h3><p data-i18n="n3p">Ein Ingenieur prüft und entscheidet.</p></div></div>
-      <div class="node" role="listitem"><div class="box"><span class="who lab" data-i18n="w-lab">Lab</span><h3 data-i18n="n4h">Umsetzen</h3><p data-i18n="n4p">Bauen, flashen, messen, testen.</p></div></div>
-      <div class="node" role="listitem"><div class="box"><span class="who repo" data-i18n="w-repo">Projekt</span><h3 data-i18n="n5h">Nachweis</h3><p data-i18n="n5p">Ergebnis und Testdaten zurück ins Projekt.</p></div></div>
+    <div id="wf">
+      <div class="run" aria-live="off">
+        <div class="item"><span class="id" id="run-id">REQ-014</span><span class="ttl" id="run-ttl">Akku-Laufzeit ≥ 6 Monate</span></div>
+        <div class="st"><span class="pulse" aria-hidden="true"></span><span id="run-st">Beispiel-Ablauf</span></div>
+      </div>
+
+      <div class="loop" role="list" aria-label="Arbeitsschleife">
+        <div class="node" role="listitem"><div class="box"><span class="ok" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2.5 6.5l2.3 2.3L9.5 3.5"/></svg></span><span class="who repo" data-i18n="w-repo">Projekt</span><h3 data-i18n="n1h">Kontext</h3><p data-i18n="n1p">Anforderungen und aktueller Projektstand.</p><div class="bar"><i></i></div></div></div>
+        <div class="node" role="listitem"><div class="box"><span class="ok" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2.5 6.5l2.3 2.3L9.5 3.5"/></svg></span><span class="who ai" data-i18n="w-ai">KI-Agent</span><h3 data-i18n="n2h">Ausarbeiten</h3><p data-i18n="n2p">Entwurf, Code, Analyse oder Test.</p><div class="bar"><i></i></div></div></div>
+        <div class="node gate" role="listitem"><div class="box"><span class="ok" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2.5 6.5l2.3 2.3L9.5 3.5"/></svg></span><span class="who hu" data-i18n="w-hu">Mensch</span><h3 data-i18n="n3h">Freigabe</h3><p data-i18n="n3p">Ein Ingenieur prüft und entscheidet.</p><div class="bar"><i></i></div></div></div>
+        <div class="node" role="listitem"><div class="box"><span class="ok" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2.5 6.5l2.3 2.3L9.5 3.5"/></svg></span><span class="who lab" data-i18n="w-lab">Lab</span><h3 data-i18n="n4h">Umsetzen</h3><p data-i18n="n4p">Bauen, flashen, messen, testen.</p><div class="bar"><i></i></div></div></div>
+        <div class="node" role="listitem"><div class="box"><span class="ok" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2.5 6.5l2.3 2.3L9.5 3.5"/></svg></span><span class="who repo" data-i18n="w-repo">Projekt</span><h3 data-i18n="n5h">Nachweis</h3><p data-i18n="n5p">Ergebnis und Testdaten zurück ins Projekt.</p><div class="bar"><i></i></div></div></div>
+      </div>
+      <div class="loopback" aria-hidden="true"><span class="mono" data-i18n="loop">nächste Iteration</span></div>
+
+      <div class="log" aria-hidden="true">
+        <div class="hd"><span data-i18n="logh">Projekt-Log</span><span data-i18n="logs">Beispiel · simuliert</span></div>
+        <ol id="log"></ol>
+      </div>
     </div>
-    <div class="loopback" aria-hidden="true"><span class="mono" data-i18n="loop">nächste Iteration</span></div>
 
     <p class="repo-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="9" r="2.5"/><path d="M6 8.5v7M18 11.5c0 3-3 3.5-9.5 5"/></svg><span data-i18n="repo">Alle Agenten arbeiten im selben Projekt-Repository – keine Kopien in Chatfenstern. Bei Übergabe erhalten Sie es vollständig.</span></p>
 
@@ -310,29 +364,28 @@ footer a{color:var(--muted)}
 
     <div class="story" role="tabpanel" id="story-a" aria-labelledby="tab-a">
       <p data-i18n="sa">Ein typischer Prototyp – von der Idee bis zur Übergabe.</p>
-      <ol class="chain">
-        <li><span class="who you" data-i18n="w-you">Sie</span><div><b data-i18n="a1h">Idee und Anforderungen</b><span class="d" data-i18n="a1p">Im kostenlosen Erstgespräch.</span></div></li>
-        <li><span class="who ai" data-i18n="w-ai">KI-Agent</span><div><b data-i18n="a2h">Systemarchitektur</b><span class="d" data-i18n="a2p">Architektur, Stückliste und Risikoliste als Entwurf.</span></div></li>
-        <li><span class="who hu" data-i18n="w-hu">Mensch</span><div><b data-i18n="a3h">Architektur-Review</b><span class="d" data-i18n="a3p">Daraus entsteht Ihr verbindlicher Festpreis.</span></div></li>
-        <li><span class="who ai" data-i18n="w-ais">KI-Agenten</span><div><b data-i18n="a4h">Parallele Entwicklung</b><span class="d" data-i18n="a4p">Vier Spezialisten arbeiten gleichzeitig am selben Gerät.</span><div class="chips"><span class="chip" data-i18n="ch1">Firmware &amp; Edge AI</span><span class="chip">App</span><span class="chip" data-i18n="ch2">PCB mit Simulation</span><span class="chip" data-i18n="ch3">3D-Gehäuse</span></div></div></li>
-        <li><span class="who ai" data-i18n="w-ai">KI-Agent</span><div><b data-i18n="a5h">Qualitätssicherung</b><span class="d" data-i18n="a5p">Tests direkt aus den Anforderungen; jede Änderung wird automatisch geprüft.</span></div></li>
-        <li><span class="who lab" data-i18n="w-lab">Lab</span><div><b data-i18n="a6h">Aufbau und Funktionstests</b><span class="d" data-i18n="a6p">Echte Hardware, echte Messwerte.</span></div></li>
-        <li><span class="who hu" data-i18n="w-hu">Mensch</span><div><b data-i18n="a7h">Endprüfung in Reutlingen</b><span class="d" data-i18n="a7p">Abnahme, Übergabe, alle Daten.</span></div></li>
+      <ol class="flow">
+        <li><span class="who you" data-i18n="w-you">Sie</span><b data-i18n="a1h">Idee und Anforderungen</b><span class="d" data-i18n="a1p">Im kostenlosen Erstgespräch.</span></li>
+        <li><span class="who ai" data-i18n="w-ai">KI-Agent</span><b data-i18n="a2h">Systemarchitektur</b><span class="d" data-i18n="a2p">Architektur, Stückliste und Risikoliste als Entwurf.</span></li>
+        <li><span class="who hu" data-i18n="w-hu">Mensch</span><b data-i18n="a3h">Architektur-Review</b><span class="d" data-i18n="a3p">Daraus entsteht Ihr verbindlicher Festpreis.</span></li>
+        <li><span class="who ai" data-i18n="w-ais">KI-Agenten</span><b data-i18n="a4h">Parallele Entwicklung</b><div class="chips"><span class="chip" data-i18n="ch1">Firmware &amp; Edge AI</span><span class="chip">App</span><span class="chip" data-i18n="ch2">PCB mit Simulation</span><span class="chip" data-i18n="ch3">3D-Gehäuse</span></div></li>
+        <li><span class="who ai" data-i18n="w-ai">KI-Agent</span><b data-i18n="a5h">Qualitätssicherung</b><span class="d" data-i18n="a5p">Tests aus den Anforderungen, bei jeder Änderung.</span></li>
+        <li><span class="who lab" data-i18n="w-lab">Lab</span><b data-i18n="a6h">Aufbau und Funktionstests</b><span class="d" data-i18n="a6p">Echte Hardware, echte Messwerte.</span></li>
+        <li><span class="who hu" data-i18n="w-hu">Mensch</span><b data-i18n="a7h">Endprüfung in Reutlingen</b><span class="d" data-i18n="a7p">Abnahme, Übergabe, alle Daten.</span></li>
       </ol>
     </div>
 
     <div class="story" role="tabpanel" id="story-b" aria-labelledby="tab-b" hidden>
       <p data-i18n="sb">Anforderungen ändern sich. So bleibt der Festpreis trotzdem planbar.</p>
-      <ol class="chain">
-        <li><span class="who you" data-i18n="w-you">Sie</span><div><b data-i18n="b1h">Änderungswunsch</b><span class="d" data-i18n="b1p">Zum Beispiel ein zusätzlicher Sensor oder eine neue Funktion.</span></div></li>
-        <li><span class="who ai" data-i18n="w-ai">KI-Agent</span><div><b data-i18n="b2h">Auswirkungsanalyse</b><span class="d" data-i18n="b2p">Was betrifft das in Platine, Firmware, App, Gehäuse und Kosten?</span></div></li>
-        <li><span class="who hu" data-i18n="w-hu">Mensch</span><div><b data-i18n="b3h">Bewertung und Angebot</b><span class="d" data-i18n="b3p">Sie erhalten vorab einen Festpreis für die Änderung.</span></div></li>
-        <li><span class="who you" data-i18n="w-you">Sie</span><div><b data-i18n="b4h">Freigabe</b><span class="d" data-i18n="b4p">Erst nach Ihrem Okay geht es weiter.</span></div></li>
-        <li><span class="who ai" data-i18n="w-ais">KI-Agenten</span><div><b data-i18n="b5h">Umsetzung mit Tests</b><span class="d" data-i18n="b5p">Betroffene Teile werden angepasst und erneut geprüft.</span></div></li>
-        <li><span class="who hu" data-i18n="w-hu">Mensch</span><div><b data-i18n="b6h">Review und Demo</b><span class="d" data-i18n="b6p">Sie sehen das Ergebnis im nächsten Wochen-Update.</span></div></li>
+      <ol class="flow">
+        <li><span class="who you" data-i18n="w-you">Sie</span><b data-i18n="b1h">Änderungswunsch</b><span class="d" data-i18n="b1p">Z. B. ein zusätzlicher Sensor.</span></li>
+        <li><span class="who ai" data-i18n="w-ai">KI-Agent</span><b data-i18n="b2h">Auswirkungsanalyse</b><span class="d" data-i18n="b2p">Platine, Firmware, App, Gehäuse, Kosten.</span></li>
+        <li><span class="who hu" data-i18n="w-hu">Mensch</span><b data-i18n="b3h">Bewertung und Angebot</b><span class="d" data-i18n="b3p">Festpreis für die Änderung, vorab.</span></li>
+        <li><span class="who you" data-i18n="w-you">Sie</span><b data-i18n="b4h">Freigabe</b><span class="d" data-i18n="b4p">Erst nach Ihrem Okay geht es weiter.</span></li>
+        <li><span class="who ai" data-i18n="w-ais">KI-Agenten</span><b data-i18n="b5h">Umsetzung mit Tests</b><span class="d" data-i18n="b5p">Betroffene Teile anpassen und erneut prüfen.</span></li>
+        <li><span class="who hu" data-i18n="w-hu">Mensch</span><b data-i18n="b6h">Review und Demo</b><span class="d" data-i18n="b6p">Im nächsten Wochen-Update.</span></li>
       </ol>
     </div>
-
     <div class="grid g3 team">
       <div class="card loc">
         <span class="flag" data-i18n="l0f">KI · Agenten-Team</span>
@@ -376,6 +429,7 @@ footer a{color:var(--muted)}
     <details><summary data-i18n="q2">Ist der Prototyp CE-zertifiziert?</summary><p data-i18n="a2">Nein – ein Prototyp ist noch kein Serienprodukt und braucht keine CE-Kennzeichnung. Wir legen ihn aber so aus, dass der Weg zur Zulassung kurz bleibt: vorzertifizierte Funkmodule (RED), EMV-gerechtes Platinenlayout und sichere Firmware-Updates ohne Standardpasswörter (Cyber Resilience Act). Die Zertifizierung selbst übernimmt später ein akkreditiertes Prüflabor; wir bereiten die Unterlagen dafür vor.</p></details>
     <details><summary data-i18n="q3">Was, wenn sich die Anforderungen ändern?</summary><p data-i18n="a3">Kleine Anpassungen sind im Paket enthalten. Größere Änderungen bieten wir vorab zum Festpreis oder zu €39/Stunde an.</p></details>
     <details><summary data-i18n="q4">Unterschreiben Sie eine NDA?</summary><p data-i18n="a4">Ja, gerne vor dem ersten technischen Gespräch. Alle Teammitglieder sind vertraglich zur Vertraulichkeit verpflichtet.</p></details>
+    <details><summary data-i18n="q5">Werden Projektdaten mit KI-Diensten verarbeitet?</summary><p data-i18n="a5">Ja. Unsere KI-Agenten arbeiten mit Sprachmodellen eines externen KI-Anbieters. Projektinhalte wie Anforderungen, Code und technische Dokumentation werden dafür an dessen Dienste übermittelt und dort verarbeitet. Wenn bestimmte Unterlagen nicht an externe KI-Dienste gehen dürfen, sagen Sie es uns vor Projektstart – wir vereinbaren dann, wie wir damit umgehen, und halten es in der NDA bzw. im Vertrag fest.</p></details>
   </div>
 </section>
 
@@ -441,7 +495,7 @@ n2h:"Work it out",n2p:"Draft, code, analysis or test.",
 n3h:"Approval",n3p:"An engineer reviews and decides.",
 n4h:"Build",n4p:"Build, flash, measure, test.",
 n5h:"Evidence",n5p:"Results and test data back into the project.",
-loop:"next iteration",
+loop:"next iteration",logh:"Project log",logs:"Example · simulated",
 repo:"Every agent works in the same project repository – no copies pasted into chat windows. At handover, it is yours in full.",
 ta:"From concept to working prototype",tb:"When something changes",
 sa:"A typical prototype – from idea to handover.",
@@ -450,16 +504,16 @@ a2h:"System architecture",a2p:"Architecture, bill of materials and risk list as 
 a3h:"Architecture review",a3p:"This becomes your binding fixed price.",
 a4h:"Parallel development",a4p:"Four specialists work on the same device at the same time.",
 ch1:"Firmware & edge AI",ch2:"PCB with simulation",ch3:"3D enclosure",
-a5h:"Quality assurance",a5p:"Tests derived from the requirements; every change is checked automatically.",
+a5h:"Quality assurance",a5p:"Tests from the requirements, on every change.",
 a6h:"Assembly and functional tests",a6p:"Real hardware, real measurements.",
 a7h:"Final inspection in Reutlingen",a7p:"Acceptance, handover, all files.",
 sb:"Requirements change. Here is how the fixed price stays predictable.",
-b1h:"Change request",b1p:"For example an extra sensor or a new feature.",
-b2h:"Impact analysis",b2p:"What does it affect in PCB, firmware, app, enclosure and cost?",
-b3h:"Review and quote",b3p:"You get a fixed price for the change upfront.",
+b1h:"Change request",b1p:"E.g. an extra sensor.",
+b2h:"Impact analysis",b2p:"PCB, firmware, app, enclosure, cost.",
+b3h:"Review and quote",b3p:"A fixed price for the change, upfront.",
 b4h:"Approval",b4p:"Nothing moves until you say yes.",
-b5h:"Implementation with tests",b5p:"Affected parts are updated and tested again.",
-b6h:"Review and demo",b6p:"You see the result in the next weekly update.",
+b5h:"Implementation with tests",b5p:"Update affected parts and test again.",
+b6h:"Review and demo",b6p:"In the next weekly update.",
 l0f:"AI · Agent team",l0h:"Development & tests",l0a:"Architecture, firmware, app, PCB, 3D, QA",l0b:"Coordinated daily by a project-lead agent",l0c:"Weekly updates and demos for you",
 l1h:"Project lead & approvals",l1a:"Contract under German law",l1b:"Review of every milestone",l1c:"Final inspection before handover",
 l2h:"Hardware & fabrication",l2a:"PCB assembly",l2b:"Enclosure fabrication & 3D printing",l2c:"Integration and functional tests",
@@ -473,6 +527,7 @@ q1:"Who owns the results?",a1:"You do. After payment you receive full rights to 
 q2:"Is the prototype CE certified?",a2:"No – a prototype is not yet a series product and does not need CE marking. We design it so the path to approval stays short: pre-certified radio modules (RED), EMC-compliant PCB layout and secure firmware updates without default passwords (Cyber Resilience Act). Certification itself is done later by an accredited test lab; we prepare the documentation for it.",
 q3:"What if requirements change?",a3:"Small adjustments are included. Larger changes are quoted upfront at a fixed price or at €39/hour.",
 q4:"Do you sign an NDA?",a4:"Yes, gladly before the first technical call. Every team member is bound to confidentiality by contract.",
+q5:"Is project data processed by AI services?",a5:"Yes. Our AI agents run on language models from an external AI provider. Project content such as requirements, code and technical documentation is sent to that provider's services and processed there. If certain documents must not go to external AI services, tell us before the project starts – we will agree how to handle them and put it in the NDA or contract.",
 s7k:"Contact",s7h:"Tell us about your idea",s7p:"Book a free 30-minute call via Google Meet right away – or send us two or three sentences: what should the device do, for whom, and by when? Reply within 48 hours.",s7b:"Send an email",s7c:"Book a 30-min call",
 dsg:"Privacy",dsgp:"This site uses no cookies, no tracking and no external fonts. It is hosted on GitHub Pages (GitHub Inc.), which processes technically necessary access data such as your IP address. If you email us, your message is processed via Gmail (Google); we use your details only to handle your request and delete them when no longer needed.",
 from:"from",imp1:"Information pursuant to § 5 DDG",imp2:"Owner:",imp3:"Germany"
@@ -487,6 +542,7 @@ function setLang(l){
   document.documentElement.lang=l;
   document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===l));
   try{localStorage.setItem("lang",l)}catch(e){}
+  document.dispatchEvent(new Event("langchange"));
 }
 document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>setLang(b.dataset.lang)));
 const tabs=[...document.querySelectorAll('[role="tab"]')];
@@ -494,6 +550,92 @@ function showTab(t){tabs.forEach(x=>{const on=x===t;x.setAttribute("aria-selecte
 tabs.forEach((t,i)=>{t.addEventListener("click",()=>showTab(t));t.addEventListener("keydown",e=>{if(e.key==="ArrowRight"||e.key==="ArrowLeft"){const n=tabs[(i+(e.key==="ArrowRight"?1:tabs.length-1))%tabs.length];showTab(n);n.focus();}});});
 let saved=null;try{saved=localStorage.getItem("lang")}catch(e){}
 if(saved==="en"||(!saved&&!navigator.language.startsWith("de")))setLang("en");
+/* live workflow demo */
+(function(){
+  const RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const L=()=>document.documentElement.lang==="en"?"en":"de";
+  const K={de:["KONTEXT","KI-AGENT","FREIGABE","LAB","NACHWEIS"],en:["CONTEXT","AI AGENT","APPROVAL","LAB","EVIDENCE"]};
+  const KC=["repo","","hu","lab","repo"];
+  const S=[
+    {id:"REQ-014",t:{de:"Akku-Laufzeit ≥ 6 Monate",en:"Battery life ≥ 6 months"},
+     s:{de:["Liest Anforderung, Schaltplan und Messdaten","Firmware-Agent entwirft Deep-Sleep-Zyklus","Wartet auf Code-Review …","Lab misst Ruhestrom am Muster","Messbericht im Projekt abgelegt"],
+        en:["Reads requirement, schematic and measurements","Firmware agent drafts a deep-sleep cycle","Waiting for code review …","Lab measures sleep current on the unit","Measurement report saved to the project"]}},
+    {id:"PCB-03",t:{de:"Antennen-Freiraum auf der Platine",en:"Antenna keep-out on the PCB"},
+     s:{de:["Liest Layout und Datenblatt des Funkmoduls","PCB-Agent simuliert und passt das Layout an","Wartet auf Layout-Review …","Lab bestückt und prüft die Reichweite","Layout-Version und Testergebnis gespeichert"],
+        en:["Reads layout and radio-module datasheet","PCB agent simulates and adjusts the layout","Waiting for layout review …","Lab assembles and tests the range","Layout version and test result saved"]}},
+    {id:"APP-021",t:{de:"Kopplung per Bluetooth",en:"Bluetooth pairing"},
+     s:{de:["Liest Firmware-Schnittstelle und App-Stand","App-Agent baut den Ablauf, QA-Agent schreibt Tests","Wartet auf Demo-Freigabe …","Lab testet mit echter Hardware","Testprotokoll und Build gespeichert"],
+        en:["Reads firmware interface and app state","App agent builds the flow, QA agent writes tests","Waiting for demo approval …","Lab tests with real hardware","Test log and build saved"]}}
+  ];
+  const OK={de:"Freigegeben ✓",en:"Approved ✓"}, IDLE={de:"Beispiel-Ablauf",en:"Example run"};
+  const wf=document.getElementById("wf"); if(!wf) return;
+  const nodes=[...wf.querySelectorAll(".node")], run=wf.querySelector(".run"),
+        rid=document.getElementById("run-id"), rttl=document.getElementById("run-ttl"),
+        rst=document.getElementById("run-st"), log=document.getElementById("log");
+  let sc=0, st=-1, phase="", timer=null, visible=false;
+
+  function line(k,cls,txt){
+    const li=document.createElement("li");
+    li.innerHTML='<span class="k '+cls+'"></span><span></span>';
+    li.children[0].textContent=k; li.children[1].textContent=txt;
+    log.appendChild(li); while(log.children.length>4) log.removeChild(log.firstChild);
+  }
+  function paint(){
+    const l=L(), s=S[sc];
+    rid.textContent=s.id; rttl.textContent=s.t[l];
+    rst.textContent=st<0?IDLE[l]:(phase==="ok"?OK[l]:s.s[l][st]);
+    run.classList.toggle("wait",phase==="wait");
+    nodes.forEach((n,i)=>{n.classList.toggle("done",i<st||(i===st&&phase==="ok"));n.classList.toggle("on",i===st&&phase!=="ok");n.classList.toggle("wait",i===st&&phase==="wait");});
+  }
+  function setDur(n,ms){n.style.setProperty("--d",ms+"ms");const i=n.querySelector(".bar i");i.style.animation="none";void i.offsetWidth;i.style.animation="";}
+  function step(){
+    if(!visible){timer=null;return;}
+    const l=L(), s=S[sc];
+    if(st===2&&phase==="wait"){phase="ok";line(K[l][2],"hu",s.id+" · "+OK[l]);paint();return next(900);}
+    if(st>=4){ // scenario finished
+      nodes.forEach(n=>n.classList.add("done"));nodes[4].classList.remove("on");
+      sc=(sc+1)%S.length; st=-1; phase=""; return next(1600);
+    }
+    st++;
+    phase=st===2?"wait":"run";
+    const d=st===2?1500:1700;
+    setDur(nodes[st],d); paint();
+    if(st!==2) line(K[l][st],KC[st],s.id+" · "+s.s[l][st]); else line(K[l][2],"hu",s.id+" · "+s.s[l][2]);
+    next(d);
+  }
+  function next(ms){timer=setTimeout(step,ms);}
+  function start(){if(timer) return; if(st<0&&!log.children.length) step(); else next(400);}
+
+  paint();
+  if(RM){ // static: show all stages done for the first example
+    st=4;phase="ok";paint();nodes.forEach(n=>n.classList.add("done"));
+    S[0].s[L()].forEach((t,i)=>line(K[L()][i],KC[i],S[0].id+" · "+t));
+  } else {
+    wf.classList.add("anim");
+    new IntersectionObserver(es=>{visible=es[0].isIntersecting; if(visible) start(); else {clearTimeout(timer);timer=null;}},{threshold:.35}).observe(wf);
+  }
+  document.addEventListener("langchange",()=>{paint();log.innerHTML="";});
+
+  /* stories: step through the active flow */
+  const flows=[...document.querySelectorAll(".story .flow")];
+  if(RM) return;
+  document.querySelectorAll(".story").forEach(s=>s.classList.add("anim"));
+  let fi=-1, ft=null, fvis=false;
+  const active=()=>flows.find(f=>!f.closest(".story").hidden);
+  function fstep(){
+    const f=active(); if(!f||!fvis){ft=null;return;}
+    const items=[...f.children];
+    fi++;
+    if(fi>=items.length){items.forEach(x=>{x.classList.remove("on");x.classList.add("done");});fi=-1;ft=setTimeout(()=>{items.forEach(x=>x.classList.remove("done"));fstep();},2200);return;}
+    items.forEach((x,i)=>{x.classList.toggle("done",i<fi);x.classList.toggle("on",i===fi);});
+    ft=setTimeout(fstep,1500);
+  }
+  function freset(){clearTimeout(ft);ft=null;fi=-1;flows.forEach(f=>[...f.children].forEach(x=>x.classList.remove("on","done")));if(fvis) fstep();}
+  const seen=new Set();
+  const io=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?seen.add(e.target):seen.delete(e.target));const v=seen.size>0;if(v&&!fvis){fvis=true;freset();}else if(!v&&fvis){fvis=false;clearTimeout(ft);ft=null;}},{threshold:.25});
+  document.querySelectorAll(".story").forEach(s=>io.observe(s));
+  document.querySelectorAll('[role="tab"]').forEach(t=>t.addEventListener("click",freset));
+})();
 </script>
 </body>
 </html>
