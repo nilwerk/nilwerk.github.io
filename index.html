@@ -98,6 +98,52 @@ section{padding:64px 0;border-top:1px solid var(--line)}
 .loc{padding:26px}
 .loc .flag{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.78rem;color:var(--accent)}
 .loc ul{margin:12px 0 0;padding-left:18px;color:var(--muted)}
+/* ai workflow */
+.loop{display:grid;grid-template-columns:repeat(5,1fr)}
+.node{position:relative;padding-right:18px}
+.node:last-child{padding-right:0}
+.node::after{content:"";position:absolute;top:50%;right:3px;width:12px;height:1px;background:var(--accent)}
+.node::before{content:"";position:absolute;top:calc(50% - 3px);right:2px;width:6px;height:6px;border-top:1px solid var(--accent);border-right:1px solid var(--accent);transform:rotate(45deg)}
+.node:last-child::after,.node:last-child::before{display:none}
+.node .box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;height:100%}
+.node.gate .box{border:2px solid var(--ink)}
+.node h3{font-size:1rem;margin:10px 0 4px}
+.node p{margin:0;color:var(--muted);font-size:.88rem;line-height:1.45}
+.who{display:inline-block;font:600 .68rem "JetBrains Mono",ui-monospace,Menlo,monospace;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:6px;text-align:center;white-space:nowrap}
+.who.ai{background:var(--accent-soft);color:var(--accent)}
+.who.hu{background:var(--ink);color:var(--bg)}
+.who.lab{border:1px solid var(--warn);color:var(--warn);padding:2px 7px}
+.who.you,.who.repo{border:1px solid var(--line);color:var(--muted);padding:2px 7px}
+.loopback{margin:10px 9% 0;height:22px;border:1px dashed var(--accent);border-top:0;border-radius:0 0 14px 14px;position:relative}
+.loopback span{position:absolute;left:50%;bottom:-.7em;transform:translateX(-50%);background:var(--bg);padding:0 10px;white-space:nowrap}
+.repo-note{display:flex;gap:10px;align-items:center;margin:34px 0 0;color:var(--muted);font-size:.95rem}
+.repo-note svg{flex:none;color:var(--accent)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:40px 0 14px}
+.tabs button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font:600 .9rem Inter,system-ui,sans-serif;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.story{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+.story>p{margin:0 0 18px;color:var(--muted);font-size:.95rem}
+.chain{list-style:none;margin:0;padding:0;display:grid}
+.chain li{display:grid;grid-template-columns:92px 1fr;gap:14px;align-items:start;position:relative;padding-bottom:16px}
+.chain li:last-child{padding-bottom:0}
+.chain li::before{content:"";position:absolute;left:46px;top:24px;bottom:0;width:1px;background:var(--trace)}
+.chain li:last-child::before{display:none}
+.chain .who{position:relative;z-index:1;background-clip:padding-box}
+.chain .who.lab,.chain .who.you{background:var(--surface)}
+.chain b{display:block;font-weight:600;font-size:.97rem}
+.chain span.d{color:var(--muted);font-size:.9rem}
+.chain .chips{margin-top:6px}
+.team{margin-top:16px}
+@media(max-width:760px){
+  .loop{grid-template-columns:1fr}
+  .node{padding:0 0 18px}
+  .node:last-child{padding-bottom:0}
+  .node::after{top:auto;bottom:3px;right:auto;left:28px;width:1px;height:12px}
+  .node::before{top:auto;bottom:2px;right:auto;left:25px;transform:rotate(135deg)}
+  .loopback{display:none}
+  .chain li{grid-template-columns:80px 1fr;gap:12px}
+  .chain li::before{left:40px}
+}
 /* proof */
 .proof .card{display:flex;flex-direction:column;gap:6px}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
@@ -135,6 +181,7 @@ footer a{color:var(--muted)}
       <a href="#leistungen" data-i18n="nav1">Leistungen</a>
       <a href="#pakete" data-i18n="nav2">Pakete</a>
       <a href="#ablauf" data-i18n="nav3">Ablauf</a>
+      <a href="#ki-workflow" data-i18n="nav5">KI-Workflow</a>
       <a href="#kontakt" data-i18n="nav4">Kontakt</a>
       <div class="lang" role="group" aria-label="Sprache">
         <button type="button" data-lang="de" aria-pressed="true">DE</button>
@@ -237,23 +284,70 @@ footer a{color:var(--muted)}
   </div>
 </section>
 
-<section>
+<section id="ki-workflow">
   <div class="wrap">
     <div class="sec-head">
-      <p class="mono" data-i18n="s4k">So arbeiten wir</p>
-      <h2 data-i18n="s4h">Deutsche Verantwortung, effizientes Engineering-Lab</h2>
-      <p data-i18n="s4p">Darum können wir schneller und günstiger liefern, ohne bei der Qualität nachzugeben.</p>
+      <p class="mono" data-i18n="s4k">So arbeiten wir · KI-Workflow</p>
+      <h2 data-i18n="s4h">KI-Agenten arbeiten. Ingenieure entscheiden.</h2>
+      <p data-i18n="s4p">Ein Team spezialisierter KI-Agenten übernimmt Recherche, Entwürfe, Code und Tests. Vor jedem nächsten Schritt prüft ein Mensch. So liefern wir schneller und günstiger – und bleiben verantwortlich.</p>
     </div>
-    <div class="split">
+
+    <div class="loop" role="list" aria-label="Arbeitsschleife">
+      <div class="node" role="listitem"><div class="box"><span class="who repo" data-i18n="w-repo">Projekt</span><h3 data-i18n="n1h">Kontext</h3><p data-i18n="n1p">Anforderungen und aktueller Projektstand.</p></div></div>
+      <div class="node" role="listitem"><div class="box"><span class="who ai" data-i18n="w-ai">KI-Agent</span><h3 data-i18n="n2h">Ausarbeiten</h3><p data-i18n="n2p">Entwurf, Code, Analyse oder Test.</p></div></div>
+      <div class="node gate" role="listitem"><div class="box"><span class="who hu" data-i18n="w-hu">Mensch</span><h3 data-i18n="n3h">Freigabe</h3><p data-i18n="n3p">Ein Ingenieur prüft und entscheidet.</p></div></div>
+      <div class="node" role="listitem"><div class="box"><span class="who lab" data-i18n="w-lab">Lab</span><h3 data-i18n="n4h">Umsetzen</h3><p data-i18n="n4p">Bauen, flashen, messen, testen.</p></div></div>
+      <div class="node" role="listitem"><div class="box"><span class="who repo" data-i18n="w-repo">Projekt</span><h3 data-i18n="n5h">Nachweis</h3><p data-i18n="n5p">Ergebnis und Testdaten zurück ins Projekt.</p></div></div>
+    </div>
+    <div class="loopback" aria-hidden="true"><span class="mono" data-i18n="loop">nächste Iteration</span></div>
+
+    <p class="repo-note"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="9" r="2.5"/><path d="M6 8.5v7M18 11.5c0 3-3 3.5-9.5 5"/></svg><span data-i18n="repo">Alle Agenten arbeiten im selben Projekt-Repository – keine Kopien in Chatfenstern. Bei Übergabe erhalten Sie es vollständig.</span></p>
+
+    <div class="tabs" role="tablist" aria-label="Beispiele">
+      <button type="button" role="tab" id="tab-a" aria-controls="story-a" aria-selected="true" data-i18n="ta">Vom Konzept zum Funktionsmuster</button>
+      <button type="button" role="tab" id="tab-b" aria-controls="story-b" aria-selected="false" tabindex="-1" data-i18n="tb">Wenn sich etwas ändert</button>
+    </div>
+
+    <div class="story" role="tabpanel" id="story-a" aria-labelledby="tab-a">
+      <p data-i18n="sa">Ein typischer Prototyp – von der Idee bis zur Übergabe.</p>
+      <ol class="chain">
+        <li><span class="who you" data-i18n="w-you">Sie</span><div><b data-i18n="a1h">Idee und Anforderungen</b><span class="d" data-i18n="a1p">Im kostenlosen Erstgespräch.</span></div></li>
+        <li><span class="who ai" data-i18n="w-ai">KI-Agent</span><div><b data-i18n="a2h">Systemarchitektur</b><span class="d" data-i18n="a2p">Architektur, Stückliste und Risikoliste als Entwurf.</span></div></li>
+        <li><span class="who hu" data-i18n="w-hu">Mensch</span><div><b data-i18n="a3h">Architektur-Review</b><span class="d" data-i18n="a3p">Daraus entsteht Ihr verbindlicher Festpreis.</span></div></li>
+        <li><span class="who ai" data-i18n="w-ais">KI-Agenten</span><div><b data-i18n="a4h">Parallele Entwicklung</b><span class="d" data-i18n="a4p">Vier Spezialisten arbeiten gleichzeitig am selben Gerät.</span><div class="chips"><span class="chip" data-i18n="ch1">Firmware &amp; Edge AI</span><span class="chip">App</span><span class="chip" data-i18n="ch2">PCB mit Simulation</span><span class="chip" data-i18n="ch3">3D-Gehäuse</span></div></div></li>
+        <li><span class="who ai" data-i18n="w-ai">KI-Agent</span><div><b data-i18n="a5h">Qualitätssicherung</b><span class="d" data-i18n="a5p">Tests direkt aus den Anforderungen; jede Änderung wird automatisch geprüft.</span></div></li>
+        <li><span class="who lab" data-i18n="w-lab">Lab</span><div><b data-i18n="a6h">Aufbau und Funktionstests</b><span class="d" data-i18n="a6p">Echte Hardware, echte Messwerte.</span></div></li>
+        <li><span class="who hu" data-i18n="w-hu">Mensch</span><div><b data-i18n="a7h">Endprüfung in Reutlingen</b><span class="d" data-i18n="a7p">Abnahme, Übergabe, alle Daten.</span></div></li>
+      </ol>
+    </div>
+
+    <div class="story" role="tabpanel" id="story-b" aria-labelledby="tab-b" hidden>
+      <p data-i18n="sb">Anforderungen ändern sich. So bleibt der Festpreis trotzdem planbar.</p>
+      <ol class="chain">
+        <li><span class="who you" data-i18n="w-you">Sie</span><div><b data-i18n="b1h">Änderungswunsch</b><span class="d" data-i18n="b1p">Zum Beispiel ein zusätzlicher Sensor oder eine neue Funktion.</span></div></li>
+        <li><span class="who ai" data-i18n="w-ai">KI-Agent</span><div><b data-i18n="b2h">Auswirkungsanalyse</b><span class="d" data-i18n="b2p">Was betrifft das in Platine, Firmware, App, Gehäuse und Kosten?</span></div></li>
+        <li><span class="who hu" data-i18n="w-hu">Mensch</span><div><b data-i18n="b3h">Bewertung und Angebot</b><span class="d" data-i18n="b3p">Sie erhalten vorab einen Festpreis für die Änderung.</span></div></li>
+        <li><span class="who you" data-i18n="w-you">Sie</span><div><b data-i18n="b4h">Freigabe</b><span class="d" data-i18n="b4p">Erst nach Ihrem Okay geht es weiter.</span></div></li>
+        <li><span class="who ai" data-i18n="w-ais">KI-Agenten</span><div><b data-i18n="b5h">Umsetzung mit Tests</b><span class="d" data-i18n="b5p">Betroffene Teile werden angepasst und erneut geprüft.</span></div></li>
+        <li><span class="who hu" data-i18n="w-hu">Mensch</span><div><b data-i18n="b6h">Review und Demo</b><span class="d" data-i18n="b6p">Sie sehen das Ergebnis im nächsten Wochen-Update.</span></div></li>
+      </ol>
+    </div>
+
+    <div class="grid g3 team">
+      <div class="card loc">
+        <span class="flag" data-i18n="l0f">KI · Agenten-Team</span>
+        <h3 data-i18n="l0h">Entwicklung &amp; Tests</h3>
+        <ul><li data-i18n="l0a">Architektur, Firmware, App, PCB, 3D, QA</li><li data-i18n="l0b">Täglich koordiniert durch einen Projektleiter-Agenten</li><li data-i18n="l0c">Wöchentliche Updates und Demos für Sie</li></ul>
+      </div>
       <div class="card loc">
         <span class="flag">DE · Reutlingen</span>
-        <h3 data-i18n="l1h">Projektleitung &amp; Qualität</h3>
-        <ul><li data-i18n="l1a">Vertrag nach deutschem Recht</li><li data-i18n="l1b">Systemarchitektur, Firmware, App</li><li data-i18n="l1c">Endprüfung vor Übergabe</li></ul>
+        <h3 data-i18n="l1h">Projektleitung &amp; Freigaben</h3>
+        <ul><li data-i18n="l1a">Vertrag nach deutschem Recht</li><li data-i18n="l1b">Review jedes Meilensteins</li><li data-i18n="l1c">Endprüfung vor Übergabe</li></ul>
       </div>
       <div class="card loc">
         <span class="flag">EG · Engineering-Lab</span>
         <h3 data-i18n="l2h">Hardware &amp; Fertigung</h3>
-        <ul><li data-i18n="l2a">PCB-Design und Bestückung</li><li data-i18n="l2b">Gehäusekonstruktion &amp; 3D-Druck</li><li data-i18n="l2c">Integration und Funktionstests</li></ul>
+        <ul><li data-i18n="l2a">PCB-Bestückung</li><li data-i18n="l2b">Gehäusefertigung &amp; 3D-Druck</li><li data-i18n="l2c">Integration und Funktionstests</li></ul>
       </div>
     </div>
   </div>
@@ -339,9 +433,36 @@ pnote:"Extra engineering: €39/hour. You receive all source code, CAD and manuf
 s3k:"Process",s3h:"You only pay for accepted milestones",
 st1h:"Request",st1p:"30-minute call, free.",st2h:"Sprint",st2p:"Architecture, BOM, fixed price.",st3h:"Milestones",st3p:"Paid in stages, not upfront.",
 st4h:"Build",st4p:"Weekly updates & demos.",st5h:"Inspection in DE",st5p:"Functional and visual check.",st6h:"Handover",st6p:"Acceptance, shipping, all files.",
-s4k:"How we work",s4h:"German accountability, efficient engineering lab",s4p:"That is how we deliver faster and for less without compromising on quality.",
-l1h:"Project lead & quality",l1a:"Contract under German law",l1b:"System architecture, firmware, app",l1c:"Final inspection before handover",
-l2h:"Hardware & fabrication",l2a:"PCB design and assembly",l2b:"Enclosure design & 3D printing",l2c:"Integration and functional tests",
+nav5:"AI workflow",
+s4k:"How we work · AI workflow",s4h:"AI agents do the work. Engineers decide.",s4p:"A team of specialised AI agents handles research, drafts, code and tests. A human reviews before every next step. That is how we deliver faster and for less – and stay accountable.",
+"w-repo":"Project","w-ai":"AI agent","w-ais":"AI agents","w-hu":"Human","w-lab":"Lab","w-you":"You",
+n1h:"Context",n1p:"Requirements and the current project state.",
+n2h:"Work it out",n2p:"Draft, code, analysis or test.",
+n3h:"Approval",n3p:"An engineer reviews and decides.",
+n4h:"Build",n4p:"Build, flash, measure, test.",
+n5h:"Evidence",n5p:"Results and test data back into the project.",
+loop:"next iteration",
+repo:"Every agent works in the same project repository – no copies pasted into chat windows. At handover, it is yours in full.",
+ta:"From concept to working prototype",tb:"When something changes",
+sa:"A typical prototype – from idea to handover.",
+a1h:"Idea and requirements",a1p:"In the free intro call.",
+a2h:"System architecture",a2p:"Architecture, bill of materials and risk list as a draft.",
+a3h:"Architecture review",a3p:"This becomes your binding fixed price.",
+a4h:"Parallel development",a4p:"Four specialists work on the same device at the same time.",
+ch1:"Firmware & edge AI",ch2:"PCB with simulation",ch3:"3D enclosure",
+a5h:"Quality assurance",a5p:"Tests derived from the requirements; every change is checked automatically.",
+a6h:"Assembly and functional tests",a6p:"Real hardware, real measurements.",
+a7h:"Final inspection in Reutlingen",a7p:"Acceptance, handover, all files.",
+sb:"Requirements change. Here is how the fixed price stays predictable.",
+b1h:"Change request",b1p:"For example an extra sensor or a new feature.",
+b2h:"Impact analysis",b2p:"What does it affect in PCB, firmware, app, enclosure and cost?",
+b3h:"Review and quote",b3p:"You get a fixed price for the change upfront.",
+b4h:"Approval",b4p:"Nothing moves until you say yes.",
+b5h:"Implementation with tests",b5p:"Affected parts are updated and tested again.",
+b6h:"Review and demo",b6p:"You see the result in the next weekly update.",
+l0f:"AI · Agent team",l0h:"Development & tests",l0a:"Architecture, firmware, app, PCB, 3D, QA",l0b:"Coordinated daily by a project-lead agent",l0c:"Weekly updates and demos for you",
+l1h:"Project lead & approvals",l1a:"Contract under German law",l1b:"Review of every milestone",l1c:"Final inspection before handover",
+l2h:"Hardware & fabrication",l2a:"PCB assembly",l2b:"Enclosure fabrication & 3D printing",l2c:"Integration and functional tests",
 s5k:"References",s5h:"Selected projects",s5p:"Systems we've designed and built – from sensing and firmware to the app.",
 r1t:"Agriculture · IoT",r1h:"Water monitoring and irrigation control grid for a farm",r1p:"Distributed low-power soil-moisture nodes report over MQTT to a central controller that runs irrigation zone by zone. Switched sensor power against corrosion, signal smoothing and outlier filtering for reliable readings.",
 r2t:"Entertainment · Edge",r2h:"Arcade games with humans in the loop",r2p:"A sensor ball with IMU and barometer detects throws, catches, spins and squeezes in real time. A safe rule engine turns them into games that can be described without code – even by AI.",
@@ -368,6 +489,9 @@ function setLang(l){
   try{localStorage.setItem("lang",l)}catch(e){}
 }
 document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>setLang(b.dataset.lang)));
+const tabs=[...document.querySelectorAll('[role="tab"]')];
+function showTab(t){tabs.forEach(x=>{const on=x===t;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute("aria-controls")).hidden=!on;});}
+tabs.forEach((t,i)=>{t.addEventListener("click",()=>showTab(t));t.addEventListener("keydown",e=>{if(e.key==="ArrowRight"||e.key==="ArrowLeft"){const n=tabs[(i+(e.key==="ArrowRight"?1:tabs.length-1))%tabs.length];showTab(n);n.focus();}});});
 let saved=null;try{saved=localStorage.getItem("lang")}catch(e){}
 if(saved==="en"||(!saved&&!navigator.language.startsWith("de")))setLang("en");
 </script>
