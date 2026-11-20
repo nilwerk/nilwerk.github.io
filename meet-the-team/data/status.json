@@ -1,0 +1,47 @@
+{
+  "updated": "2026-11-20 09:00",
+  "employee_of_the_month": {
+    "name": "Mira",
+    "role": "Firmware + Edge AI",
+    "photo": "assets/eotm-mira.jpg",
+    "reason": "Cut the sleep current of the sensor node by a large margin, so the battery now lasts far longer between charges.",
+    "reason_de": "Hat den Ruhestrom des Sensorknotens stark gesenkt, sodass der Akku jetzt deutlich länger hält."
+  },
+  "current_project": {
+    "name": "Plant monitor v3",
+    "status": "Testing",
+    "progress": 60,
+    "summary": "Sensor stake, app and firmware are working together. We are now testing battery life and the waterproof enclosure.",
+    "next": "Field test on a real plant for two weeks",
+    "photo": "assets/project-plant-monitor.jpg",
+    "status_de": "Im Test",
+    "summary_de": "Sensorstab, App und Firmware arbeiten zusammen. Wir testen gerade Akkulaufzeit und das wasserdichte Gehäuse.",
+    "next_de": "Feldtest an einer echten Pflanze, zwei Wochen"
+  },
+  "highlights": [
+    {
+      "title": "New board revision",
+      "text": "The sensor board was redrawn to fit the new enclosure outline.",
+      "title_de": "Neue Platinenversion",
+      "text_de": "Die Sensorplatine wurde für den neuen Gehäuseumriss neu gezeichnet."
+    },
+    {
+      "title": "Setup flow on phones",
+      "text": "The app setup now takes three steps instead of seven.",
+      "title_de": "Einrichtung am Handy",
+      "text_de": "Die App-Einrichtung braucht jetzt drei statt sieben Schritte."
+    }
+  ],
+  "gallery": [
+    {
+      "src": "assets/product-1.jpg",
+      "caption": "Plant monitor sensor stake (prototype)",
+      "caption_de": "Sensorstab der Pflanzenüberwachung (Prototyp)"
+    },
+    {
+      "src": "assets/app-1.jpg",
+      "caption": "Companion app, live readings screen",
+      "caption_de": "Begleit-App, Ansicht der Messwerte"
+    }
+  ]
+}
