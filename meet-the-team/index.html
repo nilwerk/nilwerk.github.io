@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meet the team! · Nilwerk</title>
+<meta name="description" content="Meet the Nilwerk team, see what we are building, and ask us a question, request a quote or start a project.">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f1ede4;color:#222}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+header.top{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;padding:8px 0 12px}
+h1{font-size:22px;margin:0}
+.muted{color:#777;font-size:13px}
+.hint{font-size:13px;color:#555}
+button{font:inherit;padding:8px 12px;border:1px solid #bbb;background:#fff;border-radius:8px;cursor:pointer}
+button:hover{background:#f5f5f5}
+button.primary{background:#2d6cdf;border-color:#2d6cdf;color:#fff}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+#stage{position:relative;height:min(62vh,600px);min-height:360px;border-radius:12px;overflow:hidden;background:#d9d3c4;border:1px solid #cfc7b4}
+#view{position:absolute;inset:0;cursor:grab}
+#view canvas{display:block;width:100%;height:100%}
+#err{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:24px;text-align:center;color:#7a1f1f}
+#legend{position:absolute;left:10px;bottom:10px;background:rgba(255,255,255,.9);border-radius:8px;padding:6px 10px;font-size:12px;display:flex;gap:10px;flex-wrap:wrap;pointer-events:none}
+#legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.lg-work::before{background:#22c55e}.lg-walk::before{background:#f59e0b}.lg-meet::before{background:#3b82f6}.lg-brk::before{background:#a3a3a3}.lg-free::before{background:#d1d5db}
+#note{position:absolute;right:10px;bottom:10px;font-size:12px;background:rgba(255,255,255,.85);padding:4px 8px;border-radius:6px;pointer-events:none}
+#card{position:absolute;top:10px;right:10px;width:280px;max-width:calc(100% - 20px);background:#fff;border-radius:10px;padding:14px;box-shadow:0 4px 18px rgba(0,0,0,.15)}
+#card .x,dialog .x{position:absolute;top:6px;right:8px;border:0;background:none;font-size:22px;cursor:pointer;padding:2px 6px}
+#card[hidden],#toast[hidden]{display:none}
+.phrow{display:flex;gap:10px;align-items:center;padding-right:18px}
+.sw{width:14px;height:14px;border-radius:50%;flex:none}
+.sw.big{width:30px;height:30px}
+.st{font-size:13px;color:#444;margin:8px 0}
+#card .btns{margin-top:10px}
+#actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.act{text-align:left;background:#fff;border:1px solid #ddd;border-radius:12px;padding:14px}
+.act:hover{border-color:#2d6cdf;background:#fff}
+.act b{display:block;font-size:16px;margin-bottom:4px}
+.act span{font-size:13px;color:#555}
+#status{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.box{background:#fff;border:1px solid #e3ddcf;border-radius:12px;padding:14px}
+.box h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#777;margin:0 0 8px}
+.box img{width:100%;border-radius:8px;aspect-ratio:4/3;object-fit:cover;display:block}
+.ph-empty{aspect-ratio:4/3;border-radius:8px;background:#f3efe6;display:flex;align-items:center;justify-content:center;color:#999;font-size:13px}
+.pill{display:inline-block;font-size:12px;background:#e8f0ff;color:#2d6cdf;padding:2px 8px;border-radius:99px}
+.bar{height:8px;background:#eee;border-radius:4px;overflow:hidden;margin:10px 0 6px}
+.bar i{display:block;height:100%;background:#22c55e}
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+figure{margin:0}
+figcaption{font-size:12px;color:#666;margin-top:4px}
+.hi{margin-bottom:10px}
+.hi p{margin:2px 0;font-size:14px}
+.full{grid-column:1 / -1}
+#upd{font-size:12px;color:#777;margin-top:4px}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 14px;border-radius:8px;font-size:14px;max-width:90%;z-index:10}
+dialog{border:0;border-radius:12px;padding:22px;width:min(480px,94vw);box-shadow:0 10px 40px rgba(0,0,0,.25)}
+dialog::backdrop{background:rgba(0,0,0,.35)}
+.fform{display:flex;flex-direction:column;gap:10px}
+.fform h3{margin:0;font-size:18px}
+.fform label{font-size:13px;color:#444;display:flex;flex-direction:column;gap:4px}
+.fform label.chk{flex-direction:row;align-items:flex-start;gap:8px}
+.fform input,.fform select,.fform textarea{font:inherit;padding:8px;border:1px solid #bbb;border-radius:6px;width:100%}
+.fform input[type=checkbox]{width:auto;margin-top:4px}
+header.top{align-items:center}
+.lang{display:flex;border:1px solid #ddd;border-radius:999px;overflow:hidden;margin-left:auto}
+.lang button{border:0;background:transparent;color:#777;font:600 .78rem Inter,system-ui,sans-serif;padding:6px 10px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:#222;color:#fff}
+@media (max-width:760px){
+  #actions,#status{grid-template-columns:1fr}
+  #card{width:auto;left:10px;right:10px;top:auto;bottom:40px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <h1 data-i18n="title"></h1>
+  <span class="muted"><a href="../" data-i18n="home"></a> · <span data-i18n="tagline"></span></span>
+  <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="de" aria-pressed="false">DE</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
+</header>
+
+<section id="stage" aria-label="3D view of the Nilwerk office">
+  <div id="view"><div id="err"></div></div>
+  <div id="card" hidden></div>
+  <div id="legend"><span class="lg-work" data-i18n="lg_work"></span><span class="lg-walk" data-i18n="lg_walk"></span><span class="lg-meet" data-i18n="lg_meet"></span><span class="lg-brk" data-i18n="lg_break"></span><span class="lg-free" data-i18n="lg_free"></span></div>
+  <div id="note" data-i18n="note"></div>
+</section>
+
+<section id="actions" aria-label="Contact options">
+  <button class="act" data-form="question"><b data-i18n="askT"></b><span data-i18n="askD"></span></button>
+  <button class="act" data-form="quote"><b data-i18n="quoteT"></b><span data-i18n="quoteD"></span></button>
+  <button class="act" data-form="project"><b data-i18n="projT"></b><span data-i18n="projD"></span></button>
+</section>
+
+<section id="status" aria-label="Team highlights and current project">
+  <div class="box" id="eotm"><h3 data-i18n="eotm"></h3><div class="muted" data-i18n="loading"></div></div>
+  <div class="box" id="proj"><h3 data-i18n="proj"></h3><div class="muted" data-i18n="loading"></div></div>
+  <div class="box full" id="hl"><h3 data-i18n="hl"></h3><div class="muted" data-i18n="loading"></div></div>
+  <div class="box full" id="gal-box"><h3 data-i18n="work"></h3><div class="gal" id="gal"></div></div>
+</section>
+
+<p class="muted" id="upd"></p>
+</div>
+
+<dialog id="dlg"></dialog>
+<div id="toast" hidden></div>
+
+<script src="three.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+// tiny DOM helper: el('p',{class:'x',text:'hi',onclick:fn},child...)
+function el(tag,attrs={},...kids){
+  const n=document.createElement(tag);
+  for(const k in attrs){
+    const v=attrs[k];
+    if(v===false||v==null)continue;
+    if(k==='class')n.className=v;
+    else if(k==='text')n.textContent=v;
+    else if(k.startsWith('on'))n[k]=v;
+    else n.setAttribute(k,v===true?'':v);
+  }
+  kids.flat().forEach(c=>{if(c!=null)n.append(c);});
+  return n;
+}
+function showError(msg){const e=$('err');e.textContent=msg;e.style.display='flex';}
+
+const T={
+en:{title:'Meet the team!',home:'← Nilwerk home',tagline:'Connected hardware prototypes, from idea to working device',
+ note:'Simulated view · click someone to meet them',lg_work:'working',lg_walk:'walking',lg_meet:'meeting',lg_break:'break',lg_free:'free',
+ askT:'Ask a question',askD:'Something about our work, or how a prototype is built.',
+ quoteT:'Get a quote',quoteD:'Tell us what you need and we reply with a quote.',
+ projT:'Start a project',projD:'Have a product idea? Tell us about it and we plan the next step.',
+ eotm:'Employee of the month',proj:'Current project',hl:'Highlights',work:'Our work',
+ loading:'Loading…',photoSoon:'Photo coming soon',next:'Next:',updated:'Last updated by Nora',
+ unavailable:'Status is not available right now. Please check back soon.',
+ st_walk:'Walking to a new spot',st_meet:'In a team meeting',st_break:'On a break',st_work:'Working',st_free:'At desk · free',st_idle:'Idle',
+ area_kitchen:'kitchen',area_lounge:'lounge',area_play:'play area',
+ cardHint:'Our agents only take instructions from the CEO, so you can’t assign them work from here.',
+ close:'Close',cancel:'Cancel',send:'Open email to send',
+ formNote:'Your email app opens with this message ready. Nothing is sent until you press send there.',
+ consent:'I agree that Nilwerk may reply to me about this request.',
+ toast:'Your email app should open. If nothing happens, email',
+ subjQ:'Question for',subjNew:'New message',footer:'— sent from the Nilwerk website',
+ shortened:'[message shortened, please add details by reply]',
+ noThree:'The 3D library (three.min.js) did not load. Keep it in the same folder as this page.',
+ noWebgl:'This browser has no WebGL, so the 3D office cannot draw. Try Chrome or Edge.'},
+de:{title:'Lerne das Team kennen!',home:'← Nilwerk Startseite',tagline:'Vernetzte Hardware-Prototypen, von der Idee bis zum funktionierenden Gerät',
+ note:'Simulierte Ansicht · Klick auf eine Person zum Kennenlernen',lg_work:'arbeitet',lg_walk:'unterwegs',lg_meet:'Besprechung',lg_break:'Pause',lg_free:'frei',
+ askT:'Frage stellen',askD:'Etwas zu unserer Arbeit oder zum Aufbau eines Prototyps.',
+ quoteT:'Angebot anfragen',quoteD:'Beschreiben Sie, was Sie brauchen. Wir antworten mit einem Angebot.',
+ projT:'Projekt starten',projD:'Eine Produktidee? Erzählen Sie uns davon, dann planen wir den nächsten Schritt.',
+ eotm:'Mitarbeiter des Monats',proj:'Aktuelles Projekt',hl:'Highlights',work:'Unsere Arbeit',
+ loading:'Lädt…',photoSoon:'Foto folgt bald',next:'Als Nächstes:',updated:'Zuletzt aktualisiert von Nora',
+ unavailable:'Der Status ist gerade nicht verfügbar. Bitte schauen Sie bald wieder vorbei.',
+ st_walk:'Geht zu einem neuen Platz',st_meet:'In einer Teambesprechung',st_break:'In der Pause',st_work:'Arbeitet',st_free:'Am Platz · frei',st_idle:'Untätig',
+ area_kitchen:'Küche',area_lounge:'Lounge',area_play:'Spielbereich',
+ cardHint:'Unsere Agenten nehmen Anweisungen nur vom CEO entgegen. Aufgaben können Sie hier daher nicht vergeben.',
+ close:'Schließen',cancel:'Abbrechen',send:'E-Mail zum Senden öffnen',
+ formNote:'Ihr E-Mail-Programm öffnet sich mit dieser Nachricht. Gesendet wird erst, wenn Sie dort auf Senden drücken.',
+ consent:'Ich bin einverstanden, dass Nilwerk mir zu dieser Anfrage antworten darf.',
+ toast:'Ihr E-Mail-Programm sollte sich öffnen. Falls nicht, schreiben Sie direkt an',
+ subjQ:'Frage an',subjNew:'Neue Nachricht',footer:'— gesendet von der Nilwerk-Website',
+ shortened:'[Nachricht gekürzt, bitte Details per Antwort ergänzen]',
+ noThree:'Die 3D-Bibliothek (three.min.js) wurde nicht geladen. Legen Sie sie in denselben Ordner wie diese Seite.',
+ noWebgl:'Dieser Browser unterstützt kein WebGL, deshalb kann das 3D-Büro nicht gezeichnet werden. Versuchen Sie Chrome oder Edge.'}
+};
+const L=()=>document.documentElement.lang==='de'?'de':'en';
+const t=k=>(T[L()][k]??T.en[k]??k);
+let lastStatus=null;
+const SAVED_LANG=(()=>{try{return localStorage.getItem('lang')}catch(e){return null}})();
+document.documentElement.lang=(SAVED_LANG==='de'||SAVED_LANG==='en')?SAVED_LANG:(navigator.language.startsWith('de')?'de':'en');
+if(typeof THREE==='undefined'){showError(t('noThree'));throw new Error('three.js missing');}
+
+// helper: move an object by setting its position (used by the furniture and body code)
+THREE.Object3D.prototype.translate=function(x,y,z){this.position.set(x,y,z);return this;};
+const SPEED=2.4;   // world units per second
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const p2w=(x,y)=>new THREE.Vector3((x-480)/40,0,(y-300)/40);
+
+// Team roster (from team/PERSONAS.md). Gender follows the persona name and avatar image.
+// Peter is a human team member and is not shown.
+const AGENTS=[
+ {id:'lead', name:'Nora',   gender:'f',role:'Lead / Project Manager',  part:'NW-PM-01',nick:'The conductor',        shirt:'#1f6f68',skin:'#e8b896',hair:'bob',  hairCol:'#3a2a20',plan:'Plan today’s tasks and assign roles'},
+ {id:'arch', name:'Theo',   gender:'m',role:'System Architect',        part:'NW-AR-02',nick:'The cartographer',     shirt:'#3b4a8c',skin:'#c98e6a',hair:'short',hairCol:'#1d1b1a',glasses:true,plan:'Review designs against the requirements'},
+ {id:'qa',   name:'Ines',   gender:'f',role:'QA & Test Engineer',      part:'NW-QA-03',nick:'The skeptic',          shirt:'#b0473d',skin:'#f0c9a8',hair:'bun',  hairCol:'#7a3b1e',plan:'Run acceptance checks on the latest builds'},
+ {id:'devops',name:'Kai',   gender:'m',role:'Pipeline / DevOps',       part:'NW-DO-04',nick:'The keeper of green',  shirt:'#2d6f9e',skin:'#a8714f',hair:'short',hairCol:'#141414',plan:'Check that the build is green'},
+ {id:'fw',   name:'Mira',   gender:'f',role:'Firmware + Edge AI',      part:'NW-FW-05',nick:'The microamp hunter',  shirt:'#b07a12',skin:'#d9a07a',hair:'bun',  hairCol:'#2b1d16',plan:'Measure sleep current on the firmware build'},
+ {id:'fs',   name:'Leo',    gender:'m',role:'Full-stack Developer',    part:'NW-FS-06',nick:'The pathfinder',       shirt:'#6f47a8',skin:'#f2d0b4',hair:'curly',hairCol:'#c99a4b',plan:'Test the setup flow on a phone build'},
+ {id:'cloud',name:'Sana',   gender:'f',role:'Cloud AI Engineer',       part:'NW-AI-07',nick:'The guardrail builder',shirt:'#24809e',skin:'#8d5a3b',hair:'long', hairCol:'#1a1210',plan:'Add guardrail tests for the new features'},
+ {id:'pcb',  name:'Emil',   gender:'m',role:'PCB Designer',            part:'NW-HW-08',nick:'The simulator',        shirt:'#2f7d47',skin:'#efc4a0',hair:'short',hairCol:'#8a8a86',glasses:true,beard:true,plan:'Run the board simulation'},
+ {id:'3d',   name:'Yara',   gender:'f',role:'3D Product Designer',     part:'NW-ID-09',nick:'The form giver',       shirt:'#b04a72',skin:'#c48660',hair:'long', hairCol:'#2a1712',plan:'Update the enclosure design'},
+ {id:'pr',   name:'Poppy',  gender:'f',role:'PR, Social & Awareness',  part:'NW-PR-11',nick:'The storyteller',      shirt:'#d6457a',skin:'#f1c9a8',hair:'long', hairCol:'#c4632f',plan:'Draft this week’s post'},
+ {id:'sales',name:'Max',    gender:'m',role:'Sales Assistant',         part:'NW-SA-10',nick:'The door opener',      shirt:'#c0622a',skin:'#e6b08e',hair:'short',hairCol:'#5b3a26',plan:'Follow up on new requests'}
+];
+
+/* ---------- layout (2D plan coordinates, converted to 3D) ---------- */
+const DESKS=AGENTS.map((_,i)=>({x:70+(i%6)*88,y:i<6?110:230}));
+const MEET=AGENTS.map((_,i)=>{
+  const t=-Math.PI/2+2*Math.PI*i/AGENTS.length;
+  const x=770+135*Math.cos(t),y=120+72*Math.sin(t);
+  const w=p2w(x,y),c=p2w(770,120);
+  return{x,y,area:'meeting room',face:Math.atan2(c.x-w.x,c.z-w.z)};
+});
+const BREAK=[];
+const add=(area,x,y,pose,face)=>BREAK.push({x,y,area,pose,face,key:area+x+'_'+y});
+add('kitchen',630,300,'sitTalk',Math.PI); add('kitchen',680,300,'sitTalk',Math.PI); add('kitchen',730,300,'sitTalk',Math.PI);
+add('kitchen',655,300,'coffee',Math.PI); add('kitchen',705,300,'coffee',Math.PI);
+add('kitchen',640,450,'sitTalk',Math.PI/2); add('kitchen',720,450,'sitTalk',-Math.PI/2);
+add('kitchen',680,410,'sitTalk',0); add('kitchen',680,490,'sitTalk',Math.PI);
+add('lounge',815,300,'sitRelax',0); add('lounge',865,300,'sitRelax',0); add('lounge',915,300,'sitRelax',0);
+add('lounge',815,430,'sitRelax',Math.PI/2); add('lounge',905,430,'sitRelax',-Math.PI/2);
+add('lounge',830,520,'standTalk',Math.PI); add('lounge',890,520,'standTalk',Math.PI);
+add('play area',250,465,'pingLeft',Math.PI/2); add('play area',390,465,'pingRight',-Math.PI/2);
+add('play area',130,470,'sitRelax',0); add('play area',170,470,'sitRelax',0); add('play area',210,470,'sitRelax',0);
+[60,125,190,255,320,385,450,515].forEach(x=>{add('play area',x,380,'cheer',0);add('play area',x,540,'cheer',Math.PI);});
+const occ=new Set();
+function claimBreak(){const free=BREAK.filter(s=>!occ.has(s.key));if(!free.length)return null;const s=rnd(free);occ.add(s.key);return s;}
+function release(a){if(a.spotKey){occ.delete(a.spotKey);a.spotKey=null;}}
+
+/* ---------- 3D scene ---------- */
+const view=$('view');
+let renderer=null;
+try{renderer=new THREE.WebGLRenderer({antialias:true});}
+catch(e){showError(t('noWebgl'));}
+if(renderer){
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  view.insertBefore(renderer.domElement,view.firstChild);
+}
+const scene=new THREE.Scene();
+scene.background=new THREE.Color('#d9d3c4');
+const camera=new THREE.PerspectiveCamera(42,1,0.1,200);
+scene.add(new THREE.HemisphereLight('#ffffff','#8a7f6a',0.9));
+const sun=new THREE.DirectionalLight('#ffffff',0.6);sun.position.set(6,14,9);scene.add(sun);
+const mat=c=>new THREE.MeshLambertMaterial({color:c});
+function mesh(geo,col){return new THREE.Mesh(geo,mat(col));}
+function put(obj,x,y,z){scene.add(obj);obj.position.set(x,y,z);return obj;}
+
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(40,30),mat('#bfb6a2'));
+ground.rotation.x=-Math.PI/2;ground.position.y=-0.01;scene.add(ground);
+
+const ROOMS=[
+ {label:'Desks',x:20,y:20,w:560,h:300,col:'#e6d9bd'},
+ {label:'Meeting room',x:600,y:20,w:340,h:200,col:'#d9e2ea'},
+ {label:'Kitchen',x:600,y:240,w:160,h:340,col:'#ece7dd'},
+ {label:'Lounge',x:780,y:240,w:160,h:340,col:'#e0d7ea'},
+ {label:'Play area',x:20,y:340,w:560,h:240,col:'#d4e8cf'}
+];
+ROOMS.forEach(r=>{
+  const c=p2w(r.x+r.w/2,r.y+r.h/2);
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(r.w/40,r.h/40),mat(r.col));
+  m.rotation.x=-Math.PI/2;m.position.set(c.x,0.01,c.z);scene.add(m);
+});
+
+/* Furniture */
+function plant(p){
+  put(mesh(new THREE.BoxGeometry(0.5,0.4,0.5),'#8a5a3b'),p.x,0.2,p.z);
+  put(mesh(new THREE.SphereGeometry(0.4,12,10),'#3f8f4e'),p.x,0.8,p.z);
+}
+function chairAt(x,y,face,kind){
+  const p=p2w(x,y),grp=new THREE.Group();
+  grp.position.copy(p);grp.rotation.y=face;scene.add(grp);
+  if(kind==='stool'){
+    grp.add(mesh(new THREE.CylinderGeometry(0.2,0.2,0.08,14),'#5a4636').translate(0,0.4,0));
+    grp.add(mesh(new THREE.CylinderGeometry(0.03,0.03,0.36,8),'#333').translate(0,0.18,0));
+  }else if(kind==='arm'){
+    grp.add(mesh(new THREE.BoxGeometry(0.9,0.08,0.8),'#7d6aa6').translate(0,0.36,0));
+    grp.add(mesh(new THREE.BoxGeometry(0.9,0.6,0.15),'#7d6aa6').translate(0,0.7,-0.33));
+    grp.add(mesh(new THREE.BoxGeometry(0.1,0.3,0.8),'#6a5a8e').translate(-0.4,0.5,0));
+    grp.add(mesh(new THREE.BoxGeometry(0.1,0.3,0.8),'#6a5a8e').translate(0.4,0.5,0));
+  }else{ // office chair
+    grp.add(mesh(new THREE.BoxGeometry(0.5,0.08,0.5),'#2b2f36').translate(0,0.38,0));
+    grp.add(mesh(new THREE.BoxGeometry(0.5,0.6,0.07),'#2b2f36').translate(0,0.7,-0.25));
+    grp.add(mesh(new THREE.CylinderGeometry(0.03,0.03,0.34,8),'#333').translate(0,0.17,0));
+  }
+  return grp;
+}
+DESKS.forEach(d=>{
+  const p=p2w(d.x,d.y);
+  put(mesh(new THREE.BoxGeometry(1.7,0.08,0.7),'#b8875a'),p.x,0.78,p.z+0.8);
+  [[-0.75,0.5],[0.75,0.5],[-0.75,1.1],[0.75,1.1]].forEach(([dx,dz])=>put(mesh(new THREE.BoxGeometry(0.07,0.74,0.07),'#6b4f33'),p.x+dx,0.37,p.z+dz));
+  put(mesh(new THREE.BoxGeometry(0.7,0.45,0.05),'#222'),p.x,1.12,p.z+1.15);
+  put(mesh(new THREE.BoxGeometry(0.2,0.12,0.2),'#333'),p.x,0.9,p.z+1.15);
+  chairAt(d.x,d.y,0,'office');
+});
+const wb=p2w(445,50);put(mesh(new THREE.BoxGeometry(5.8,1.3,0.08),'#ffffff'),wb.x,1.5,wb.z);
+// meeting room: table plus one chair per seat
+const mt=p2w(770,120);
+put(mesh(new THREE.BoxGeometry(4.2,0.08,1.6),'#a0744a'),mt.x,0.78,mt.z);
+put(mesh(new THREE.BoxGeometry(0.4,0.7,0.4),'#7a5a3a'),mt.x,0.4,mt.z);
+MEET.forEach(s=>chairAt(s.x,s.y,s.face,'office'));
+// kitchen: counter, sink, coffee machine, fridge, table with stools
+const kc=p2w(680,268);
+put(mesh(new THREE.BoxGeometry(3.4,0.9,0.5),'#c7ccd4'),kc.x,0.45,kc.z);
+put(mesh(new THREE.BoxGeometry(3.42,0.05,0.52),'#f1f1ee'),kc.x,0.92,kc.z);
+put(mesh(new THREE.BoxGeometry(0.7,0.04,0.36),'#8b99a8'),kc.x-0.8,0.95,kc.z);
+put(mesh(new THREE.BoxGeometry(0.45,0.5,0.35),'#3a3a3a'),kc.x+1.2,1.2,kc.z-0.05);
+put(mesh(new THREE.CylinderGeometry(0.05,0.04,0.1,10),'#ffffff'),kc.x+0.5,1.0,kc.z+0.05);
+put(mesh(new THREE.BoxGeometry(3.4,0.7,0.4),'#e5e0d6'),kc.x,1.9,kc.z-0.35);
+const fr=p2w(745,500);put(mesh(new THREE.BoxGeometry(0.8,1.9,0.7),'#e5e7eb'),fr.x,0.95,fr.z);
+const kt=p2w(680,450);put(mesh(new THREE.BoxGeometry(1.6,0.08,1.0),'#c9a77a'),kt.x,0.76,kt.z);
+put(mesh(new THREE.BoxGeometry(0.2,0.7,0.2),'#7a5a3a'),kt.x,0.38,kt.z);
+chairAt(640,450,Math.PI/2,'stool');chairAt(720,450,-Math.PI/2,'stool');
+chairAt(680,410,0,'stool');chairAt(680,490,Math.PI,'stool');
+[630,680,730].forEach(x=>chairAt(x,300,Math.PI,'stool'));
+// lounge: couch, armchairs, coffee table, wall TV
+const cc=p2w(860,305);
+put(mesh(new THREE.BoxGeometry(3,0.4,0.9),'#5b6fa0'),cc.x,0.2,cc.z);
+put(mesh(new THREE.BoxGeometry(3,0.75,0.2),'#4a5c86'),cc.x,0.75,cc.z-0.5);
+chairAt(815,430,Math.PI/2,'arm');chairAt(905,430,-Math.PI/2,'arm');
+const ct=p2w(860,430);put(mesh(new THREE.BoxGeometry(1,0.25,0.5),'#d6c7a1'),ct.x,0.2,ct.z);
+const tv=p2w(860,246);put(mesh(new THREE.BoxGeometry(2.2,1.2,0.08),'#111111'),tv.x,1.5,tv.z);
+// play area: ping-pong table with net, bench, slide, plants
+const pp=p2w(320,465);
+put(mesh(new THREE.BoxGeometry(3,0.1,1.3),'#2f6f4e'),pp.x,0.8,pp.z);
+put(mesh(new THREE.BoxGeometry(0.05,0.25,1.4),'#ffffff'),pp.x,0.92,pp.z);
+[[-1.4,-0.6],[1.4,-0.6],[-1.4,0.6],[1.4,0.6]].forEach(([dx,dz])=>put(mesh(new THREE.BoxGeometry(0.1,0.76,0.1),'#333'),pp.x+dx,0.38,pp.z+dz));
+const bn=p2w(170,470);put(mesh(new THREE.BoxGeometry(2.4,0.4,0.5),'#8c6a44'),bn.x,0.2,bn.z);
+const sl=p2w(510,400);put(mesh(new THREE.BoxGeometry(1.4,1.4,0.8),'#f59e0b'),sl.x,0.7,sl.z);
+plant(p2w(45,300));plant(p2w(935,300));
+const ball=mesh(new THREE.SphereGeometry(0.06,8,6),'#ffffff');ball.visible=false;scene.add(ball);
+
+/* ---------- characters ---------- */
+const charObjs=[];
+function labelSprite(name,role){
+  const c=document.createElement('canvas');c.width=512;c.height=160;
+  const x=c.getContext('2d');
+  x.fillStyle='rgba(255,255,255,0.92)';x.fillRect(0,0,512,160);
+  x.fillStyle='#1d1d1d';x.font='bold 64px system-ui';x.textAlign='center';x.fillText(name,256,72);
+  x.fillStyle='#555';x.font='32px system-ui';x.fillText(role,256,125);
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false}));
+  s.scale.set(2.2,0.7,1);s.position.y=2.5;return s;
+}
+function buildChar(d){
+  const g=new THREE.Group();
+  const female=d.gender==='f',w=female?0.44:0.5;
+  const shirt=d.shirt,skin=d.skin,hairCol=d.hairCol,pants=female?'#3b3550':'#2d3748';
+  const hipL=new THREE.Group(),hipR=new THREE.Group(),kneeL=new THREE.Group(),kneeR=new THREE.Group();
+  hipL.position.set(-0.12,0.72,0);hipR.position.set(0.12,0.72,0);
+  kneeL.position.set(0,-0.36,0);kneeR.position.set(0,-0.36,0);
+  [kneeL,kneeR].forEach(k=>{
+    k.add(mesh(new THREE.BoxGeometry(0.16,0.36,0.18),pants).translate(0,-0.18,0));
+    k.add(mesh(new THREE.BoxGeometry(0.16,0.07,0.26),'#222').translate(0,-0.37,0.05));
+  });
+  hipL.add(mesh(new THREE.BoxGeometry(0.16,0.36,0.18),pants).translate(0,-0.18,0));hipL.add(kneeL);
+  hipR.add(mesh(new THREE.BoxGeometry(0.16,0.36,0.18),pants).translate(0,-0.18,0));hipR.add(kneeR);
+  g.add(hipL,hipR);
+  if(female)g.add(mesh(new THREE.CylinderGeometry(0.26,0.32,0.3,14),shirt).translate(0,0.58,0));
+  g.add(mesh(new THREE.BoxGeometry(w,0.7,0.3),shirt).translate(0,1.07,0));
+  const armL=new THREE.Group(),armR=new THREE.Group();
+  armL.position.set(-(w/2+0.07),1.4,0);armR.position.set(w/2+0.07,1.4,0);
+  armL.add(mesh(new THREE.BoxGeometry(0.14,0.62,0.16),shirt).translate(0,-0.31,0));
+  armR.add(mesh(new THREE.BoxGeometry(0.14,0.62,0.16),shirt).translate(0,-0.31,0));
+  const cup=mesh(new THREE.CylinderGeometry(0.05,0.04,0.1,10),'#ffffff').translate(0,-0.64,0.12);cup.visible=false;armR.add(cup);
+  const racket=mesh(new THREE.BoxGeometry(0.12,0.2,0.03),'#c0392b').translate(0,-0.72,0.12);racket.visible=false;armR.add(racket);
+  g.add(armL,armR);
+  const head=new THREE.Group();head.position.set(0,1.72,0);
+  head.add(mesh(new THREE.SphereGeometry(0.22,16,12),skin));
+  const cap=mesh(new THREE.SphereGeometry(0.235,16,12),hairCol).translate(0,0.09,-0.02);cap.scale.set(1,0.62,1);head.add(cap);
+  if(d.hair==='bob')head.add(mesh(new THREE.BoxGeometry(0.46,0.36,0.2),hairCol).translate(0,-0.12,-0.06));
+  if(d.hair==='long')head.add(mesh(new THREE.BoxGeometry(0.46,0.7,0.18),hairCol).translate(0,-0.25,-0.14));
+  if(d.hair==='bun')head.add(mesh(new THREE.SphereGeometry(0.11,10,8),hairCol).translate(0,0.3,-0.08));
+  if(d.hair==='curly'){for(let i=0;i<8;i++){const an=i/8*Math.PI*2;head.add(mesh(new THREE.SphereGeometry(0.1,8,6),hairCol).translate(Math.cos(an)*0.2,0.2,-0.05+Math.sin(an)*0.18));}}
+  if(d.beard)head.add(mesh(new THREE.BoxGeometry(0.24,0.12,0.14),hairCol).translate(0,-0.16,0.1));
+  if(d.glasses){[-0.09,0.09].forEach(x=>{const t=new THREE.Mesh(new THREE.TorusGeometry(0.068,0.012,6,14),new THREE.MeshBasicMaterial({color:'#1c1c1c'}));t.position.set(x,0.02,0.205);head.add(t);});}
+  g.add(head);
+  const shadow=new THREE.Mesh(new THREE.CircleGeometry(0.4,18),new THREE.MeshBasicMaterial({color:'#000',transparent:true,opacity:0.22}));
+  shadow.rotation.x=-Math.PI/2;shadow.position.y=0.02;g.add(shadow);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(0.5,0.05,8,28),new THREE.MeshBasicMaterial({color:'#d1d5db'}));
+  ring.rotation.x=-Math.PI/2;ring.position.y=0.03;g.add(ring);
+  g.add(labelSprite(d.name,d.role));
+  g.userData.rig={hipL,hipR,kneeL,kneeR,armL,armR,head,cup,racket};
+  g.userData.ring=ring;
+  scene.add(g);charObjs.push(g);
+  return g;
+}
+function say(a,text){
+  clearBubble(a);
+  const c=document.createElement('canvas');c.width=512;c.height=128;
+  const x=c.getContext('2d');
+  x.fillStyle='#ffffff';x.fillRect(0,0,512,128);x.strokeStyle='#999';x.lineWidth=4;x.strokeRect(2,2,508,124);
+  x.fillStyle='#222';x.font='30px system-ui';x.textAlign='center';x.fillText(text.slice(0,32),256,74);
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false}));
+  s.scale.set(2.4,0.6,1);s.position.y=2.95;a.g.add(s);
+  a.bubble=s;a.bubbleUntil=performance.now()+3200;
+}
+function clearBubble(a){
+  if(!a.bubble)return;
+  a.g.remove(a.bubble);a.bubble.material.map.dispose();a.bubble.material.dispose();
+  a.bubble=null;
+}
+
+/* ---------- team state (simulated) ---------- */
+const agents=AGENTS.map((d,i)=>{
+  const a={...d,i,desk:DESKS[i],at:'desk',area:'',spot:null,task:null,progress:0,walking:false,spotKey:null,
+    tgt:null,onArrive:null,phase:0,pose:'sitIdle',bubble:null,bubbleUntil:0,
+    cur:{rootY:0,hL:0,hR:0,kL:0,kR:0,aL:0,aR:0,nod:0,look:0}};
+  a.g=buildChar(d);
+  a.g.position.copy(p2w(a.desk.x,a.desk.y));
+  a.g.userData.agent=a;
+  return a;
+});
+
+function walk(a,p3,done){
+  clearBubble(a);
+  a.tgt=p3.clone();a.onArrive=done;a.walking=true;a.at=null;
+}
+function toDesk(a){
+  release(a);
+  walk(a,p2w(a.desk.x,a.desk.y),()=>{a.at='desk';a.area='';a.spot=null;a.g.rotation.y=0;});
+}
+function toBreak(a){
+  const s=claimBreak();if(!s)return;
+  release(a);a.spotKey=s.key;
+  walk(a,p2w(s.x,s.y),()=>{a.at='break';a.area=s.area;a.spot=s;a.g.rotation.y=s.face;});
+}
+function toMeeting(a){
+  release(a);
+  const s=MEET[a.i];
+  walk(a,p2w(s.x,s.y),()=>{a.at='meeting';a.area='';a.spot=s;a.g.rotation.y=s.face;});
+}
+function assign(a,text){
+  a.task={text};a.progress=0;
+  toDesk(a);
+}
+function areaName(k){return t('area_'+({kitchen:'kitchen',lounge:'lounge','play area':'play'}[k]||'kitchen'));}
+function statusText(a){
+  if(a.walking)return t('st_walk');
+  if(a.at==='meeting')return t('st_meet');
+  if(a.at==='break')return `${t('st_break')} · ${areaName(a.area)}`;
+  if(a.at==='desk')return a.task?`${t('st_work')} · ${Math.round(a.progress)}%`:t('st_free');
+  return t('st_idle');
+}
+const STATE_COL={work:'#22c55e',walk:'#f59e0b',meet:'#3b82f6',brk:'#a3a3a3',free:'#d1d5db'};
+function cls(a){
+  if(a.walking)return 'walk';
+  if(a.at==='desk')return a.task?'work':'free';
+  if(a.at==='meeting')return 'meet';
+  if(a.at==='break')return 'brk';
+  return 'walk';
+}
+function poseOf(a){
+  if(a.walking)return 'walk';
+  if(a.at==='desk')return a.task?'sitType':'sitIdle';
+  if(a.at==='meeting')return 'sitTalk';
+  if(a.at==='break'&&a.spot)return a.spot.pose;
+  return 'stand';
+}
+
+/* ---------- simulation ---------- */
+function tick(){
+  agents.forEach(a=>{
+    if(a.walking)return;
+    if(a.at==='desk'){
+      if(a.task){
+        a.progress=Math.min(100,a.progress+2+Math.random()*4);
+        if(a.progress>=100){a.task=null;a.progress=0;toBreak(a);}
+      }else if(Math.random()<0.05){toBreak(a);}
+    }else if(a.at==='break'&&!a.task&&Math.random()<0.1){toDesk(a);}
+  });
+}
+const LINES={
+ 'desks':['Quick question about the design?','Can you review this?','Looks good to me.','Did the build go green?'],
+ 'meeting room':['Let me check the requirement.','Agreed, ship the small slice.','Show me the numbers.','What does it cost in µA?'],
+ 'kitchen':['Coffee first, then the review.','Anyone tried the new cup?','Nice, the demo works!'],
+ 'lounge':['Long day in the lab.','Did the customer reply?','Quick break, then back.'],
+ 'play area':['Best of three!','Your serve.','Nice smash!']
+};
+const LINES_DE={
+ 'desks':['Kurze Frage zum Design?','Kannst du das mal prüfen?','Sieht gut aus.','Ist der Build grün?'],
+ 'meeting room':['Ich prüfe die Anforderung.','Einverstanden, wir liefern den kleinen Schritt.','Zeig mir die Zahlen.','Was kostet das in µA?'],
+ 'kitchen':['Erst Kaffee, dann Review.','Hat jemand die neue Tasse probiert?','Super, die Demo läuft!'],
+ 'lounge':['Langer Tag im Labor.','Hat der Kunde geantwortet?','Kurze Pause, dann weiter.'],
+ 'play area':['Best of three!','Dein Aufschlag.','Starker Schlag!']
+};
+function LINES_T(){return L()==='de'?LINES_DE:LINES;}
+function talk(){
+  const groups={};
+  agents.forEach(a=>{
+    if(a.walking)return;
+    const area=a.at==='meeting'?'meeting room':a.at==='desk'?'desks':a.at==='break'?a.area:null;
+    if(!area)return;
+    (groups[area]=groups[area]||[]).push(a);
+  });
+  const areas=Object.keys(groups).filter(k=>groups[k].length>=2);
+  if(!areas.length)return;
+  const area=rnd(areas),group=groups[area].slice().sort(()=>Math.random()-0.5);
+  const [p,q]=group;
+  say(p,rnd(LINES_T()[area]));
+  setTimeout(()=>{if(!q.walking)say(q,rnd(LINES_T()[area]));},1700);
+}
+
+/* ---------- agent card (view only, no controls) ---------- */
+let shown=null;
+function showCard(a){
+  if(shown)shown.g.userData.ring.scale.setScalar(1);
+  shown=a;a.g.userData.ring.scale.setScalar(1.3);
+  $('card').replaceChildren(
+    el('button',{class:'x',text:'×',title:t('close'),onclick:hideCard}),
+    el('div',{class:'phrow'},
+      el('span',{class:'sw big',style:`background:${a.shirt}`}),
+      el('div',{},el('b',{text:a.name}),' ',el('span',{class:'muted',text:a.part}),el('br'),
+        el('small',{class:'muted',text:`${a.role} · ${a.nick}`}))),
+    el('div',{class:'st',text:statusText(a)}),
+    el('p',{class:'hint',text:t('cardHint')}),
+    el('div',{class:'btns'},
+      el('button',{class:'primary',text:t('askT'),onclick:()=>openForm('question',a)}),
+      el('button',{text:t('projT'),onclick:()=>openForm('project',a)}))
+  );
+  $('card').hidden=false;
+}
+function hideCard(){
+  if(shown)shown.g.userData.ring.scale.setScalar(1);
+  shown=null;$('card').hidden=true;
+}
+
+/* ---------- contact forms (open the visitor's email app, addressed to nilwerk.team@gmail.com) ---------- */
+const TEAM_EMAIL='nilwerk.team@gmail.com';
+const TO=['Team (general)','Max · quotes and sales','Nora · projects','Theo · architecture','Ines · testing','Kai · pipeline','Mira · firmware','Leo · full-stack','Sana · AI systems','Emil · PCB','Yara · enclosures','Poppy · press'];
+const TO_DE=['Team (allgemein)','Max · Angebote und Vertrieb','Nora · Projekte','Theo · Architektur','Ines · Testing','Kai · Pipeline','Mira · Firmware','Leo · Full-Stack','Sana · KI-Systeme','Emil · Platine','Yara · Gehäuse','Poppy · Presse'];
+const FORMS_EN={
+ question:{title:'Ask a question',tag:'Question',intro:'Ask about our work, how a prototype is built, or anything else.',fields:[
+   {id:'name',label:'Your name',type:'text',req:true},
+   {id:'email',label:'Your email',type:'email',req:true},
+   {id:'to',label:'Who should answer?',type:'select',options:TO},
+   {id:'msg',label:'Your question',type:'textarea',req:true}]},
+ quote:{title:'Get a quote',tag:'Quote request',intro:'Tell us what you need. We reply with a quote.',fields:[
+   {id:'name',label:'Your name',type:'text',req:true},
+   {id:'email',label:'Your email',type:'email',req:true},
+   {id:'company',label:'Company (optional)',type:'text'},
+   {id:'item',label:'What do you need quoted?',type:'text',req:true},
+   {id:'qty',label:'Quantity',type:'select',options:['1 prototype','2–10','11–100','100+','Not sure']},
+   {id:'date',label:'When do you need it? (optional)',type:'text'},
+   {id:'msg',label:'Details: size, features, materials (optional)',type:'textarea'}]},
+ project:{title:'Start a project',tag:'New project',intro:'Have a product idea? Tell us where you are and we plan the next step.',fields:[
+   {id:'name',label:'Your name',type:'text',req:true},
+   {id:'email',label:'Your email',type:'email',req:true},
+   {id:'company',label:'Company (optional)',type:'text'},
+   {id:'idea',label:'Describe your product idea',type:'textarea',req:true},
+   {id:'stage',label:'Where are you now?',type:'select',options:['Just an idea','Sketch or prototype exists','Ready for a pilot run','Ready for production']},
+   {id:'timeline',label:'Timeline',type:'select',options:['This month','This quarter','This year','Just exploring']},
+   {id:'budget',label:'Budget range',type:'select',options:['Under €2k','€2k–10k','€10k–50k','€50k+','Prefer to discuss']}]}
+};
+const FORMS_DE={
+ question:{title:'Frage stellen',tag:'Frage',intro:'Fragen Sie zu unserer Arbeit, zum Aufbau eines Prototyps oder zu etwas anderem.',fields:[
+   {id:'name',label:'Ihr Name',type:'text',req:true},
+   {id:'email',label:'Ihre E-Mail',type:'email',req:true},
+   {id:'to',label:'Wer soll antworten?',type:'select',options:TO_DE},
+   {id:'msg',label:'Ihre Frage',type:'textarea',req:true}]},
+ quote:{title:'Angebot anfragen',tag:'Angebotsanfrage',intro:'Beschreiben Sie, was Sie brauchen. Wir antworten mit einem Angebot.',fields:[
+   {id:'name',label:'Ihr Name',type:'text',req:true},
+   {id:'email',label:'Ihre E-Mail',type:'email',req:true},
+   {id:'company',label:'Firma (optional)',type:'text'},
+   {id:'item',label:'Was soll angeboten werden?',type:'text',req:true},
+   {id:'qty',label:'Menge',type:'select',options:['1 Prototyp','2–10','11–100','100+','Noch unklar']},
+   {id:'date',label:'Wann brauchen Sie es? (optional)',type:'text'},
+   {id:'msg',label:'Details: Größe, Funktionen, Materialien (optional)',type:'textarea'}]},
+ project:{title:'Projekt starten',tag:'Neues Projekt',intro:'Eine Produktidee? Sagen Sie uns, wo Sie stehen, dann planen wir den nächsten Schritt.',fields:[
+   {id:'name',label:'Ihr Name',type:'text',req:true},
+   {id:'email',label:'Ihre E-Mail',type:'email',req:true},
+   {id:'company',label:'Firma (optional)',type:'text'},
+   {id:'idea',label:'Beschreiben Sie Ihre Produktidee',type:'textarea',req:true},
+   {id:'stage',label:'Wo stehen Sie gerade?',type:'select',options:['Nur eine Idee','Skizze oder Prototyp vorhanden','Bereit für einen Pilotlauf','Bereit für die Serie']},
+   {id:'timeline',label:'Zeitrahmen',type:'select',options:['Diesen Monat','Dieses Quartal','Dieses Jahr','Ich schaue mich nur um']},
+   {id:'budget',label:'Budget',type:'select',options:['Unter 2.000 €','2.000–10.000 €','10.000–50.000 €','Über 50.000 €','Lieber besprechen']}]}
+};
+function openForm(type,agent){
+  hideCard();
+  const f=(L()==='de'?FORMS_DE:FORMS_EN)[type],dlg=$('dlg');
+  const form=el('form',{class:'fform'});
+  form.append(el('h3',{text:f.title}),el('p',{class:'hint',text:f.intro}));
+  f.fields.forEach(x=>{
+    const id='f_'+x.id;
+    let input;
+    if(x.type==='select'){
+      input=el('select',{id,name:x.id},...x.options.map(o=>el('option',{value:o,text:o})));
+      if(x.id==='to'&&agent){
+        const hit=x.options.find(o=>o.split(' · ')[0]===agent.name);
+        if(hit)input.value=hit;
+      }
+    }else if(x.type==='textarea'){
+      input=el('textarea',{id,name:x.id,rows:4});
+    }else{
+      input=el('input',{id,name:x.id,type:x.type});
+    }
+    if(x.req)input.required=true;
+    form.append(el('label',{for:id},x.label+(x.req?' *':''),input));
+  });
+  const cb=el('input',{type:'checkbox',id:'f_consent',required:true});
+  form.append(el('label',{class:'chk'},cb,' '+t('consent')+' *'));
+  form.append(el('p',{class:'hint',text:t('formNote')}));
+  form.append(el('div',{class:'btns'},
+    el('button',{type:'button',text:t('cancel'),onclick:()=>dlg.close()}),
+    el('button',{class:'primary',type:'submit',text:t('send')})));
+  form.onsubmit=e=>{
+    e.preventDefault();
+    let who=t('subjNew'),to='';
+    const lines=[];
+    f.fields.forEach(x=>{
+      const v=form.elements[x.id].value.trim();
+      if(x.id==='name')who=v||who;
+      if(x.id==='to')to=v;
+      if(v)lines.push(`${x.label}: ${v}`);
+    });
+    const subject=type==='question'&&to
+      ? `${t('subjQ')} ${to.split(' · ')[0]} – ${who}`
+      : `${f.tag}: ${who}`;
+    let body=lines.join('\n')+'\n\n'+t('footer');
+    if(body.length>1800)body=body.slice(0,1800)+'\n'+t('shortened');
+    dlg.close();
+    location.href=`mailto:${TEAM_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    toast(`${t('toast')} ${TEAM_EMAIL}.`);
+  };
+  dlg.replaceChildren(el('button',{class:'x',text:'×',title:t('close'),onclick:()=>dlg.close()}),form);
+  dlg.showModal();
+}
+document.querySelectorAll('[data-form]').forEach(b=>b.addEventListener('click',()=>openForm(b.dataset.form)));
+function toast(t){const n=$('toast');n.textContent=t;n.hidden=false;clearTimeout(n._t);n._t=setTimeout(()=>{n.hidden=true;},7000);}
+
+/* ---------- status from Nora (data/status.json in this repo) ---------- */
+// Text fields can have a German twin: summary_de, reason_de, title_de, text_de, caption_de, status_de, next_de
+function pickText(o,k){return (L()==='de'&&o[k+'_de'])||o[k]||'';}
+function photo(src,alt){
+  if(!src)return el('div',{class:'ph-empty',text:t('photoSoon')});
+  const i=el('img',{src,alt:alt||'',loading:'lazy'});
+  i.onerror=()=>i.replaceWith(el('div',{class:'ph-empty',text:t('photoSoon')}));
+  return i;
+}
+function renderStatus(s){
+  lastStatus=s;
+  $('upd').textContent=s.updated?`${t('updated')} · ${s.updated}`:'';
+  const e=s.employee_of_the_month||{};
+  $('eotm').replaceChildren(el('h3',{text:t('eotm')}),
+    photo(e.photo,e.name),
+    el('b',{text:e.name||'—'}),' ',el('small',{class:'muted',text:e.role||''}),
+    el('p',{text:pickText(e,'reason')}));
+  const p=s.current_project||{};
+  $('proj').replaceChildren(el('h3',{text:t('proj')}),
+    photo(p.photo,p.name),
+    el('div',{style:'margin-top:8px'},el('b',{text:p.name||'—'}),' ',el('span',{class:'pill',text:pickText(p,'status')})),
+    el('div',{class:'bar'},el('i',{style:`width:${Math.max(0,Math.min(100,p.progress||0))}%`})),
+    el('p',{text:pickText(p,'summary')}),
+    pickText(p,'next')?el('small',{class:'muted',text:t('next')+' '+pickText(p,'next')}):null);
+  $('hl').replaceChildren(el('h3',{text:t('hl')}),
+    ...(s.highlights||[]).map(h=>el('div',{class:'hi'},el('b',{text:pickText(h,'title')}),el('p',{text:pickText(h,'text')}))));
+  $('gal').replaceChildren(...(s.gallery||[]).map(g=>el('figure',{},photo(g.src,pickText(g,'caption')),el('figcaption',{text:pickText(g,'caption')}))));
+}
+async function loadStatus(){
+  try{
+    const r=await fetch('data/status.json',{cache:'no-cache'});
+    if(!r.ok)throw new Error(r.status);
+    renderStatus(await r.json());
+  }catch(err){
+    $('upd').textContent=t('unavailable');
+  }
+}
+
+/* ---------- language ---------- */
+function applyStatic(){
+  document.title=t('title');
+  document.querySelectorAll('[data-i18n]').forEach(n=>{n.textContent=t(n.dataset.i18n);});
+  document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===L())));
+}
+function setLang(l){
+  document.documentElement.lang=l;
+  try{localStorage.setItem('lang',l)}catch(e){}
+  applyStatic();
+  if(lastStatus)renderStatus(lastStatus);
+  if(shown)showCard(shown);
+}
+
+/* ---------- camera: drag to orbit, wheel to zoom, click an agent ---------- */
+let theta=0.35,phi=0.95,radius=31;
+let dragging=false,moved=0,lastX=0,lastY=0;
+const dom=renderer?renderer.domElement:null;
+const ray=new THREE.Raycaster();
+if(dom){
+  dom.addEventListener('pointerdown',e=>{dragging=true;moved=0;lastX=e.clientX;lastY=e.clientY;});
+  dom.addEventListener('wheel',e=>{e.preventDefault();radius=Math.min(40,Math.max(9,radius+e.deltaY*0.02));},{passive:false});
+}
+addEventListener('pointermove',e=>{
+  if(!dragging)return;
+  const dx=e.clientX-lastX,dy=e.clientY-lastY;
+  moved+=Math.abs(dx)+Math.abs(dy);
+  theta-=dx*0.006;phi=Math.min(1.35,Math.max(0.35,phi-dy*0.004));
+  lastX=e.clientX;lastY=e.clientY;
+});
+addEventListener('pointerup',e=>{
+  if(!dragging)return;
+  dragging=false;
+  if(moved<6&&dom&&e.target===dom)pick(e);
+});
+function pick(e){
+  const r=dom.getBoundingClientRect();
+  ray.setFromCamera(new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1),camera);
+  const hc=ray.intersectObjects(charObjs,true);
+  for(const h of hc){
+    let o=h.object;while(o&&!o.userData.agent)o=o.parent;
+    if(o&&o.userData.agent){showCard(o.userData.agent);return;}
+  }
+}
+
+/* ---------- poses and animation ---------- */
+function targetsFor(p,c,t){
+  const T={rootY:0,hL:0,hR:0,kL:0,kR:0,aL:0,aR:0,nod:0,look:0};
+  const sit=()=>{T.rootY=-0.36;T.hL=T.hR=-Math.PI/2;T.kL=T.kR=Math.PI/2;};
+  let cup=false,racket=false;
+  switch(p){
+    case 'walk':{
+      const s=Math.sin(c.phase);
+      T.hL=s*0.7;T.hR=-s*0.7;T.kL=Math.max(0,-s)*0.8;T.kR=Math.max(0,s)*0.8;
+      T.aL=-s*0.6;T.aR=s*0.6;break;}
+    case 'sitType': sit();T.aL=-1.2+Math.sin(t*15)*0.08;T.aR=-1.2+Math.sin(t*15+Math.PI)*0.08;break;
+    case 'sitIdle': sit();T.aL=0.1;T.aR=-0.3;T.look=Math.sin(t*0.6)*0.5;break;
+    case 'sitTalk': sit();T.aL=0.1;T.aR=-0.6+Math.sin(t*3.2)*0.35;T.nod=Math.sin(t*4)*0.07;break;
+    case 'sitRelax': sit();T.aL=0.2;T.aR=0.2;T.look=Math.sin(t*0.4)*0.25;break;
+    case 'coffee': T.aR=-1.1;T.aL=-0.2;cup=true;break;
+    case 'standTalk': T.aR=-0.4+Math.sin(t*3)*0.3;T.aL=0.15;T.nod=Math.sin(t*4)*0.06;break;
+    case 'pingLeft':case 'pingRight': T.aR=-1.4+Math.sin(t*7)*0.6;T.aL=-0.4;racket=true;break;
+    case 'cheer': T.aL=-2.6+Math.sin(t*5)*0.2;T.aR=-2.6+Math.sin(t*5+1)*0.2;break;
+    default: break;
+  }
+  return{T,cup,racket};
+}
+function animate(c,dt,now){
+  if(c.walking){
+    c.phase+=dt*9;
+    const dir=c.tgt.clone().sub(c.g.position);dir.y=0;
+    const dist=dir.length(),step=SPEED*dt;
+    if(dist<=step||dist===0){
+      c.g.position.set(c.tgt.x,0,c.tgt.z);c.walking=false;
+      const cb=c.onArrive;c.onArrive=null;if(cb)cb();
+    }else{
+      dir.divideScalar(dist);
+      c.g.position.addScaledVector(dir,step);
+      c.g.rotation.y=Math.atan2(dir.x,dir.z);
+    }
+  }
+  c.pose=c.walking?'walk':poseOf(c);
+  const {T,cup,racket}=targetsFor(c.pose,c,now/1000);
+  const k=Math.min(1,dt*10),cur=c.cur;
+  for(const key in T)cur[key]+=(T[key]-cur[key])*k;
+  const r=c.g.userData.rig;
+  c.g.position.y=cur.rootY;
+  r.hipL.rotation.x=cur.hL;r.hipR.rotation.x=cur.hR;
+  r.kneeL.rotation.x=cur.kL;r.kneeR.rotation.x=cur.kR;
+  r.armL.rotation.x=cur.aL;r.armR.rotation.x=cur.aR;
+  r.head.rotation.x=cur.nod;r.head.rotation.y=cur.look;
+  r.cup.visible=cup;r.racket.visible=racket;
+  if(c.bubble&&now>c.bubbleUntil)clearBubble(c);
+}
+let last=performance.now();
+function frame(now){
+  const dt=Math.max(0,Math.min(0.05,(now-last)/1000));last=now;
+  agents.forEach(a=>animate(a,dt,now));
+  const players=agents.filter(a=>!a.walking&&(a.pose==='pingLeft'||a.pose==='pingRight'));
+  if(players.length>=2){
+    const t=now/380;
+    ball.visible=true;
+    ball.position.set(pp.x+Math.cos(t)*1.3,0.98+Math.abs(Math.sin(t*2))*0.22,pp.z);
+  }else ball.visible=false;
+  camera.position.set(radius*Math.sin(phi)*Math.sin(theta),radius*Math.cos(phi),radius*Math.sin(phi)*Math.cos(theta));
+  camera.lookAt(0,0.6,0);
+  if(renderer)renderer.render(scene,camera);
+  requestAnimationFrame(frame);
+}
+function resize(){
+  const w=view.clientWidth,h=view.clientHeight;
+  if(renderer)renderer.setSize(w,h,false);
+  camera.aspect=w/h;camera.updateProjectionMatrix();
+}
+function refresh(){
+  agents.forEach(a=>{
+    a.g.userData.ring.material.color.set(STATE_COL[cls(a)]);
+  });
+}
+
+/* ---------- start ---------- */
+addEventListener('resize',resize);
+resize();
+agents.forEach(a=>assign(a,a.plan));
+refresh();
+loadStatus();
+applyStatic();
+document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+setInterval(tick,1500);
+setInterval(()=>{if(Math.random()<0.7)talk();},2500);
+setInterval(refresh,400);
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
