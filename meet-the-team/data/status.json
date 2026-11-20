@@ -1,47 +1,53 @@
 {
-  "updated": "2026-11-20 09:00",
+  "updated": "2026-11-20 09:46",
   "employee_of_the_month": {
-    "name": "Mira",
-    "role": "Firmware + Edge AI",
-    "photo": "assets/eotm-mira.jpg",
-    "reason": "Cut the sleep current of the sensor node by a large margin, so the battery now lasts far longer between charges.",
-    "reason_de": "Hat den Ruhestrom des Sensorknotens stark gesenkt, sodass der Akku jetzt deutlich länger hält."
+    "name": "Team member of the month",
+    "role": "",
+    "photo": "assets/eotm.svg",
+    "reason": "Kept the sensor node's hourly readings safe through a power dip. Tests tried 200,000 damaged states, and none was accepted.",
+    "reason_de": "Hat die stündlichen Messwerte des Sensorknotens auch bei einem Spannungseinbruch gesichert. Die Tests haben 200.000 beschädigte Zustände geprüft; keiner wurde akzeptiert."
   },
   "current_project": {
-    "name": "Plant monitor v3",
-    "status": "Testing",
-    "progress": 60,
-    "summary": "Sensor stake, app and firmware are working together. We are now testing battery life and the waterproof enclosure.",
-    "next": "Field test on a real plant for two weeks",
+    "name": "Plant monitor v1 demo",
+    "status": "Software ready, bench test next",
+    "progress": 50,
+    "summary": "The software for the v1 demo is merged: sensor firmware, the phone app setup and the cloud data service. The first bench test with real hardware is next.",
+    "next": "Bench test of the v1 demo board, then a two-week test on a real plant.",
     "photo": "assets/project-plant-monitor.jpg",
-    "status_de": "Im Test",
-    "summary_de": "Sensorstab, App und Firmware arbeiten zusammen. Wir testen gerade Akkulaufzeit und das wasserdichte Gehäuse.",
-    "next_de": "Feldtest an einer echten Pflanze, zwei Wochen"
+    "status_de": "Software fertig, Labortest als Nächstes",
+    "summary_de": "Die Software für den v1-Demonstrator ist zusammengeführt: Sensor-Firmware, App-Einrichtung und der Cloud-Datendienst. Der erste Labortest mit echter Hardware steht als Nächstes an.",
+    "next_de": "Labortest des v1-Demonstrators, danach ein zweiwöchiger Test an einer echten Pflanze."
   },
   "highlights": [
     {
-      "title": "New board revision",
-      "text": "The sensor board was redrawn to fit the new enclosure outline.",
-      "title_de": "Neue Platinenversion",
-      "text_de": "Die Sensorplatine wurde für den neuen Gehäuseumriss neu gezeichnet."
+      "title": "Data copy before account delete",
+      "text": "Before an account can be deleted, the app saves a complete copy of the user's plants and photos.",
+      "title_de": "Datenkopie vor dem Löschen",
+      "text_de": "Bevor ein Konto gelöscht werden kann, speichert die App eine vollständige Kopie der Pflanzen und Fotos."
     },
     {
-      "title": "Setup flow on phones",
-      "text": "The app setup now takes three steps instead of seven.",
-      "title_de": "Einrichtung am Handy",
-      "text_de": "Die App-Einrichtung braucht jetzt drei statt sieben Schritte."
+      "title": "Cloud data service live",
+      "text": "The data export service runs in the cloud project. A test with a real user account is still to come.",
+      "title_de": "Cloud-Datendienst aktiv",
+      "text_de": "Der Datenexport läuft im Cloud-Projekt. Ein Test mit einem echten Nutzerkonto steht noch aus."
+    },
+    {
+      "title": "Nightly tests",
+      "text": "Every night the cloud tests run 66 deliberate bugs. All 66 were caught.",
+      "title_de": "Nächtliche Tests",
+      "text_de": "Jede Nacht testen wir die Cloud mit 66 absichtlich eingebauten Fehlern. Alle 66 wurden erkannt."
     }
   ],
   "gallery": [
     {
       "src": "assets/product-1.jpg",
-      "caption": "Plant monitor sensor stake (prototype)",
-      "caption_de": "Sensorstab der Pflanzenüberwachung (Prototyp)"
+      "caption": "Early enclosure concept, exploded CAD view (v1)",
+      "caption_de": "Frühes Gehäusekonzept, Explosionsansicht (CAD, v1)"
     },
     {
       "src": "assets/app-1.jpg",
-      "caption": "Companion app, live readings screen",
-      "caption_de": "Begleit-App, Ansicht der Messwerte"
+      "caption": "Companion app: welcome, sign-up and profile screens (web build, stand-in backend)",
+      "caption_de": "Begleit-App: Start-, Anmelde- und Profilansicht (Web-Version, Testdaten)"
     }
   ]
 }
