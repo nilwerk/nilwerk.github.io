@@ -9,7 +9,6 @@
 *{box-sizing:border-box}
 body{margin:0;font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f1ede4;color:#222}
 .wrap{max-width:1100px;margin:0 auto;padding:16px}
-header.top{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;padding:8px 0 12px}
 h1{font-size:22px;margin:0}
 .muted{color:#777;font-size:13px}
 .hint{font-size:13px;color:#555}
@@ -62,12 +61,47 @@ dialog::backdrop{background:rgba(0,0,0,.35)}
 .fform label.chk{flex-direction:row;align-items:flex-start;gap:8px}
 .fform input,.fform select,.fform textarea{font:inherit;padding:8px;border:1px solid #bbb;border-radius:6px;width:100%}
 .fform input[type=checkbox]{width:auto;margin-top:4px}
-header.top{align-items:center}
-.lang{display:flex;border:1px solid #ddd;border-radius:999px;overflow:hidden;margin-left:auto}
-.lang button{border:0;background:transparent;color:#777;font:600 .78rem Inter,system-ui,sans-serif;padding:6px 10px;cursor:pointer}
-.lang button[aria-pressed="true"]{background:#222;color:#fff}
+/* site header and footer: same markup and styles as the main page */
+:root{--bg:#f6f4ef;--surface:#ffffff;--ink:#15181d;--muted:#5b616b;--line:#e2ded5;--accent:#0f7a5c;--accent-ink:#ffffff;--accent-soft:#e3f2ec;--trace:#c9c2b3}
+nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px;padding:0 16px}
+nav a{color:inherit}
+.brand{display:flex;align-items:center;gap:10px;font-family:"Space Grotesk",Inter,sans-serif;font-weight:700;text-decoration:none}
+.brand svg{flex:none}
+.brand .word{font-size:1.28rem;letter-spacing:-.03em;font-weight:700}
+.brand .word span{color:var(--accent)}
+.navlinks{display:flex;gap:22px;align-items:center}
+.navlinks a{text-decoration:none;color:var(--muted);font-size:.93rem}
+.navlinks a:hover{color:var(--ink)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{border:0;background:transparent;color:var(--muted);font:600 .78rem Inter,system-ui,sans-serif;padding:6px 10px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+@media(max-width:760px){.navlinks a{display:none}}
+footer{padding:32px 0 48px;color:var(--muted);font-size:.88rem}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{color:var(--muted)}
+.legal{margin-top:24px;font-size:.85rem;color:var(--muted)}
+.legal h3{font-size:1rem;color:var(--ink);margin-bottom:6px}
+/* page intro and counters */
+.intro{padding:20px 0 4px}
+.intro h1{font-size:22px}
+.intro p{margin:4px 0 0}
+.counters{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ctr{background:#fff;border:1px solid #e3ddcf;border-top:4px solid var(--accent);border-radius:12px;padding:16px}
+.ctr.wide{grid-column:1 / -1}
+.ctr .num{font-size:46px;font-weight:700;line-height:1;color:var(--accent);letter-spacing:-.02em}
+.ctr .lbl{font-size:14px;color:#333;margin-top:8px}
+.ctr .nt{font-size:12px;color:#666;margin-top:6px}
+.ctr .parts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px;border-top:1px solid #eee;padding-top:12px}
+.ctr .parts b{display:block;font-size:28px;line-height:1.1;color:#2d6cdf}
+.ctr .parts span{font-size:12px;color:#555}
+.eotm-time{font-size:20px;font-weight:700;margin:10px 0 2px;color:var(--accent)}
+.eotm-months{font-size:15px;margin:0 0 6px}
+.gal figure.full img{aspect-ratio:auto;object-fit:contain;background:#f1ede4}
 @media (max-width:760px){
   #actions,#status{grid-template-columns:1fr}
+  .counters{grid-template-columns:1fr}
+  .ctr .parts{grid-template-columns:1fr}
   #card{width:auto;left:10px;right:10px;top:auto;bottom:40px}
 }
 </style>
@@ -75,11 +109,31 @@ header.top{align-items:center}
 <body>
 <div class="wrap">
 
-<header class="top">
+<nav>
+  <div class="wrap">
+    <a class="brand" href="../#top" aria-label="Nilwerk">
+      <svg class="mark" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="9" fill="#15181d" stroke="#ffffff" stroke-opacity=".12"/><path d="M10 22V9.5l12 12.5V9.5" stroke="#3fc79a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="22" r="2.6" fill="#15181d" stroke="#3fc79a" stroke-width="1.8"/><circle cx="22" cy="9.5" r="2.6" fill="#15181d" stroke="#3fc79a" stroke-width="1.8"/><path d="M6.5 26.6c2.4-1.5 4.8-1.5 7.2 0s4.8 1.5 7.2 0 4.8-1.5 6.9-.1" stroke="#8fd9ff" stroke-opacity=".7" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <span class="word">nil<span>werk</span></span>
+    </a>
+    <div class="navlinks">
+      <a href="../#leistungen" data-i18n="nav1">Leistungen</a>
+      <a href="../#pakete" data-i18n="nav2">Pakete</a>
+      <a href="../#ablauf" data-i18n="nav3">Ablauf</a>
+      <a href="../#ki-workflow" data-i18n="nav5">KI-Workflow</a>
+      <a href="./">Team</a>
+      <a href="../#kontakt" data-i18n="nav4">Kontakt</a>
+      <div class="lang" role="group" aria-label="Sprache">
+        <button type="button" data-lang="de" aria-pressed="true">DE</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="intro">
   <h1 data-i18n="title"></h1>
-  <span class="muted"><a href="../" data-i18n="home"></a> · <span data-i18n="tagline"></span></span>
-  <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="de" aria-pressed="false">DE</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
-</header>
+  <p class="muted" data-i18n="tagline"></p>
+</div>
 
 <section id="stage" aria-label="3D view of the Nilwerk office">
   <div id="view"><div id="err"></div></div>
@@ -95,6 +149,7 @@ header.top{align-items:center}
 </section>
 
 <section id="status" aria-label="Team highlights and current project">
+  <div class="box full" id="ctr"><h3 data-i18n="counters"></h3><div class="muted" data-i18n="loading"></div></div>
   <div class="box" id="eotm"><h3 data-i18n="eotm"></h3><div class="muted" data-i18n="loading"></div></div>
   <div class="box" id="proj"><h3 data-i18n="proj"></h3><div class="muted" data-i18n="loading"></div></div>
   <div class="box full" id="hl"><h3 data-i18n="hl"></h3><div class="muted" data-i18n="loading"></div></div>
@@ -103,6 +158,21 @@ header.top{align-items:center}
 
 <p class="muted" id="upd"></p>
 </div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Nilwerk</span>
+    <span><a href="../#impressum">Impressum</a> · <a href="../#impressum" data-i18n="dsg">Datenschutz</a></span>
+  </div>
+  <div class="wrap legal" id="impressum">
+    <div>
+      <h3>Impressum</h3>
+      <p><span data-i18n="imp1">Angaben gemäß § 5 DDG</span><br><strong>Nilwerk</strong><br><span data-i18n="imp2">Inhaber:</span> Arsany Tadrous<br>72764 Reutlingen<br><span data-i18n="imp3">Deutschland</span><br>E-Mail: <a href="mailto:nilwerk.team@gmail.com">nilwerk.team@gmail.com</a></p>
+      <h3 style="margin-top:14px" data-i18n="dsg">Datenschutz</h3>
+      <p data-i18n="dsgp">Diese Seite setzt keine Cookies, kein Tracking und keine externen Schriftarten ein. Gehostet wird sie bei GitHub Pages (GitHub Inc.), das beim Aufruf technisch notwendige Zugriffsdaten wie die IP-Adresse verarbeitet. Wenn Sie uns per E-Mail schreiben, wird Ihre Nachricht über Gmail (Google) verarbeitet; wir nutzen Ihre Angaben ausschließlich zur Bearbeitung Ihrer Anfrage und löschen sie, wenn sie dafür nicht mehr benötigt werden.</p>
+    </div>
+  </div>
+</footer>
 
 <dialog id="dlg"></dialog>
 <div id="toast" hidden></div>
@@ -127,12 +197,15 @@ function el(tag,attrs={},...kids){
 function showError(msg){const e=$('err');e.textContent=msg;e.style.display='flex';}
 
 const T={
-en:{title:'Meet the team!',home:'← Nilwerk home',tagline:'Connected hardware prototypes, from idea to working device',
+en:{title:'Meet the team!',tagline:'Connected hardware prototypes, from idea to working device',
  note:'Simulated view · click someone to meet them',lg_work:'working',lg_walk:'walking',lg_meet:'meeting',lg_break:'break',lg_free:'free',
  askT:'Ask a question',askD:'Something about our work, or how a prototype is built.',
  quoteT:'Get a quote',quoteD:'Tell us what you need and we reply with a quote.',
  projT:'Start a project',projD:'Have a product idea? Tell us about it and we plan the next step.',
- eotm:'Employee of the month',proj:'Current project',hl:'Highlights',work:'Our work',
+ eotm:'Employee of the month',proj:'Current project',hl:'Highlights',work:'Our work',counters:'Numbers so far',
+ nav1:'Services',nav2:'Packages',nav3:'Process',nav4:'Contact',nav5:'AI workflow',imp1:'Information pursuant to § 5 DDG',imp2:'Owner:',imp3:'Germany',dsg:'Privacy',
+ dsgp:'This site uses no cookies, no tracking and no external fonts. It is hosted on GitHub Pages (GitHub Inc.), which processes technically necessary access data such as your IP address. If you email us, your message is processed via Gmail (Google); we use your details only to handle your request and delete them when no longer needed.',
+
  loading:'Loading…',photoSoon:'Photo coming soon',next:'Next:',updated:'Last updated by Nora',
  unavailable:'Status is not available right now. Please check back soon.',
  st_walk:'Walking to a new spot',st_meet:'In a team meeting',st_break:'On a break',st_work:'Working',st_free:'At desk · free',st_idle:'Idle',
@@ -146,12 +219,15 @@ en:{title:'Meet the team!',home:'← Nilwerk home',tagline:'Connected hardware p
  shortened:'[message shortened, please add details by reply]',
  noThree:'The 3D library (three.min.js) did not load. Keep it in the same folder as this page.',
  noWebgl:'This browser has no WebGL, so the 3D office cannot draw. Try Chrome or Edge.'},
-de:{title:'Lerne das Team kennen!',home:'← Nilwerk Startseite',tagline:'Vernetzte Hardware-Prototypen, von der Idee bis zum funktionierenden Gerät',
+de:{title:'Lerne das Team kennen!',tagline:'Vernetzte Hardware-Prototypen, von der Idee bis zum funktionierenden Gerät',
  note:'Simulierte Ansicht · Klick auf eine Person zum Kennenlernen',lg_work:'arbeitet',lg_walk:'unterwegs',lg_meet:'Besprechung',lg_break:'Pause',lg_free:'frei',
  askT:'Frage stellen',askD:'Etwas zu unserer Arbeit oder zum Aufbau eines Prototyps.',
  quoteT:'Angebot anfragen',quoteD:'Beschreiben Sie, was Sie brauchen. Wir antworten mit einem Angebot.',
  projT:'Projekt starten',projD:'Eine Produktidee? Erzählen Sie uns davon, dann planen wir den nächsten Schritt.',
- eotm:'Mitarbeiter des Monats',proj:'Aktuelles Projekt',hl:'Highlights',work:'Unsere Arbeit',
+ eotm:'Mitarbeiter des Monats',proj:'Aktuelles Projekt',hl:'Highlights',work:'Unsere Arbeit',counters:'Zahlen bisher',
+ nav1:'Leistungen',nav2:'Pakete',nav3:'Ablauf',nav4:'Kontakt',nav5:'KI-Workflow',imp1:'Angaben gemäß § 5 DDG',imp2:'Inhaber:',imp3:'Deutschland',dsg:'Datenschutz',
+ dsgp:'Diese Seite setzt keine Cookies, kein Tracking und keine externen Schriftarten ein. Gehostet wird sie bei GitHub Pages (GitHub Inc.), das beim Aufruf technisch notwendige Zugriffsdaten wie die IP-Adresse verarbeitet. Wenn Sie uns per E-Mail schreiben, wird Ihre Nachricht über Gmail (Google) verarbeitet; wir nutzen Ihre Angaben ausschließlich zur Bearbeitung Ihrer Anfrage und löschen sie, wenn sie dafür nicht mehr benötigt werden.',
+
  loading:'Lädt…',photoSoon:'Foto folgt bald',next:'Als Nächstes:',updated:'Zuletzt aktualisiert von Nora',
  unavailable:'Der Status ist gerade nicht verfügbar. Bitte schauen Sie bald wieder vorbei.',
  st_walk:'Geht zu einem neuen Platz',st_meet:'In einer Teambesprechung',st_break:'In der Pause',st_work:'Arbeitet',st_free:'Am Platz · frei',st_idle:'Untätig',
@@ -627,13 +703,23 @@ function photo(src,alt){
   i.onerror=()=>i.replaceWith(el('div',{class:'ph-empty',text:t('photoSoon')}));
   return i;
 }
+function counterBlock(c){
+  return el('div',{class:'ctr'+(c.parts?' wide':'')},
+    el('div',{class:'num',text:c.value}),
+    el('div',{class:'lbl',text:pickText(c,'label')}),
+    c.parts?el('div',{class:'parts'},...c.parts.map(p=>el('div',{},el('b',{text:p.value}),el('span',{text:pickText(p,'label')})))):null,
+    pickText(c,'note')?el('div',{class:'nt',text:pickText(c,'note')}):null);
+}
 function renderStatus(s){
   lastStatus=s;
   $('upd').textContent=s.updated?`${t('updated')} · ${s.updated}`:'';
   const e=s.employee_of_the_month||{};
   $('eotm').replaceChildren(el('h3',{text:t('eotm')}),
     photo(e.photo,e.name),
-    el('b',{text:e.name||'—'}),' ',el('small',{class:'muted',text:e.role||''}),
+    el('div',{style:'margin-top:8px'},el('b',{text:e.name||'—'}),' ',el('span',{class:'pill',text:pickText(e,'role')})),
+    el('div',{class:'eotm-time',text:pickText(e,'hours')}),
+    el('div',{class:'eotm-months',text:pickText(e,'time_in_months')}),
+    el('small',{class:'muted',text:pickText(e,'time_note')}),
     el('p',{text:pickText(e,'reason')}));
   const p=s.current_project||{};
   $('proj').replaceChildren(el('h3',{text:t('proj')}),
@@ -642,9 +728,13 @@ function renderStatus(s){
     el('div',{class:'bar'},el('i',{style:`width:${Math.max(0,Math.min(100,p.progress||0))}%`})),
     el('p',{text:pickText(p,'summary')}),
     pickText(p,'next')?el('small',{class:'muted',text:t('next')+' '+pickText(p,'next')}):null);
+  $('ctr').replaceChildren(el('h3',{text:t('counters')}),
+    el('div',{class:'counters'},...(s.counters||[]).map(counterBlock)));
   $('hl').replaceChildren(el('h3',{text:t('hl')}),
-    ...(s.highlights||[]).map(h=>el('div',{class:'hi'},el('b',{text:pickText(h,'title')}),el('p',{text:pickText(h,'text')}))));
-  $('gal').replaceChildren(...(s.gallery||[]).map(g=>el('figure',{},photo(g.src,pickText(g,'caption')),el('figcaption',{text:pickText(g,'caption')}))));
+    ...(s.highlights||[]).slice(0,3).map(h=>el('div',{class:'hi'},el('b',{text:pickText(h,'title')}),el('p',{text:pickText(h,'text')}))));
+  const c=s.collage;
+  $('gal').replaceChildren(...(c?[el('figure',{class:'full'},photo(c.src,pickText(c,'caption')),el('figcaption',{text:pickText(c,'caption')}))]:[]),
+    ...(s.gallery||[]).map(g=>el('figure',{},photo(g.src,pickText(g,'caption')),el('figcaption',{text:pickText(g,'caption')}))));
 }
 async function loadStatus(){
   try{
