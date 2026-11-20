@@ -1,9 +1,16 @@
 {
-  "updated": "2026-11-20 09:46",
+  "updated": "2026-11-20 19:37",
   "employee_of_the_month": {
-    "name": "Team member of the month",
-    "role": "",
+    "name": "Mira",
+    "role": "Firmware + Edge AI",
+    "role_de": "Firmware und Edge-KI",
     "photo": "assets/eotm.svg",
+    "hours": "149 hours this month",
+    "hours_de": "149 Stunden in diesem Monat",
+    "time_in_months": "About 0.9 month of full-time work (range 0.7 to 1.1 month)",
+    "time_in_months_de": "Etwa 0,9 Monate Vollzeitarbeit (Spanne 0,7 bis 1,1 Monate)",
+    "time_note": "Human-equivalent of AI agent time, not a person's own hours. Agent time of 186 minutes, converted at a planning value of 1.25 minutes per hour (range 124 to 186 hours). For comparison: one full-time year is about 2,080 hours, one month about 173 hours.",
+    "time_note_de": "Menschliches Äquivalent der KI-Agentenzeit, nicht die eigenen Stunden einer Person. Agentenzeit von 186 Minuten, umgerechnet mit einem Planungswert von 1,25 Minuten pro Stunde (Spanne 124 bis 186 Stunden). Zum Vergleich: ein Vollzeitjahr hat etwa 2.080 Stunden, ein Monat etwa 173 Stunden.",
     "reason": "Kept the sensor node's hourly readings safe through a power dip. Tests tried 200,000 damaged states, and none was accepted.",
     "reason_de": "Hat die stündlichen Messwerte des Sensorknotens auch bei einem Spannungseinbruch gesichert. Die Tests haben 200.000 beschädigte Zustände geprüft; keiner wurde akzeptiert."
   },
@@ -13,7 +20,7 @@
     "progress": 50,
     "summary": "The software for the v1 demo is merged: sensor firmware, the phone app setup and the cloud data service. The first bench test with real hardware is next.",
     "next": "Bench test of the v1 demo board, then a two-week test on a real plant.",
-    "photo": "assets/project-plant-monitor.jpg",
+    "photo": "assets/project-v1-compact.jpg",
     "status_de": "Software fertig, Labortest als Nächstes",
     "summary_de": "Die Software für den v1-Demonstrator ist zusammengeführt: Sensor-Firmware, App-Einrichtung und der Cloud-Datendienst. Der erste Labortest mit echter Hardware steht als Nächstes an.",
     "next_de": "Labortest des v1-Demonstrators, danach ein zweiwöchiger Test an einer echten Pflanze."
@@ -30,24 +37,70 @@
       "text": "The data export service runs in the cloud project. A test with a real user account is still to come.",
       "title_de": "Cloud-Datendienst aktiv",
       "text_de": "Der Datenexport läuft im Cloud-Projekt. Ein Test mit einem echten Nutzerkonto steht noch aus."
-    },
-    {
-      "title": "Nightly tests",
-      "text": "Every night the cloud tests run 66 deliberate bugs. All 66 were caught.",
-      "title_de": "Nächtliche Tests",
-      "text_de": "Jede Nacht testen wir die Cloud mit 66 absichtlich eingebauten Fehlern. Alle 66 wurden erkannt."
     }
   ],
   "gallery": [
     {
-      "src": "assets/product-1.jpg",
-      "caption": "Early enclosure concept, exploded CAD view (v1)",
-      "caption_de": "Frühes Gehäusekonzept, Explosionsansicht (CAD, v1)"
+      "src": "assets/project-v1-compact-exploded.jpg",
+      "caption": "v1 compact enclosure, exploded CAD view",
+      "caption_de": "v1-Kompaktgehäuse, Explosionsansicht (CAD)"
     },
     {
       "src": "assets/app-1.jpg",
       "caption": "Companion app: welcome, sign-up and profile screens (web build, stand-in backend)",
       "caption_de": "Begleit-App: Start-, Anmelde- und Profilansicht (Web-Version, Testdaten)"
     }
-  ]
+  ],
+  "counters": [
+    {
+      "value": "138",
+      "label": "pull requests merged",
+      "label_de": "Pull Requests zusammengeführt",
+      "note": "",
+      "note_de": ""
+    },
+    {
+      "value": "1,304",
+      "label": "team hours, human-equivalent",
+      "label_de": "Team-Stunden, menschliches Äquivalent",
+      "note": "Planning value. Range 1,087 to 1,630 hours.",
+      "note_de": "Planungswert. Spanne 1.087 bis 1.630 Stunden."
+    },
+    {
+      "value": "4",
+      "label": "projects worked on",
+      "label_de": "bearbeitete Projekte",
+      "note": "This one plus three earlier projects. The names of the three earlier projects are to be confirmed by Arsany.",
+      "note_de": "Dieses Projekt plus drei frühere. Die Namen der drei früheren Projekte werden von Arsany noch bestätigt."
+    },
+    {
+      "value": "354",
+      "label": "app tests passing",
+      "label_de": "App-Tests bestanden",
+      "note": "Test coverage not measured yet.",
+      "note_de": "Testabdeckung noch nicht gemessen.",
+      "parts": [
+        {
+          "value": "68",
+          "label": "care-tips tests",
+          "label_de": "Pflegetipps-Tests"
+        },
+        {
+          "value": "66 / 66",
+          "label": "cloud mutants killed (0 survived)",
+          "label_de": "Cloud-Mutanten erkannt (0 überlebt)"
+        },
+        {
+          "value": "66 / 66",
+          "label": "tips mutants killed (0 survived)",
+          "label_de": "Tipps-Mutanten erkannt (0 überlebt)"
+        }
+      ]
+    }
+  ],
+  "collage": {
+    "src": "assets/our-work-collage.jpg",
+    "caption": "Our work: v1 compact enclosure (render, exploded view) and companion app screens",
+    "caption_de": "Unsere Arbeit: v1-Kompaktgehäuse (Render, Explosionsansicht) und Begleit-App-Ansichten"
+  }
 }
