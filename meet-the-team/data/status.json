@@ -3,7 +3,7 @@
   "employee_of_the_month": {
     "name": "Team member of the month",
     "role": "",
-    "photo": "assets/eotm.jpg",
+    "photo": "assets/eotm.svg",
     "reason": "Kept the sensor node's hourly readings safe through a power dip. Tests tried 200,000 damaged states, and none was accepted.",
     "reason_de": "Hat die stündlichen Messwerte des Sensorknotens auch bei einem Spannungseinbruch gesichert. Die Tests haben 200.000 beschädigte Zustände geprüft; keiner wurde akzeptiert."
   },
