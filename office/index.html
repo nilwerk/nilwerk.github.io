@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Virtual office and lab · Nilwerk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f4ef; --surface:#ffffff; --ink:#15181d; --muted:#5b616b; --line:#e2ded5;
+  --accent:#0f7a5c; --accent-ink:#ffffff; --accent-soft:#e3f2ec; --trace:#c9c2b3;
+  --warn-bg:#fff4e5; --warn-ink:#8a4b00; --warn-line:#e7a24a;
+  --busy:#0f7a5c; --free:#8a929c;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101317; --surface:#181c22; --ink:#eef0f2; --muted:#9aa3ad; --line:#2a3038;
+    --accent:#3ccf9c; --accent-ink:#0b1210; --accent-soft:#16332a; --trace:#3a4149;
+    --warn-bg:#2b2112; --warn-ink:#f2c27a; --warn-line:#8a6225;
+    --busy:#3ccf9c; --free:#6b7480;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101317; --surface:#181c22; --ink:#eef0f2; --muted:#9aa3ad; --line:#2a3038;
+  --accent:#3ccf9c; --accent-ink:#0b1210; --accent-soft:#16332a; --trace:#3a4149;
+  --warn-bg:#2b2112; --warn-ink:#f2c27a; --warn-line:#8a6225;
+  --busy:#3ccf9c; --free:#6b7480;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Inter,system-ui,sans-serif}
+body{padding:0 16px 48px}
+main{max-width:1100px;margin:0 auto}
+h1,h2,h3{font-family:"Space Grotesk",Inter,sans-serif;letter-spacing:-.01em;margin:0}
+h1{font-size:clamp(26px,4vw,38px);margin-top:28px}
+h2{font-size:22px;margin:40px 0 6px}
+h3{font-size:17px}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.04em}
+.muted{color:var(--muted)}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.lang button{font:500 13px Inter;padding:6px 10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.banner{margin:18px 0 0;padding:12px 14px;border:1.5px dashed var(--warn-line);background:var(--warn-bg);color:var(--warn-ink);border-radius:12px;font-size:14px}
+.summary{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:150px}
+.stat b{font:700 22px "Space Grotesk",Inter;display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:12px}
+.desk{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;transition:border-color .4s}
+.desk.working{border-color:var(--accent)}
+.who{display:flex;gap:10px;align-items:center}
+.who img{width:44px;height:44px;border-radius:10px;background:var(--accent-soft);flex:none}
+.who .role{color:var(--muted);font-size:13px}
+.chip{display:inline-block;font:500 12px "JetBrains Mono",monospace;padding:3px 8px;border-radius:999px;border:1px solid var(--line)}
+.chip.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.chip.off{color:var(--muted)}
+.bar{height:8px;border-radius:999px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--busy);transition:width .8s ease}
+.bar.free i{background:var(--free)}
+.row{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
+.lab{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:12px}
+.station{background:var(--surface);border:1px solid var(--trace);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.station p{margin:0;font-size:14px;color:var(--muted)}
+.tag{font:500 11px "JetBrains Mono",monospace;color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+footer{margin-top:44px;font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div>
+      <div class="mono muted" data-i18n="kicker">Nilwerk · simulation</div>
+      <h1 data-i18n="title">Virtual office and lab</h1>
+    </div>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="de" aria-pressed="false">DE</button>
+    </div>
+  </div>
+
+  <p class="banner" data-i18n="banner">Simulation. Desk, load and lab states are generated at random every few seconds. They are not live data and do not show real working hours. The team is AI agents, led and reviewed by humans.</p>
+
+  <div class="summary">
+    <div class="stat"><span class="mono muted" data-i18n="sumOffice">Office load (simulated)</span><b id="officeLoad">–</b></div>
+    <div class="stat"><span class="mono muted" data-i18n="sumDesks">Desks working now</span><b id="deskCount">–</b></div>
+    <div class="stat"><span class="mono muted" data-i18n="sumLab">Lab load (simulated)</span><b id="labLoad">–</b></div>
+    <div class="stat"><span class="mono muted" data-i18n="sumTick">Last update</span><b id="tick">–</b></div>
+  </div>
+
+  <h2 data-i18n="deskH">Desks</h2>
+  <p class="muted" style="margin:0" data-i18n="deskP">Each desk is busy or free at random. Busy desks show a simulated load; free desks idle. Refreshes every few seconds.</p>
+  <div class="grid" id="desks"></div>
+
+  <h2 data-i18n="labH">Lab</h2>
+  <p class="muted" style="margin:0" data-i18n="labP">A separate area for hands-on work: boards come in, get checked, are printed and tested. The states below are simulated too.</p>
+  <div class="lab" id="lab"></div>
+
+  <footer>
+    <p data-i18n="foot">Simulation for illustration, generated in the browser. Nothing on this page is measured, reported or sent anywhere.</p>
+  </footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var T = {
+    en: {
+      kicker:"Nilwerk · simulation", title:"Virtual office and lab",
+      banner:"Simulation. Desk, load and lab states are generated at random every few seconds. They are not live data and do not show real working hours. The team is AI agents, led and reviewed by humans.",
+      sumOffice:"Office load (simulated)", sumDesks:"Desks working now", sumLab:"Lab load (simulated)", sumTick:"Last update",
+      deskH:"Desks", deskP:"Each desk is busy or free at random. Busy desks show a simulated load; free desks idle. Refreshes every few seconds.",
+      labH:"Lab", labP:"A separate area for hands-on work: boards come in, get checked, are printed and tested. The states below are simulated too.",
+      foot:"Simulation for illustration, generated in the browser. Nothing on this page is measured, reported or sent anywhere.",
+      working:"working", free:"free", load:"load", idle:"idle",
+      bench:"Lab bench", benchRole:"Hands-on assembly, measuring and test", benchBusy:"at the bench", benchFree:"bench free",
+      intake:"Board intake", intakeP:"Boards received, checked against the bill of materials and counted.", waiting:"boards waiting",
+      printers:"3D printing", printersP:"Two printers for housings and test parts.", printing:"printing", cooling:"cooling", progress:"progress",
+      quality:"Quality test", qualityP:"Test rigs check each unit: power, sensors and the radio link.", running:"testing", pass:"pass rate",
+      rig:"Rig", printer:"Printer"
+    },
+    de: {
+      kicker:"Nilwerk · Simulation", title:"Virtuelles Büro und Labor",
+      banner:"Simulation. Platz-, Auslastungs- und Laborstände werden alle paar Sekunden zufällig erzeugt. Es sind keine Live-Daten und keine echten Arbeitszeiten. Das Team sind KI-Agenten, geführt und geprüft von Menschen.",
+      sumOffice:"Auslastung Büro (simuliert)", sumDesks:"Plätze gerade aktiv", sumLab:"Auslastung Labor (simuliert)", sumTick:"Letzte Aktualisierung",
+      deskH:"Arbeitsplätze", deskP:"Jeder Platz ist zufällig belegt oder frei. Belegte Plätze zeigen eine simulierte Auslastung; freie Plätze sind im Leerlauf. Aktualisierung alle paar Sekunden.",
+      labH:"Labor", labP:"Ein eigener Bereich für praktische Arbeit: Platinen kommen an, werden geprüft, gedruckt und getestet. Auch die Stände unten sind simuliert.",
+      foot:"Simulation zur Veranschaulichung, im Browser erzeugt. Nichts auf dieser Seite wird gemessen, berichtet oder irgendwohin gesendet.",
+      working:"aktiv", free:"frei", load:"Auslastung", idle:"Leerlauf",
+      bench:"Labortisch", benchRole:"Praktischer Aufbau, Messen und Test", benchBusy:"am Tisch", benchFree:"Tisch frei",
+      intake:"Platinen-Eingang", intakeP:"Platinen werden angenommen, gegen die Stückliste geprüft und gezählt.", waiting:"Platinen warten",
+      printers:"3D-Druck", printersP:"Zwei Drucker für Gehäuse und Testteile.", printing:"druckt", cooling:"kühlt ab", progress:"Fortschritt",
+      quality:"Qualitätstest", qualityP:"Testplätze prüfen jede Einheit: Versorgung, Sensoren und Funkverbindung.", running:"testet", pass:"Bestehensquote",
+      rig:"Platz", printer:"Drucker"
+    }
+  };
+  var AGENTS = [
+    {name:"Nora",  role:["Lead / PM","Lead / PM"],                 av:"lead-pm.svg",   p:0.70},
+    {name:"Theo",  role:["System Architect","Systemarchitekt"],     av:"architect.svg", p:0.65},
+    {name:"Ines",  role:["QA & Test","QA & Test"],                  av:"qa.svg",        p:0.60},
+    {name:"Kai",   role:["Pipeline / DevOps","Pipeline / DevOps"],  av:"devops.svg",    p:0.50},
+    {name:"Mira",  role:["Firmware + Edge AI","Firmware + Edge-KI"],av:"firmware.svg",  p:0.75},
+    {name:"Leo",   role:["Full-stack","Full-Stack"],                av:"fullstack.svg", p:0.70},
+    {name:"Sana",  role:["Cloud AI","Cloud-KI"],                    av:"cloud-ai.svg",  p:0.60},
+    {name:"Emil",  role:["PCB designer","PCB-Designer"],            av:"pcb.svg",       p:0.55},
+    {name:"Yara",  role:["3D designer","3D-Designer"],              av:"mechanical.svg",p:0.45},
+    {name:"Poppy", role:["PR & Social","PR & Social"],              av:"pr-social.svg", p:0.50}
+  ];
+  var lang = "en";
+  try { lang = localStorage.getItem("office-lang") === "de" ? "de" : "en"; } catch(e) {}
+  function t(k){ return (T[lang][k]) || (T.en[k]) || k; }
+  function role(i){ return AGENTS[i].role[lang === "de" ? 1 : 0]; }
+  function rnd(a,b){ return a + Math.floor(Math.random()*(b-a+1)); }
+  function el(tag, cls, text){ var n=document.createElement(tag); if(cls) n.className=cls; if(text!==undefined) n.textContent=text; return n; }
+
+  // state
+  var desks = AGENTS.map(function(a){ return roll(a.p, null); });
+  var rigs = [0,1,2].map(function(){ return {on:false, pass:100}; });
+  var printers = [0,1].map(function(){ return {state:"idle", progress:0}; });
+  var intake = {waiting:0};
+  var bench = {busy:false, load:0};
+
+  function roll(p){
+    var working = Math.random() < p;
+    return {working: working, load: working ? rnd(30,96) : rnd(0,12)};
+  }
+  function step(){
+    for (var i=0;i<desks.length;i++){
+      if (Math.random() < 0.35) desks[i] = roll(AGENTS[i].p);
+      else if (desks[i].working) desks[i].load = Math.max(20, Math.min(98, desks[i].load + rnd(-8,8)));
+    }
+    intake.waiting = Math.random() < 0.5 ? rnd(0,6) : intake.waiting;
+    for (var j=0;j<printers.length;j++){
+      var pr = printers[j];
+      if (pr.state === "printing"){ pr.progress += rnd(4,18); if (pr.progress >= 100){ pr.state = "cooling"; pr.progress = 100; } }
+      else if (pr.state === "cooling" && Math.random() < 0.5){ pr.state = "idle"; pr.progress = 0; }
+      else if (pr.state === "idle" && Math.random() < 0.35){ pr.state = "printing"; pr.progress = rnd(0,10); }
+    }
+    for (var k=0;k<rigs.length;k++){
+      var r = rigs[k];
+      if (Math.random() < 0.4) r.on = !r.on;
+      r.pass = r.on ? rnd(93,100) : r.pass;
+    }
+    if (Math.random() < 0.4) bench = {busy: Math.random() < 0.6, load: rnd(20,90)};
+    render();
+  }
+
+  function render(){
+    var deskEl = document.getElementById("desks");
+    if (!deskEl.childNodes.length){
+      for (var i=0;i<AGENTS.length;i++){
+        var card = el("article","desk");
+        var who = el("div","who");
+        var img = el("img"); img.src = "assets/" + AGENTS[i].av; img.alt = ""; img.width = 44; img.height = 44; img.loading = "lazy";
+        var info = el("div"); info.appendChild(el("h3",null,AGENTS[i].name)); info.appendChild(el("div","role",""));
+        who.appendChild(img); who.appendChild(info);
+        var row = el("div","row"); row.appendChild(el("span","chip","")); row.appendChild(el("span","load",""));
+        var bar = el("div","bar"); bar.appendChild(el("i"));
+        card.appendChild(who); card.appendChild(row); card.appendChild(bar);
+        deskEl.appendChild(card);
+      }
+    }
+    var cards = deskEl.children, working = 0, loadSum = 0;
+    for (var a=0;a<AGENTS.length;a++){
+      var d = desks[a], c = cards[a];
+      c.className = "desk" + (d.working ? " working" : "");
+      c.querySelector(".role").textContent = role(a);
+      var chip = c.querySelector(".chip");
+      chip.className = "chip " + (d.working ? "on" : "off");
+      chip.textContent = d.working ? t("working") : t("free");
+      c.querySelector(".load").textContent = t("load") + " " + d.load + "%";
+      var bar = c.querySelector(".bar");
+      bar.className = "bar" + (d.working ? "" : " free");
+      bar.firstChild.style.width = d.load + "%";
+      if (d.working){ working++; loadSum += d.load; }
+    }
+    // lab
+    var labEl = document.getElementById("lab");
+    labEl.textContent = "";
+    labEl.appendChild(station(t("bench"), t("benchRole"), [
+      el("span","chip " + (bench.busy?"on":"off"), bench.busy ? t("benchBusy") : t("benchFree")),
+      el("div","bar" + (bench.busy?"":" free")),
+    ], bench.busy ? bench.load : 0));
+    labEl.appendChild(station(t("intake"), t("intakeP"), [
+      el("span","chip " + (intake.waiting?"on":"off"), intake.waiting + " " + t("waiting"))
+    ], 0));
+    var pNodes = printers.map(function(pr,i){
+      var label = t("printer") + " " + (i+1) + ": " + (pr.state==="printing" ? t("printing") + " · " + t("progress") + " " + pr.progress + "%" : pr.state==="cooling" ? t("cooling") : t("idle"));
+      return el("span","chip " + (pr.state==="idle"?"off":"on"), label);
+    });
+    labEl.appendChild(station(t("printers"), t("printersP"), pNodes, 0));
+    var rNodes = rigs.map(function(r,i){
+      var label = t("rig") + " " + (i+1) + ": " + (r.on ? t("running") + " · " + t("pass") + " " + r.pass + "%" : t("idle"));
+      return el("span","chip " + (r.on?"on":"off"), label);
+    });
+    labEl.appendChild(station(t("quality"), t("qualityP"), rNodes, 0));
+
+    // summary
+    var labBusy = (bench.busy?1:0) + printers.filter(function(p){return p.state!=="idle";}).length + rigs.filter(function(r){return r.on;}).length;
+    document.getElementById("officeLoad").textContent = (working ? Math.round(loadSum / AGENTS.length) : 0) + "%";
+    document.getElementById("deskCount").textContent = working + " / " + AGENTS.length;
+    document.getElementById("labLoad").textContent = Math.round(100 * labBusy / 6) + "%";
+    document.getElementById("tick").textContent = new Date().toLocaleTimeString(lang === "de" ? "de-DE" : "en-GB", {hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  }
+  function station(title, text, nodes, load){
+    var s = el("article","station");
+    s.appendChild(el("span","tag", title));
+    s.appendChild(el("p",null,text));
+    nodes.forEach(function(n){ s.appendChild(n); });
+    return s;
+  }
+  function applyText(){
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(function(n){ n.textContent = t(n.getAttribute("data-i18n")); });
+    document.querySelectorAll(".lang button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang)); });
+    document.title = (lang === "de" ? "Virtuelles Büro und Labor" : "Virtual office and lab") + " · Nilwerk";
+    var list = document.getElementById("desks"); list.textContent = "";
+    render();
+  }
+  document.querySelectorAll(".lang button").forEach(function(b){
+    b.addEventListener("click", function(){
+      lang = b.getAttribute("data-lang");
+      try { localStorage.setItem("office-lang", lang); } catch(e) {}
+      applyText();
+    });
+  });
+  printers[0].state = "printing"; printers[0].progress = 20;
+  rigs[0].on = true;
+  applyText();
+  setInterval(step, 6000);
+})();
+</script>
+</body>
+</html>
