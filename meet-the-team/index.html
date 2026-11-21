@@ -208,7 +208,7 @@ en:{title:'Meet the team!',tagline:'Connected hardware prototypes, from idea to 
 
  loading:'Loading…',photoSoon:'Photo coming soon',next:'Next:',updated:'Last updated by Nora',
  unavailable:'Status is not available right now. Please check back soon.',
- st_walk:'Walking to a new spot',st_meet:'In a team meeting',st_break:'On a break',st_work:'Working',st_free:'At desk · free',st_idle:'Idle',
+ st_walk:'Walking to a new spot',st_meet:'In a team meeting',st_break:'On a break',st_work:'Working',st_free:'At desk · free',st_idle:'Idle',st_load:'load',lab_name:'Lab',lab_boards:'PCBs waiting',lab_print:'printing',lab_cool:'cooling',lab_test:'testing',lab_idle:'idle',lab_pass:'pass',printer_:'Printer',rig_:'Test rig',
  area_kitchen:'kitchen',area_lounge:'lounge',area_play:'play area',
  cardHint:'Our agents only take instructions from the CEO, so you can’t assign them work from here.',
  close:'Close',cancel:'Cancel',send:'Open email to send',
@@ -230,7 +230,7 @@ de:{title:'Lerne das Team kennen!',tagline:'Vernetzte Hardware-Prototypen, von d
 
  loading:'Lädt…',photoSoon:'Foto folgt bald',next:'Als Nächstes:',updated:'Zuletzt aktualisiert von Nora',
  unavailable:'Der Status ist gerade nicht verfügbar. Bitte schauen Sie bald wieder vorbei.',
- st_walk:'Geht zu einem neuen Platz',st_meet:'In einer Teambesprechung',st_break:'In der Pause',st_work:'Arbeitet',st_free:'Am Platz · frei',st_idle:'Untätig',
+ st_walk:'Geht zu einem neuen Platz',st_meet:'In einer Teambesprechung',st_break:'In der Pause',st_work:'Arbeitet',st_load:'Auslastung',lab_name:'Labor',lab_boards:'Platinen warten',lab_print:'druckt',lab_cool:'kühlt ab',lab_test:'testet',lab_idle:'Leerlauf',lab_pass:'Bestehen',printer_:'Drucker',rig_:'Testplatz',st_free:'Am Platz · frei',st_idle:'Untätig',
  area_kitchen:'Küche',area_lounge:'Lounge',area_play:'Spielbereich',
  cardHint:'Unsere Agenten nehmen Anweisungen nur vom CEO entgegen. Aufgaben können Sie hier daher nicht vergeben.',
  close:'Schließen',cancel:'Abbrechen',send:'E-Mail zum Senden öffnen',
@@ -256,7 +256,7 @@ const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const p2w=(x,y)=>new THREE.Vector3((x-480)/40,0,(y-300)/40);
 
 // Team roster (from team/PERSONAS.md). Gender follows the persona name and avatar image.
-// Peter is a human team member and is not shown.
+// Peter is not a desk agent. A simulated, unnamed bench figure stands in the lab.
 const AGENTS=[
  {id:'lead', name:'Nora',   gender:'f',role:'Lead / Project Manager',  part:'NW-PM-01',nick:'The conductor',        shirt:'#1f6f68',skin:'#e8b896',hair:'bob',  hairCol:'#3a2a20',plan:'Plan today’s tasks and assign roles'},
  {id:'arch', name:'Theo',   gender:'m',role:'System Architect',        part:'NW-AR-02',nick:'The cartographer',     shirt:'#3b4a8c',skin:'#c98e6a',hair:'short',hairCol:'#1d1b1a',glasses:true,plan:'Review designs against the requirements'},
@@ -321,7 +321,8 @@ const ROOMS=[
  {label:'Meeting room',x:600,y:20,w:340,h:200,col:'#d9e2ea'},
  {label:'Kitchen',x:600,y:240,w:160,h:340,col:'#ece7dd'},
  {label:'Lounge',x:780,y:240,w:160,h:340,col:'#e0d7ea'},
- {label:'Play area',x:20,y:340,w:560,h:240,col:'#d4e8cf'}
+ {label:'Play area',x:20,y:340,w:560,h:240,col:'#d4e8cf'},
+ {label:'Lab',x:20,y:600,w:920,h:240,col:'#dde8e0'}
 ];
 ROOMS.forEach(r=>{
   const c=p2w(r.x+r.w/2,r.y+r.h/2);
@@ -395,6 +396,62 @@ put(mesh(new THREE.BoxGeometry(0.05,0.25,1.4),'#ffffff'),pp.x,0.92,pp.z);
 const bn=p2w(170,470);put(mesh(new THREE.BoxGeometry(2.4,0.4,0.5),'#8c6a44'),bn.x,0.2,bn.z);
 const sl=p2w(510,400);put(mesh(new THREE.BoxGeometry(1.4,1.4,0.8),'#f59e0b'),sl.x,0.7,sl.z);
 plant(p2w(45,300));plant(p2w(935,300));
+
+/* Lab: boards come in, get printed and tested. The bench figure is simulated: a generic person with no real name and no pronouns. */
+const labBench=p2w(120,690);
+put(mesh(new THREE.BoxGeometry(3.6,0.08,1.1),'#9aa3ad'),labBench.x,0.8,labBench.z);
+[[-1.6,-0.4],[1.6,-0.4],[-1.6,0.4],[1.6,0.4]].forEach(([dx,dz])=>put(mesh(new THREE.BoxGeometry(0.08,0.78,0.08),'#5f6670'),labBench.x+dx,0.39,labBench.z+dz));
+const boardStack=[];
+for(let i=0;i<6;i++)boardStack.push(put(mesh(new THREE.BoxGeometry(0.7,0.03,0.5),'#1f7a4a'),labBench.x-1.2,0.86+i*0.035,labBench.z-0.1));
+const labPrinters=[p2w(340,700),p2w(450,700)].map(p=>{
+  const g=new THREE.Group();g.position.set(p.x,0,p.z);scene.add(g);
+  g.add(mesh(new THREE.BoxGeometry(1.0,0.9,0.9),'#3a3f47').translate(0,0.45,0));
+  const bed=mesh(new THREE.BoxGeometry(0.7,0.04,0.6),'#e8e6e0').translate(0,0.95,0);g.add(bed);
+  return {g,bed};
+});
+const labRigs=[p2w(600,700),p2w(700,700),p2w(800,700)].map(p=>{
+  const g=new THREE.Group();g.position.set(p.x,0,p.z);scene.add(g);
+  g.add(mesh(new THREE.BoxGeometry(0.9,0.5,0.7),'#2b2f36').translate(0,0.25,0));
+  g.add(mesh(new THREE.BoxGeometry(0.6,0.3,0.04),'#6ee7b7').translate(0,0.6,0.3));
+  return g;
+});
+function labelOver(x,y,z){
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true,depthWrite:false}));
+  s.scale.set(2.4,0.6,1);s.position.set(x,y,z);scene.add(s);return s;
+}
+function drawLabel(sprite,text){
+  const c=document.createElement('canvas');c.width=512;c.height=128;
+  const x=c.getContext('2d');
+  x.fillStyle='rgba(255,255,255,0.95)';x.fillRect(0,0,512,128);
+  x.strokeStyle='#0f7a5c';x.lineWidth=4;x.strokeRect(2,2,508,124);
+  x.fillStyle='#1d1d1d';x.font='bold 34px system-ui';x.textAlign='center';x.fillText(text,256,78);
+  if(sprite.material.map)sprite.material.map.dispose();
+  sprite.material.map=new THREE.CanvasTexture(c);sprite.material.needsUpdate=true;
+}
+function drawIf(sprite,text){if(sprite.userData.text===text)return;sprite.userData.text=text;drawLabel(sprite,text);}
+const labState={
+  boards:3,
+  boardSpr:labelOver(labBench.x-1.2,1.9,labBench.z-0.1),
+  printers:labPrinters.map((pr,i)=>({state:i===0?'printing':'idle',p:i===0?30:0,bed:pr.bed,spr:labelOver(pr.g.position.x,1.9,pr.g.position.z)})),
+  rigs:labRigs.map((g,i)=>({on:i!==1,pass:96+i,spr:labelOver(g.position.x,1.3,g.position.z)}))
+};
+function labTick(){
+  if(Math.random()<0.3)labState.boards=Math.max(0,Math.min(6,labState.boards+(Math.random()<0.5?1:-1)));
+  boardStack.forEach((b,i)=>{b.visible=i<labState.boards;});
+  labState.printers.forEach((pr,i)=>{
+    if(pr.state==='printing'){pr.p=Math.min(100,pr.p+4+Math.random()*8);if(pr.p>=100)pr.state='cooling';}
+    else if(pr.state==='cooling'){if(Math.random()<0.5){pr.state='idle';pr.p=0;}}
+    else if(Math.random()<0.25){pr.state='printing';pr.p=0;}
+    pr.bed.position.y=0.95+(pr.state==='printing'?Math.sin(performance.now()/400)*0.03:0);
+    drawIf(pr.spr,`${t('printer_')} ${i+1} · ${pr.state==='printing'?t('lab_print')+' '+Math.round(pr.p)+'%':pr.state==='cooling'?t('lab_cool'):t('lab_idle')}`);
+  });
+  labState.rigs.forEach((r,i)=>{
+    if(Math.random()<0.3)r.on=!r.on;
+    if(r.on)r.pass=Math.max(90,Math.min(100,r.pass+(Math.random()<0.5?-1:1)));
+    drawIf(r.spr,`${t('rig_')} ${i+1} · ${r.on?t('lab_test')+' · '+t('lab_pass')+' '+r.pass+'%':t('lab_idle')}`);
+  });
+  drawIf(labState.boardSpr,`${t('lab_boards')}: ${labState.boards}`);
+}
 const ball=mesh(new THREE.SphereGeometry(0.06,8,6),'#ffffff');ball.visible=false;scene.add(ball);
 
 /* ---------- characters ---------- */
@@ -451,6 +508,8 @@ function buildChar(d){
   scene.add(g);charObjs.push(g);
   return g;
 }
+const labPerson=buildChar({name:'Lab bench',role:'simulated',gender:'m',shirt:'#2d6f5a',skin:'#c98e6a',hair:'short',hairCol:'#1d1b1a',glasses:true,plan:''});
+labPerson.position.copy(p2w(120,650));
 function say(a,text){
   clearBubble(a);
   const c=document.createElement('canvas');c.width=512;c.height=128;
@@ -469,7 +528,7 @@ function clearBubble(a){
 
 /* ---------- team state (simulated) ---------- */
 const agents=AGENTS.map((d,i)=>{
-  const a={...d,i,desk:DESKS[i],at:'desk',area:'',spot:null,task:null,progress:0,walking:false,spotKey:null,
+  const a={...d,i,desk:DESKS[i],at:'desk',area:'',spot:null,task:null,progress:0,load:8,walking:false,spotKey:null,
     tgt:null,onArrive:null,phase:0,pose:'sitIdle',bubble:null,bubbleUntil:0,
     cur:{rootY:0,hL:0,hR:0,kL:0,kR:0,aL:0,aR:0,nod:0,look:0}};
   a.g=buildChar(d);
@@ -497,7 +556,7 @@ function toMeeting(a){
   walk(a,p2w(s.x,s.y),()=>{a.at='meeting';a.area='';a.spot=s;a.g.rotation.y=s.face;});
 }
 function assign(a,text){
-  a.task={text};a.progress=0;
+  a.task={text};a.progress=0;a.load=Math.max(a.load,45+Math.round(Math.random()*40));
   toDesk(a);
 }
 function areaName(k){return t('area_'+({kitchen:'kitchen',lounge:'lounge','play area':'play'}[k]||'kitchen'));}
@@ -505,7 +564,7 @@ function statusText(a){
   if(a.walking)return t('st_walk');
   if(a.at==='meeting')return t('st_meet');
   if(a.at==='break')return `${t('st_break')} · ${areaName(a.area)}`;
-  if(a.at==='desk')return a.task?`${t('st_work')} · ${Math.round(a.progress)}%`:t('st_free');
+  if(a.at==='desk')return a.task?`${t('st_work')} · ${t('st_load')} ${Math.round(a.load)}%`:`${t('st_free')} · ${t('st_load')} ${Math.round(a.load)}%`;
   return t('st_idle');
 }
 const STATE_COL={work:'#22c55e',walk:'#f59e0b',meet:'#3b82f6',brk:'#a3a3a3',free:'#d1d5db'};
@@ -531,8 +590,13 @@ function tick(){
     if(a.at==='desk'){
       if(a.task){
         a.progress=Math.min(100,a.progress+2+Math.random()*4);
+        a.load=Math.max(30,Math.min(98,a.load+(Math.random()*12-6)));
         if(a.progress>=100){a.task=null;a.progress=0;toBreak(a);}
-      }else if(Math.random()<0.05){toBreak(a);}
+      }else{
+        a.load=Math.max(0,Math.min(12,a.load+(Math.random()*4-2)));
+        if(Math.random()<0.2)assign(a,a.plan);
+        else if(Math.random()<0.05)toBreak(a);
+      }
     }else if(a.at==='break'&&!a.task&&Math.random()<0.1){toDesk(a);}
   });
 }
@@ -761,7 +825,7 @@ function setLang(l){
 }
 
 /* ---------- camera: drag to orbit, wheel to zoom, click an agent ---------- */
-let theta=0.35,phi=0.95,radius=31;
+let theta=0.35,phi=0.95,radius=36;
 let dragging=false,moved=0,lastX=0,lastY=0;
 const dom=renderer?renderer.domElement:null;
 const ray=new THREE.Raycaster();
@@ -851,7 +915,7 @@ function frame(now){
     ball.position.set(pp.x+Math.cos(t)*1.3,0.98+Math.abs(Math.sin(t*2))*0.22,pp.z);
   }else ball.visible=false;
   camera.position.set(radius*Math.sin(phi)*Math.sin(theta),radius*Math.cos(phi),radius*Math.sin(phi)*Math.cos(theta));
-  camera.lookAt(0,0.6,0);
+  camera.lookAt(0,0.6,3.2);
   if(renderer)renderer.render(scene,camera);
   requestAnimationFrame(frame);
 }
@@ -869,12 +933,14 @@ function refresh(){
 /* ---------- start ---------- */
 addEventListener('resize',resize);
 resize();
-agents.forEach(a=>assign(a,a.plan));
+agents.forEach(a=>{if(Math.random()<0.6)assign(a,a.plan);});
+labTick();
 refresh();
 loadStatus();
 applyStatic();
 document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
 setInterval(tick,1500);
+setInterval(labTick,2000);
 setInterval(()=>{if(Math.random()<0.7)talk();},2500);
 setInterval(refresh,400);
 requestAnimationFrame(frame);
