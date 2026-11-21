@@ -256,7 +256,7 @@ const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const p2w=(x,y)=>new THREE.Vector3((x-480)/40,0,(y-300)/40);
 
 // Team roster (from team/PERSONAS.md). Gender follows the persona name and avatar image.
-// Peter (hardware integrator) works at a desk and visits the lab machines.
+// Peter (hardware integrator) works only in the lab: bench, printers and test rigs. He never sits at a desk.
 const AGENTS=[
  {id:'lead', name:'Nora',   gender:'f',role:'Lead / Project Manager',  part:'NW-PM-01',nick:'The conductor',        shirt:'#1f6f68',skin:'#e8b896',hair:'bob',  hairCol:'#3a2a20',plan:'Plan today’s tasks and assign roles'},
  {id:'arch', name:'Theo',   gender:'m',role:'System Architect',        part:'NW-AR-02',nick:'The cartographer',     shirt:'#3b4a8c',skin:'#c98e6a',hair:'short',hairCol:'#1d1b1a',glasses:true,plan:'Review designs against the requirements'},
@@ -596,7 +596,7 @@ function poseOf(a){
 function tick(){
   agents.forEach(a=>{
     if(a.walking)return;
-    if(a.id==='peter'&&(a.at==='desk'||a.at==='break')&&!a.session&&Math.random()<0.15){labVisit(a);return;}
+    if(a.id==='peter'&&a.at==='lab'&&!a.session&&Math.random()<0.15){labVisit(a);return;}
     if(a.session)return;
     if(a.at==='desk'){
       if(a.task){
@@ -654,13 +654,16 @@ function labDo(k){
   else if(k.startsWith('print')){const pr=labState.printers[k==='print1'?0:1];if(pr.state==='idle'){pr.state='printing';pr.p=0;}}
   else{const r=labState.rigs[Number(k.slice(3))-1];r.on=!r.on;}
 }
+function labHome(a){
+  walk(a,p2w(120,650),()=>{a.at='lab';a.area='';a.spot=null;});
+}
 function labVisit(a){
   if(a.session)return;
   const s=rnd(LAB_STATIONS);
   a.session=true;release(a);
   walk(a,p2w(s.x,s.y),()=>{
     a.at='lab';a.area='';a.spot=null;a.g.rotation.y=0;
-    setTimeout(()=>{labDo(s.k);a.session=false;toDesk(a);},5000+Math.random()*3000);
+    setTimeout(()=>{labDo(s.k);a.session=false;labHome(a);},5000+Math.random()*3000);
   });
 }
 function scenario(){
@@ -1008,7 +1011,8 @@ function refresh(){
 /* ---------- start ---------- */
 addEventListener('resize',resize);
 resize();
-agents.forEach(a=>{if(Math.random()<0.6)assign(a,a.plan);});
+agents.forEach(a=>{if(a.id!=='peter'&&Math.random()<0.6)assign(a,a.plan);});
+{const pe=agents.find(a=>a.id==='peter');pe.g.position.copy(p2w(120,650));pe.at='lab';}
 labTick();
 refresh();
 loadStatus();
