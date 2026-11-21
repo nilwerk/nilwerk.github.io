@@ -208,7 +208,7 @@ en:{title:'Meet the team!',tagline:'Connected hardware prototypes, from idea to 
 
  loading:'Loading…',photoSoon:'Photo coming soon',next:'Next:',updated:'Last updated by Nora',
  unavailable:'Status is not available right now. Please check back soon.',
- st_walk:'Walking to a new spot',st_meet:'In a team meeting',st_break:'On a break',st_work:'Working',st_free:'At desk · free',st_idle:'Idle',st_load:'load',lab_name:'Lab',lab_boards:'PCBs waiting',lab_print:'printing',lab_cool:'cooling',lab_test:'testing',lab_idle:'idle',lab_pass:'pass',printer_:'Printer',rig_:'Test rig',
+ st_walk:'Walking to a new spot',st_meet:'In a team meeting',st_break:'On a break',st_work:'Working',st_free:'At desk · free',st_idle:'Idle',st_lab:'In the lab',st_load:'load',lab_name:'Lab',lab_boards:'PCBs waiting',lab_print:'printing',lab_cool:'cooling',lab_test:'testing',lab_idle:'idle',lab_pass:'pass',printer_:'Printer',rig_:'Test rig',
  area_kitchen:'kitchen',area_lounge:'lounge',area_play:'play area',
  cardHint:'Our agents only take instructions from the CEO, so you can’t assign them work from here.',
  close:'Close',cancel:'Cancel',send:'Open email to send',
@@ -230,7 +230,7 @@ de:{title:'Lerne das Team kennen!',tagline:'Vernetzte Hardware-Prototypen, von d
 
  loading:'Lädt…',photoSoon:'Foto folgt bald',next:'Als Nächstes:',updated:'Zuletzt aktualisiert von Nora',
  unavailable:'Der Status ist gerade nicht verfügbar. Bitte schauen Sie bald wieder vorbei.',
- st_walk:'Geht zu einem neuen Platz',st_meet:'In einer Teambesprechung',st_break:'In der Pause',st_work:'Arbeitet',st_load:'Auslastung',lab_name:'Labor',lab_boards:'Platinen warten',lab_print:'druckt',lab_cool:'kühlt ab',lab_test:'testet',lab_idle:'Leerlauf',lab_pass:'Bestehen',printer_:'Drucker',rig_:'Testplatz',st_free:'Am Platz · frei',st_idle:'Untätig',
+ st_walk:'Geht zu einem neuen Platz',st_meet:'In einer Teambesprechung',st_break:'In der Pause',st_work:'Arbeitet',st_lab:'Im Labor',st_load:'Auslastung',lab_name:'Labor',lab_boards:'Platinen warten',lab_print:'druckt',lab_cool:'kühlt ab',lab_test:'testet',lab_idle:'Leerlauf',lab_pass:'Bestehen',printer_:'Drucker',rig_:'Testplatz',st_free:'Am Platz · frei',st_idle:'Untätig',
  area_kitchen:'Küche',area_lounge:'Lounge',area_play:'Spielbereich',
  cardHint:'Unsere Agenten nehmen Anweisungen nur vom CEO entgegen. Aufgaben können Sie hier daher nicht vergeben.',
  close:'Schließen',cancel:'Abbrechen',send:'E-Mail zum Senden öffnen',
@@ -256,7 +256,7 @@ const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const p2w=(x,y)=>new THREE.Vector3((x-480)/40,0,(y-300)/40);
 
 // Team roster (from team/PERSONAS.md). Gender follows the persona name and avatar image.
-// Peter is not a desk agent. A simulated, unnamed bench figure stands in the lab.
+// Peter (hardware integrator) works at a desk and visits the lab machines.
 const AGENTS=[
  {id:'lead', name:'Nora',   gender:'f',role:'Lead / Project Manager',  part:'NW-PM-01',nick:'The conductor',        shirt:'#1f6f68',skin:'#e8b896',hair:'bob',  hairCol:'#3a2a20',plan:'Plan today’s tasks and assign roles'},
  {id:'arch', name:'Theo',   gender:'m',role:'System Architect',        part:'NW-AR-02',nick:'The cartographer',     shirt:'#3b4a8c',skin:'#c98e6a',hair:'short',hairCol:'#1d1b1a',glasses:true,plan:'Review designs against the requirements'},
@@ -268,6 +268,7 @@ const AGENTS=[
  {id:'pcb',  name:'Emil',   gender:'m',role:'PCB Designer',            part:'NW-HW-08',nick:'The simulator',        shirt:'#2f7d47',skin:'#efc4a0',hair:'short',hairCol:'#8a8a86',glasses:true,beard:true,plan:'Run the board simulation'},
  {id:'3d',   name:'Yara',   gender:'f',role:'3D Product Designer',     part:'NW-ID-09',nick:'The form giver',       shirt:'#b04a72',skin:'#c48660',hair:'long', hairCol:'#2a1712',plan:'Update the enclosure design'},
  {id:'pr',   name:'Poppy',  gender:'f',role:'PR, Social & Awareness',  part:'NW-PR-11',nick:'The storyteller',      shirt:'#d6457a',skin:'#f1c9a8',hair:'long', hairCol:'#c4632f',plan:'Draft this week’s post'},
+ {id:'peter',name:'Peter',gender:'m',role:'Hardware integrator',part:'',nick:'Hands-on lab work',shirt:'#5b6b2f',skin:'#b07a55',hair:'short',hairCol:'#1d1b1a',plan:'Build and test the boards on the bench'},
  {id:'sales',name:'Max',    gender:'m',role:'Sales Assistant',         part:'NW-SA-10',nick:'The door opener',      shirt:'#c0622a',skin:'#e6b08e',hair:'short',hairCol:'#5b3a26',plan:'Follow up on new requests'}
 ];
 
@@ -291,8 +292,10 @@ add('lounge',830,520,'standTalk',Math.PI); add('lounge',890,520,'standTalk',Math
 add('play area',250,465,'pingLeft',Math.PI/2); add('play area',390,465,'pingRight',-Math.PI/2);
 add('play area',130,470,'sitRelax',0); add('play area',170,470,'sitRelax',0); add('play area',210,470,'sitRelax',0);
 [60,125,190,255,320,385,450,515].forEach(x=>{add('play area',x,380,'cheer',0);add('play area',x,540,'cheer',Math.PI);});
+add('play area',520,450,'throw',Math.PI/2);
 const occ=new Set();
-function claimBreak(){const free=BREAK.filter(s=>!occ.has(s.key));if(!free.length)return null;const s=rnd(free);occ.add(s.key);return s;}
+const GAME_POSES=['pingLeft','pingRight','throw'];
+function claimBreak(){const free=BREAK.filter(s=>!occ.has(s.key)&&!GAME_POSES.includes(s.pose));if(!free.length)return null;const s=rnd(free);occ.add(s.key);return s;}
 function release(a){if(a.spotKey){occ.delete(a.spotKey);a.spotKey=null;}}
 
 /* ---------- 3D scene ---------- */
@@ -452,6 +455,11 @@ function labTick(){
   });
   drawIf(labState.boardSpr,`${t('lab_boards')}: ${labState.boards}`);
 }
+const dartBoard=new THREE.Group();
+const dbDisc=mesh(new THREE.CylinderGeometry(0.55,0.55,0.05,24),'#f3efe6');dbDisc.rotation.x=Math.PI/2;dartBoard.add(dbDisc);
+const dbRing=mesh(new THREE.CylinderGeometry(0.22,0.22,0.06,16),'#c0392b');dbRing.rotation.x=Math.PI/2;dartBoard.add(dbRing);
+const dbCentre=mesh(new THREE.CylinderGeometry(0.06,0.06,0.07,10),'#1f7a4a');dbCentre.rotation.x=Math.PI/2;dartBoard.add(dbCentre);
+{const dbP=p2w(578,440);dartBoard.position.set(dbP.x,1.4,dbP.z);dartBoard.rotation.y=Math.PI/2;scene.add(dartBoard);}
 const ball=mesh(new THREE.SphereGeometry(0.06,8,6),'#ffffff');ball.visible=false;scene.add(ball);
 
 /* ---------- characters ---------- */
@@ -508,8 +516,6 @@ function buildChar(d){
   scene.add(g);charObjs.push(g);
   return g;
 }
-const labPerson=buildChar({name:'Lab bench',role:'simulated',gender:'m',shirt:'#2d6f5a',skin:'#c98e6a',hair:'short',hairCol:'#1d1b1a',glasses:true,plan:''});
-labPerson.position.copy(p2w(120,650));
 function say(a,text){
   clearBubble(a);
   const c=document.createElement('canvas');c.width=512;c.height=128;
@@ -529,7 +535,7 @@ function clearBubble(a){
 /* ---------- team state (simulated) ---------- */
 const agents=AGENTS.map((d,i)=>{
   const a={...d,i,desk:DESKS[i],at:'desk',area:'',spot:null,task:null,progress:0,load:8,walking:false,spotKey:null,
-    tgt:null,onArrive:null,phase:0,pose:'sitIdle',bubble:null,bubbleUntil:0,
+    tgt:null,onArrive:null,phase:0,pose:'sitIdle',bubble:null,bubbleUntil:0,session:false,
     cur:{rootY:0,hL:0,hR:0,kL:0,kR:0,aL:0,aR:0,nod:0,look:0}};
   a.g=buildChar(d);
   a.g.position.copy(p2w(a.desk.x,a.desk.y));
@@ -562,14 +568,16 @@ function assign(a,text){
 function areaName(k){return t('area_'+({kitchen:'kitchen',lounge:'lounge','play area':'play'}[k]||'kitchen'));}
 function statusText(a){
   if(a.walking)return t('st_walk');
+  if(a.at==='lab')return t('st_lab');
   if(a.at==='meeting')return t('st_meet');
   if(a.at==='break')return `${t('st_break')} · ${areaName(a.area)}`;
   if(a.at==='desk')return a.task?`${t('st_work')} · ${t('st_load')} ${Math.round(a.load)}%`:`${t('st_free')} · ${t('st_load')} ${Math.round(a.load)}%`;
   return t('st_idle');
 }
-const STATE_COL={work:'#22c55e',walk:'#f59e0b',meet:'#3b82f6',brk:'#a3a3a3',free:'#d1d5db'};
+const STATE_COL={work:'#22c55e',walk:'#f59e0b',meet:'#3b82f6',brk:'#a3a3a3',free:'#d1d5db',lab:'#14b8a6'};
 function cls(a){
   if(a.walking)return 'walk';
+  if(a.at==='lab')return 'lab';
   if(a.at==='desk')return a.task?'work':'free';
   if(a.at==='meeting')return 'meet';
   if(a.at==='break')return 'brk';
@@ -579,6 +587,7 @@ function poseOf(a){
   if(a.walking)return 'walk';
   if(a.at==='desk')return a.task?'sitType':'sitIdle';
   if(a.at==='meeting')return 'sitTalk';
+  if(a.at==='lab')return 'labWork';
   if(a.at==='break'&&a.spot)return a.spot.pose;
   return 'stand';
 }
@@ -587,9 +596,11 @@ function poseOf(a){
 function tick(){
   agents.forEach(a=>{
     if(a.walking)return;
+    if(a.id==='peter'&&(a.at==='desk'||a.at==='break')&&!a.session&&Math.random()<0.15){labVisit(a);return;}
+    if(a.session)return;
     if(a.at==='desk'){
       if(a.task){
-        a.progress=Math.min(100,a.progress+2+Math.random()*4);
+        a.progress=Math.min(100,a.progress+3+Math.random()*5);
         a.load=Math.max(30,Math.min(98,a.load+(Math.random()*12-6)));
         if(a.progress>=100){a.task=null;a.progress=0;toBreak(a);}
       }else{
@@ -600,19 +611,81 @@ function tick(){
     }else if(a.at==='break'&&!a.task&&Math.random()<0.1){toDesk(a);}
   });
 }
+/* ---------- games and lab visits ---------- */
+const spotByPose=p=>BREAK.find(s=>s.pose===p);
+function gotoSpot(a,s,then){
+  release(a);a.spotKey=s.key;occ.add(s.key);
+  walk(a,p2w(s.x,s.y),()=>{a.at='break';a.area=s.area;a.spot=s;a.g.rotation.y=s.face;if(then)then();});
+}
+let pingBusy=false,dartBusy=false;
+function startPingPong(){
+  if(pingBusy)return;
+  const pool=agents.filter(a=>!a.walking&&!a.task&&!a.session&&(a.at==='desk'||a.at==='break')&&a.id!=='peter');
+  if(pool.length<2)return;
+  const [p,q]=pool.sort(()=>Math.random()-0.5).slice(0,2);
+  const sL=spotByPose('pingLeft'),sR=spotByPose('pingRight');
+  if(occ.has(sL.key)||occ.has(sR.key))return;
+  pingBusy=true;p.session=true;q.session=true;
+  let arrived=0;
+  const both=()=>{
+    if(++arrived<2)return;
+    say(p,rnd(LINES_T()['play area']));
+    setTimeout(()=>{p.session=false;q.session=false;toDesk(p);toDesk(q);pingBusy=false;},14000+Math.random()*6000);
+  };
+  gotoSpot(p,sL,both);gotoSpot(q,sR,both);
+}
+const DARTS_T=()=>L()==='de'?['Volltreffer!','Knapp daneben!','Fast!']:['Bullseye!','Almost!','Close enough.'];
+function startDarts(){
+  if(dartBusy)return;
+  const pool=agents.filter(a=>!a.walking&&!a.task&&!a.session&&(a.at==='desk'||a.at==='break')&&a.id!=='peter');
+  if(!pool.length)return;
+  const s=spotByPose('throw');
+  if(occ.has(s.key))return;
+  const p=rnd(pool);
+  dartBusy=true;p.session=true;
+  gotoSpot(p,s,()=>{
+    say(p,rnd(DARTS_T()));
+    setTimeout(()=>{p.session=false;toDesk(p);dartBusy=false;},6000+Math.random()*4000);
+  });
+}
+const LAB_STATIONS=[{k:'bench',x:120,y:650},{k:'print1',x:340,y:650},{k:'print2',x:450,y:650},{k:'rig1',x:600,y:650},{k:'rig2',x:700,y:650},{k:'rig3',x:800,y:650}];
+function labDo(k){
+  if(k==='bench'){labState.boards=labState.boards>0?labState.boards-1:3;}
+  else if(k.startsWith('print')){const pr=labState.printers[k==='print1'?0:1];if(pr.state==='idle'){pr.state='printing';pr.p=0;}}
+  else{const r=labState.rigs[Number(k.slice(3))-1];r.on=!r.on;}
+}
+function labVisit(a){
+  if(a.session)return;
+  const s=rnd(LAB_STATIONS);
+  a.session=true;release(a);
+  walk(a,p2w(s.x,s.y),()=>{
+    a.at='lab';a.area='';a.spot=null;a.g.rotation.y=0;
+    setTimeout(()=>{labDo(s.k);a.session=false;toDesk(a);},5000+Math.random()*3000);
+  });
+}
+function scenario(){
+  const r=Math.random();
+  if(r<0.35)startPingPong();
+  else if(r<0.6)startDarts();
+  else if(r<0.85){
+    const free=agents.filter(a=>!a.walking&&!a.task&&!a.session&&a.at==='desk'&&a.id!=='peter');
+    if(free.length>=2){const [p,q]=free.sort(()=>Math.random()-0.5);toBreak(p);toBreak(q);}
+  }
+}
+
 const LINES={
  'desks':['Quick question about the design?','Can you review this?','Looks good to me.','Did the build go green?'],
  'meeting room':['Let me check the requirement.','Agreed, ship the small slice.','Show me the numbers.','What does it cost in µA?'],
- 'kitchen':['Coffee first, then the review.','Anyone tried the new cup?','Nice, the demo works!'],
- 'lounge':['Long day in the lab.','Did the customer reply?','Quick break, then back.'],
- 'play area':['Best of three!','Your serve.','Nice smash!']
+ 'kitchen':['Coffee first, then the review.','Anyone tried the new cup?','Nice, the demo works!','Psst, did you hear the release moved again?','Who keeps taking the last cup?','Shh, the demo is a surprise.'],
+ 'lounge':['Long day in the lab.','Did the customer reply?','Quick break, then back.','Gossip: someone finally fixed the printer.','Do not tell anyone, but the cake is real.'],
+ 'play area':['Best of three!','Your serve.','Nice smash!','Rematch?','Who is winning?']
 };
 const LINES_DE={
  'desks':['Kurze Frage zum Design?','Kannst du das mal prüfen?','Sieht gut aus.','Ist der Build grün?'],
  'meeting room':['Ich prüfe die Anforderung.','Einverstanden, wir liefern den kleinen Schritt.','Zeig mir die Zahlen.','Was kostet das in µA?'],
- 'kitchen':['Erst Kaffee, dann Review.','Hat jemand die neue Tasse probiert?','Super, die Demo läuft!'],
- 'lounge':['Langer Tag im Labor.','Hat der Kunde geantwortet?','Kurze Pause, dann weiter.'],
- 'play area':['Best of three!','Dein Aufschlag.','Starker Schlag!']
+ 'kitchen':['Erst Kaffee, dann Review.','Hat jemand die neue Tasse probiert?','Super, die Demo läuft!','Psst, wurde der Termin schon wieder verschoben?','Wer trinkt immer den letzten Kaffee?','Pst, die Demo ist eine Überraschung.'],
+ 'lounge':['Langer Tag im Labor.','Hat der Kunde geantwortet?','Kurze Pause, dann weiter.','Gerücht: Jemand hat endlich den Drucker repariert.','Nicht weitersagen, aber der Kuchen ist echt.'],
+ 'play area':['Best of three!','Dein Aufschlag.','Starker Schlag!','Revanche?','Wer führt gerade?']
 };
 function LINES_T(){return L()==='de'?LINES_DE:LINES;}
 function talk(){
@@ -873,6 +946,8 @@ function targetsFor(p,c,t){
     case 'standTalk': T.aR=-0.4+Math.sin(t*3)*0.3;T.aL=0.15;T.nod=Math.sin(t*4)*0.06;break;
     case 'pingLeft':case 'pingRight': T.aR=-1.4+Math.sin(t*7)*0.6;T.aL=-0.4;racket=true;break;
     case 'cheer': T.aL=-2.6+Math.sin(t*5)*0.2;T.aR=-2.6+Math.sin(t*5+1)*0.2;break;
+    case 'throw': T.aR=-1.5+Math.sin(t*4)*0.8;T.aL=-0.3;break;
+    case 'labWork': T.aR=-1.0+Math.sin(t*5)*0.25;T.aL=-0.9+Math.sin(t*5+1)*0.2;break;
     default: break;
   }
   return{T,cup,racket};
@@ -941,6 +1016,7 @@ applyStatic();
 document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
 setInterval(tick,1500);
 setInterval(labTick,2000);
+setInterval(scenario,6000);
 setInterval(()=>{if(Math.random()<0.7)talk();},2500);
 setInterval(refresh,400);
 requestAnimationFrame(frame);
