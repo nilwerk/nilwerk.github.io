@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-20 19:37",
+  "updated": "2026-11-21 12:25",
   "employee_of_the_month": {
     "name": "Mira",
     "role": "Firmware + Edge AI",
@@ -39,18 +39,7 @@
       "text_de": "Der Datenexport läuft im Cloud-Projekt. Ein Test mit einem echten Nutzerkonto steht noch aus."
     }
   ],
-  "gallery": [
-    {
-      "src": "assets/project-v1-compact-exploded.jpg",
-      "caption": "v1 compact enclosure, exploded CAD view",
-      "caption_de": "v1-Kompaktgehäuse, Explosionsansicht (CAD)"
-    },
-    {
-      "src": "assets/app-1.jpg",
-      "caption": "Companion app: welcome, sign-up and profile screens (web build, stand-in backend)",
-      "caption_de": "Begleit-App: Start-, Anmelde- und Profilansicht (Web-Version, Testdaten)"
-    }
-  ],
+  "gallery": [],
   "counters": [
     {
       "value": "138",
@@ -68,10 +57,10 @@
     },
     {
       "value": "4",
-      "label": "projects worked on",
-      "label_de": "bearbeitete Projekte",
-      "note": "This one plus three earlier projects. The names of the three earlier projects are to be confirmed by Arsany.",
-      "note_de": "Dieses Projekt plus drei frühere. Die Namen der drei früheren Projekte werden von Arsany noch bestätigt."
+      "label": "projects completed successfully",
+      "label_de": "erfolgreich abgeschlossene Projekte",
+      "note": "",
+      "note_de": ""
     },
     {
       "value": "354",
@@ -100,7 +89,7 @@
   ],
   "collage": {
     "src": "assets/our-work-collage.jpg",
-    "caption": "Our work: v1 compact enclosure (render, exploded view) and companion app screens",
-    "caption_de": "Unsere Arbeit: v1-Kompaktgehäuse (Render, Explosionsansicht) und Begleit-App-Ansichten"
+    "caption": "Our work: v1 enclosure (exploded view), PCB outline and the companion app screens",
+    "caption_de": "Unsere Arbeit: v1-Gehäuse (Explosionsansicht), PCB-Umriss und Begleit-App-Ansichten"
   }
 }
